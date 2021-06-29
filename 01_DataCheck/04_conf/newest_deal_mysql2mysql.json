@@ -1,0 +1,93 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "column": ["url",
+                            "city_name",
+                            "gd_city",
+                            "floor_name",
+                            "floor_name_new",
+                            "clean_floor_name",
+                            "floor_name_clean",
+                            "address",
+                            "business",
+                            "issue_code",
+                            "issue_date",
+                            "issue_date_clean",
+                            "open_date",
+                            "issue_area",
+                            "sale_state",
+                            "building_code",
+                            "room_sum",
+                            "area",
+                            "simulation_price",
+                            "sale_telephone",
+                            "sale_address",
+                            "room_code",
+                            "room_sale_area",
+                            "room_sale_state",
+                            "create_time"],
+                        "connection": [
+                            {
+                                "jdbcUrl": ["jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"],
+                                "table": ["tmp_city_newest_deal_2"]
+                            }
+                        ],
+                        "password": "egSQ7HhxajHZjvdX",
+                        "username": "mysql",
+                        "where": ""
+                    }
+                },
+                "writer": {
+                    "name": "mysqlwriter",
+                    "parameter": {
+                        "column": ["url",
+                            "city_name",
+                            "gd_city",
+                            "floor_name",
+                            "floor_name_new",
+                            "clean_floor_name",
+                            "floor_name_clean",
+                            "address",
+                            "business",
+                            "issue_code",
+                            "issue_date",
+                            "issue_date_clean",
+                            "open_date",
+                            "issue_area",
+                            "sale_state",
+                            "building_code",
+                            "room_sum",
+                            "area",
+                            "simulation_price",
+                            "sale_telephone",
+                            "sale_address",
+                            "room_code",
+                            "room_sale_area",
+                            "room_sale_state",
+                            "create_time"],
+                        "connection": [
+                            {
+                                "jdbcUrl": "jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+                                "table": ["tmp_city_newest_deal_3"]
+                            }
+                        ],
+                        "password": "egSQ7HhxajHZjvdX",
+                        "preSql": [],
+                        "session": [],
+                        "username": "mysql",
+                        "writeMode": "update"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "2"
+            }
+        }
+    }
+}

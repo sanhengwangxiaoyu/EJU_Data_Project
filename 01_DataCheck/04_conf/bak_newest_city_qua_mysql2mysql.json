@@ -1,0 +1,69 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "column": ["city_id",
+                            "county_id",
+                            "period",
+                            "for_sale",
+                            "on_sale",
+                            "sell_out",
+                            "total_count",
+                            "follow",
+                            "intention",
+                            "urgent",
+                            "increase",
+                            "retained",
+                            "unit_price"],
+                        "connection": [
+                            {
+                                "jdbcUrl": ["jdbc:mysql://172.28.36.77:3306/dws_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"],
+                                "table": ["dws_newest_city_qua"]
+                            }
+                        ],
+                        "password": "egSQ7HhxajHZjvdX",
+                        "username": "mysql",
+                        "where": ""
+                    }
+                },
+                "writer": {
+                    "name": "mysqlwriter",
+                    "parameter": {
+                        "column": ["city_id",
+                            "county_id",
+                            "period",
+                            "for_sale",
+                            "on_sale",
+                            "sell_out",
+                            "total_count",
+                            "follow",
+                            "intention",
+                            "urgent",
+                            "increase",
+                            "retained",
+                            "unit_price"],
+                        "connection": [
+                            {
+                                "jdbcUrl": "jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+                                "table": ["bak_20210622_dws_newest_city_qua"]
+                            }
+                        ],
+                        "password": "egSQ7HhxajHZjvdX",
+                        "preSql": [],
+                        "session": [],
+                        "username": "mysql",
+                        "writeMode": "update"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "2"
+            }
+        }
+    }
+}
