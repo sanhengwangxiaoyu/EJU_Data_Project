@@ -1,0 +1,4 @@
+database=${d}
+output_table_name=${ot}
+type=command
+command=python /bdp/code/python/dws_newest_provide_sche.py -t "${output_table_name}" -q "2020Q4" -d "${database}"
