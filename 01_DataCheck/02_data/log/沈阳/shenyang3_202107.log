@@ -1,0 +1,57 @@
+2021-07-06 13:50:47.495 [0-0-0-reader] INFO  TxtFileReader$Task - reading file : [D:/EJU/after_20210520/01_DataCheck/02_data/沈阳/shenyang_3.txt]
+2021-07-06 13:50:47.591 [0-0-0-reader] INFO  UnstructuredStorageReaderUtil - Header line http://124.95.133.164/work/ysxk/ysxkzinfo.jsp?id=12224797      沈阳    备注:假日蓝湾（君临天下六期C.D.E.F组团）。
+                                                                                                 has been skiped.
+2021-07-06 13:50:47.596 [0-0-0-reader] INFO  UnstructuredStorageReaderUtil - CsvReader使用默认值[{"captureRawRecord":true,"columnCount":0,"comment":"#","currentRecord":-1,"delimiter":"\t","escapeMode":1,"headerCount":0,"rawRecord":"","recordDelimiter":"\u0000","safetySwitch":false,"skipEmptyRecords":true,"textQualifier":"\"","trimWhitespace":true,"useComments":false,"useTextQualifier":true,"values":[]}],csvReaderConfig值为[null]        
+2021-07-06 13:50:48.640 [0-0-0-writer] WARN  CommonRdbmsWriter$Task - 回滚此次写入, 采用每次写入一行方式提交. 因为:Data truncation: Data too long for column 'floor_name' at row 529
+2021-07-06 13:50:51.391 [0-0-0-writer] ERROR StdoutPluginCollector - 
+com.mysql.jdbc.MysqlDataTruncation: Data truncation: Data too long for column 'floor_name' at row 1
+        at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3885) ~[mysql-connector-java-5.1.34.jar:5.1.34]
+        at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3823) ~[mysql-connector-java-5.1.34.jar:5.1.34]
+        at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2435) ~[mysql-connector-java-5.1.34.jar:5.1.34]
+        at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2582) ~[mysql-connector-java-5.1.34.jar:5.1.34]
+        at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2530) ~[mysql-connector-java-5.1.34.jar:5.1.34]
+        at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1907) ~[mysql-connector-java-5.1.34.jar:5.1.34]
+        at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1199) ~[mysql-connector-java-5.1.34.jar:5.1.34]
+        at com.alibaba.datax.plugin.rdbms.writer.CommonRdbmsWriter$Task.doOneInsert(CommonRdbmsWriter.java:382) [plugin-rdbms-util-0.0.1-SNAPSHOT.jar:na]
+        at com.alibaba.datax.plugin.rdbms.writer.CommonRdbmsWriter$Task.doBatchInsert(CommonRdbmsWriter.java:362) [plugin-rdbms-util-0.0.1-SNAPSHOT.jar:na]
+        at com.alibaba.datax.plugin.rdbms.writer.CommonRdbmsWriter$Task.startWriteWithConnection(CommonRdbmsWriter.java:297) [plugin-rdbms-util-0.0.1-SNAPSHOT.jar:na]
+        at com.alibaba.datax.plugin.rdbms.writer.CommonRdbmsWriter$Task.startWrite(CommonRdbmsWriter.java:319) [plugin-rdbms-util-0.0.1-SNAPSHOT.jar:na]
+        at com.alibaba.datax.plugin.writer.mysqlwriter.MysqlWriter$Task.startWrite(MysqlWriter.java:78) [mysqlwriter-0.0.1-SNAPSHOT.jar:na]
+        at com.alibaba.datax.core.taskgroup.runner.WriterRunner.run(WriterRunner.java:56) [datax-core-0.0.1-SNAPSHOT.jar:na]
+        at java.lang.Thread.run(Unknown Source) [na:1.8.0_40]
+2021-07-06 13:50:51.397 [0-0-0-writer] ERROR StdoutPluginCollector - 脏数据: 
+{"exception":"Data truncation: Data too long for column 'floor_name' at row 1","record":[{"byteSize":56,"index":0,"rawData":"http://124.95.133.164/work/ysxk/ysxkzinfo.jsp?id=1995814","type":"STRING"},{"byteSize":2,"index":1,"rawData":"沈阳","type":"STRING"},{"byteSize":274,"index":2,"rawData":"备注:项目名称:A1、3、7、11~13北住宅，B106、206、306、406、408北住|宅,碧桂园?太阳城21、29、30、35~39、50~53、109~112。|楼号为:3#,5#～8#,13#,15#～19#,22#,23#,25#～28#,30#～33#,|35#～39#,50#～53#,55#～63#,65#～73#,75#～83#,|85#～90#,93#,95#～97#,100#～103#,105#,109#～113#,|118#,119#,121#,122#,126#,127#,130#～132#,|135#～137#。","type":"STRING"},{"byteSize":0,"index":3,"rawData":"","type":"STRING"},{"byteSize":0,"index":4,"rawData":"","type":"STRING"},{"byteSize":0,"index":5,"rawData":"","type":"STRING"},{"byteSize":0,"index":6,"rawData":"","type":"STRING"},{"byteSize":0,"index":7,"rawData":"","type":"STRING"},{"byteSize":0,"index":8,"rawData":"","type":"STRING"},{"byteSize":0,"index":9,"rawData":"","type":"STRING"},{"byteSize":0,"index":10,"rawData":"","type":"STRING"},{"byteSize":0,"index":11,"rawData":"","type":"STRING"},{"byteSize":0,"index":12,"rawData":"","type":"STRING"},{"byteSize":0,"index":13,"rawData":"","type":"STRING"},{"byteSize":0,"index":14,"rawData":"","type":"STRING"},{"byteSize":0,"index":15,"rawData":"","type":"STRING"},{"byteSize":0,"index":16,"rawData":"","type":"STRING"},{"byteSize":0,"index":17,"rawData":"","type":"STRING"},{"byteSize":0,"index":18,"rawData":"","type":"STRING"}],"type":"writer"}
+2021-07-06 13:50:52.122 [0-0-0-writer] ERROR StdoutPluginCollector - 脏数据: 
+{"exception":"Data truncation: Data too long for column 'floor_name' at row 1","record":[{"byteSize":57,"index":0,"rawData":"http://124.95.133.164/work/ysxk/ysxkzinfo.jsp?id=22408752","type":"STRING"},{"byteSize":2,"index":1,"rawData":"沈阳","type":"STRING"},{"byteSize":438,"index":2,"rawData":"备注：东洋制钢地块项目（原名：玖熙墅）二期（1-20层）；下列房屋为租赁住房，不在本次预售范围内：2-1-1，2-1-2，2-2-1，2-2-2，2-3-1，2-3-2，1-4-1，1-4-2，2-4-1，2-4-2，1-5-1，1-5-2，2-5-1，2-5-2，1-6-1，1-6-2，2-6-1，2-6-2，1-7-1，1-7-2，2-7-1，2-7-2，1-8-1，1-8-2，2-8-1，2-8-2，|1-9-1，1-9-2，2-9-1，2-9-2，1-10-1，1-10-2，2-10-1，2-10-2，1-11-1，1-11-2，2-11-1，2-11-2，1-12-1，1-12-2，2-12-1，2-12-2，1-13-1，1-13-2，2-13-1，1-14-1，1-14-2，1-15-1，1-15-2，1-16-1，1-16-2，1-17-1，1-17-2，1-18-1，1-18-2，1-19-1，1-19-2，1-20-1，1-20-2；共59户。","type":"STRING"},{"byteSize":0,"index":3,"rawData":"","type":"STRING"},{"byteSize":0,"index":4,"rawData":"","type":"STRING"},{"byteSize":0,"index":5,"rawData":"","type":"STRING"},{"byteSize":0,"index":6,"rawData":"","type":"STRING"},{"byteSize":0,"index":7,"rawData":"","type":"STRING"},{"byteSize":0,"index":8,"rawData":"","type":"STRING"},{"byteSize":0,"index":9,"rawData":"","type":"STRING"},{"byteSize":0,"index":10,"rawData":"","type":"STRING"},{"byteSize":0,"index":11,"rawData":"","type":"STRING"},{"byteSize":0,"index":12,"rawData":"","type":"STRING"},{"byteSize":0,"index":13,"rawData":"","type":"STRING"},{"byteSize":0,"index":14,"rawData":"","type":"STRING"},{"byteSize":0,"index":15,"rawData":"","type":"STRING"},{"byteSize":0,"index":16,"rawData":"","type":"STRING"},{"byteSize":0,"index":17,"rawData":"","type":"STRING"},{"byteSize":0,"index":18,"rawData":"","type":"STRING"}],"type":"writer"}
+2021-07-06 13:50:53.003 [0-0-0-writer] ERROR StdoutPluginCollector - 脏数据: 
+{"exception":"Data truncation: Data too long for column 'floor_name' at row 1","record":[{"byteSize":57,"index":0,"rawData":"http://124.95.133.164/work/ysxk/ysxkzinfo.jsp?id=25577746","type":"STRING"},{"byteSize":2,"index":1,"rawData":"沈阳","type":"STRING"},{"byteSize":230,"index":2,"rawData":"2018年12月6日增补B1#7～24层、B2#7～24层、B3#7～27层、B4#7～29层、B5#7～29层、B6#7～29层、B7#7～29层、B8#7～29层；项目名称：东建街-2地块房地产项 
+目（一期-2|20.30米以下部分）、东建街-2地块房地产项目（一期-3|29.30米以下部分）、东建街-2地块房地产项目（一期-4）；2019年8月7日增补B1#商业1～5门；2021年1月28日增补B1#商业6门；2021年3月31日，增补B2#商业4门。","type":"STRING"},{"byteSize":0,"index":3,"rawData":"","type":"STRING"},{"byteSize":0,"index":4,"rawData":"","type":"STRING"},{"byteSize":0,"index":5,"rawData":"","type":"STRING"},{"byteSize":0,"index":6,"rawData":"","type":"STRING"},{"byteSize":0,"index":7,"rawData":"","type":"STRING"},{"byteSize":0,"index":8,"rawData":"","type":"STRING"},{"byteSize":0,"index":9,"rawData":"","type":"STRING"},{"byteSize":0,"index":10,"rawData":"","type":"STRING"},{"byteSize":0,"index":11,"rawData":"","type":"STRING"},{"byteSize":0,"index":12,"rawData":"","type":"STRING"},{"byteSize":0,"index":13,"rawData":"","type":"STRING"},{"byteSize":0,"index":14,"rawData":"","type":"STRING"},{"byteSize":0,"index":15,"rawData":"","type":"STRING"},{"byteSize":0,"index":16,"rawData":"","type":"STRING"},{"byteSize":0,"index":17,"rawData":"","type":"STRING"},{"byteSize":0,"index":18,"rawData":"","type":"STRING"}],"type":"writer"}
+2021-07-06 13:50:55.352 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[7858]ms
+2021-07-06 13:50:55.355 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2021-07-06 13:50:57.493 [job-0] INFO  StandAloneJobContainerCommunicator - Total 1290 records, 106091 bytes | Speed 10.36KB/s, 129 records/s | Error 3 records, 1118 bytes |  All Task WaitWriterTime 0.001s |  All Task WaitReaderTime 0.081s | Percentage 100.00%
+2021-07-06 13:50:57.494 [job-0] INFO  AbstractScheduler - Scheduler accomplished all tasks.
+2021-07-06 13:50:57.494 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do post work.
+2021-07-06 13:50:57.495 [job-0] INFO  JobContainer - DataX Reader.Job [txtfilereader] do post work.
+2021-07-06 13:50:57.495 [job-0] INFO  JobContainer - DataX jobId [0] completed successfully.
+2021-07-06 13:50:57.496 [job-0] INFO  HookInvoker - No hook invoked, because base dir not exists or is a file: D:\dataX\datax\hook
+2021-07-06 13:50:57.497 [job-0] INFO  JobContainer -
+         [total cpu info] =>
+                averageCpu                     | maxDeltaCpu                    | minDeltaCpu
+                -1.00%                         | -1.00%                         | -1.00%
+
+
+         [total gc info] =>
+                 NAME                 | totalGCCount       | maxDeltaGCCount    | minDeltaGCCount    | totalGCTime        | maxDeltaGCTime     | minDeltaGCTime
+                 PS MarkSweep         | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s
+                 PS Scavenge          | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s
+
+2021-07-06 13:50:57.499 [job-0] INFO  JobContainer - PerfTrace not enable!
+2021-07-06 13:50:57.500 [job-0] INFO  StandAloneJobContainerCommunicator - Total 1290 records, 106091 bytes | Speed 10.36KB/s, 129 records/s | Error 3 records, 1118 bytes |  All Task WaitWriterTime 0.001s |  All Task WaitReaderTime 0.081s | Percentage 100.00%
+2021-07-06 13:50:57.501 [job-0] INFO  JobContainer -
+任务启动时刻                    : 2021-07-06 13:50:47
+任务结束时刻                    : 2021-07-06 13:50:57
+任务总计耗时                    :                 10s
+任务平均流量                    :           10.36KB/s
+记录写入速度                    :            129rec/s
+读出记录总数                    :                1290
+读写失败总数                    :                   3
