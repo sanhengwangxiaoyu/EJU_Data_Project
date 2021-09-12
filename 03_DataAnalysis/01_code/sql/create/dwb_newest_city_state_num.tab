@@ -1,0 +1,15 @@
+CREATE TABLE dwb_db.dwb_newest_city_state_num (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `city_id` varchar(30) COMMENT '城市id',
+  `city_name` varchar(64) COMMENT '城市名称',
+  `for_sale` varchar(30) NOT NULL DEFAULT 0 COMMENT '待售数量',
+  `on_sale` varchar(30) NOT NULL DEFAULT 0 COMMENT '在售数量',
+  `total_count` varchar(30) COMMENT '项目总量',
+  `unit_price` varchar(33) COMMENT '均价',
+  `period` varchar(8) COMMENT '周期',
+  `dr` int(2) NOT NULL DEFAULT 0 COMMENT '有效标识(0,有效，1，作废）',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+KEY `idx_newest_city_id` (`city_id`) USING BTREE
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='城市楼盘各销售状态和均价统计表';

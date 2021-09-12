@@ -1,9 +1,9 @@
+#In[1]:
 #!/usr/bin/env python
 # coding: utf-8
 # -*- coding: utf-8 -*-
 """
 Created on Fri Mar 26 16:44:47 2021
-
 @author: admin1
 """
 import configparser
@@ -19,6 +19,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import getopt
 
+pymysql.install_as_MySQLdb()
 cf = configparser.ConfigParser()
 path = os.path.abspath(os.curdir)
 confpath = path + "/conf/config4.ini"
@@ -28,14 +29,11 @@ user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-# database = 'temp_db'
-date_quarter = '2021Q1'    #  获取季度（统计周期）
-start_date = '20210101'   #  获取取数的开始年月日
-stop_date = '20210401'   #  获取取数结束的年月日
-
+date_quarter = '2020Q4'    #  获取季度（统计周期）
 table_name = 'dws_customer_week'
 
 
+#In[2]:
 opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:",["table=","quarter=","startdate=","enddate="])
 for opts,arg in opts:
   if opts=="-t" or opts=="--table":
@@ -46,18 +44,12 @@ for opts,arg in opts:
     start_date = arg
   elif opts=="-e" or opts=="--enddate":
     stop_date = arg
+  elif opts=="-d" or opts=="database":
+        database = arg
 
-
-
-
-start_date_DF = datetime.datetime.strptime(start_date, "%Y%m%d")  #转换为yyyy-MM-dd HH:mm:ss 的时间格式
-end_date_DF = datetime.datetime.strptime(stop_date, "%Y%m%d")     #转换为yyyy-MM-dd HH:mm:ss 的时间格式
-pre_start_date = str(start_date_DF - relativedelta(months=+3))[0:10]   #截取成yyyy-MM-dd
-# pre_start_date = str(start_date_DF - relativedelta(months=+3))[0:10]   #截取成yyyy-MM-dd
-# pre_end_date =  str(end_date_DF - relativedelta(months=+3))[0:10]      #截取成yyyy-MM-dd
-week_date = (start_date_DF - relativedelta(days=+1)).strftime("%Y-%W")   # 截取成yyyy-week
-year_id = date_quarter.split('Q')[0]
-quarter_id = date_quarter.split('Q')[1]
+#In[3]:
+start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
+end_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
 
 # -*- coding: utf-8 -*-
 class MysqlClient:
@@ -85,134 +77,79 @@ def to_dws(result,table):
     engine = create_engine('mysql+mysqldb://'+user+':'+password+'@'+db_host+':'+'3306'+'/'+database+'?charset=utf8')
     result.to_sql(name = table,con = engine,if_exists = 'append',index = False,index_label = False)
 
-#意向客户总量#
 con = MysqlClient(db_host,database,user,password)
 
-#获取周维度#
-date=con.query("SELECT cal_date,Revised_year,Revised_quarter,Revised_month,Revised_week,concat(Revised_year,'-',Revised_week) week_id FROM  dws_db.dim_period_date where Revised_year='" + year_id + "' and Revised_quarter='" + quarter_id + "' ")
-
-week_list = list(date['week_id'].drop_duplicates())
-week_list[0]
-# week = pd.DataFrame()
-# week
+"""
+正式代码
+     根据增存量标识表，获取原表id，关联浏览日志表获取楼盘id，根据楼盘id关联楼0盘表获取城市id。并限制城市
+"""
 
 
-# In[1]:
+# In[4]:
 #当月意向客户#
 # dwb_customer_browse_log  客户浏览楼盘日志表（每日增量） 
 #                                                      imei           客户号
 #                                                      visit_date     浏览日期  
 #                                                      newest_id      楼盘id
-# ori=con.query('''SELECT imei,visit_date date,newest_id FROM dwb_db.dwb_customer_browse_log where visit_date>='''+start_date+''' and visit_date<'''+stop_date)
+ori=con.query("SELECT id,newest_id FROM dwb_db.a_dwb_customer_browse_log where visit_date>='"+start_date+"' and visit_date<='"+end_date+"' ")
 
-# In[2]:
+
+# In[5]:
 #当前季度准入楼盘#
 #dws_newest_info  新房楼盘
 #                                                      newest_id       楼盘id
 #                                                      city_id         城市id  
 #                                                      county_id       区县id  
-newest_id=con.query('''select distinct newest_id,city_id city,county_id from dws_db.dws_newest_info''')
-# dws_newest_period_admit  准入楼盘表
-#                                                      newest_id       楼盘id
-admit = con.query('''select distinct newest_id from dws_db.dws_newest_period_admit where period = "'''+date_quarter+'''"  and dr = 0''')
+admit=con.query("select newest_id from dwb_db.a_dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
+newest_id=con.query("select newest_id,city_id from dwb_db.a_dwb_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,city_name,county_id,county_name")
+# 获取指定季度的楼盘id,和城市id，区县id
+admit = pd.merge(admit,newest_id, how='inner', on=['newest_id'])
 
 
 # In[3]:
+
+# dws_imei_browse_tag  客户浏览标签结果表
+#                                   imei            类似客户号的东西
+#                                   concern        关注
+#                                   intention      意向
+#                                   urgent         迫切
+#                                   cre            增存
+ime = con.query(" SELECT max(ods_id) id,min(add_new_code) cre,visit_week period FROM dwb_db.dwb_customer_add_new_code where dr = '0' and visit_quarter = '"+date_quarter+"' group by imei,visit_week")
+
+
+# In[6]:
 # 获取楼盘的城市和区县，以及浏览基本情况#
-grouped2 = pd.merge(admit, newest_id, how='left', on=['newest_id'])
-week = pd.DataFrame()
-for a in week_list:
-    print(a)
-    con = MysqlClient(db_host,database,user,password)
-    data = con.query("SELECT distinct newest_id,imei,current_week FROM  dwb_db.dwb_customer_browse_log where current_week = '"+a+"' ")
-    week=week.append(data,ignore_index=True)
-    print(week)
-
-ori=pd.merge(week, grouped2, how='inner', on=['newest_id'])
-# ori = pd.merge(grouped2, ori, how='inner', on=['newest_id'])
+ime[['id']]=ime['id'].astype(int)
+ori[['id']]=ori['id'].astype(int)
+df = pd.merge(ime,ori ,how='left' ,on=['id'])
+df = pd.merge(admit, df, how='inner', on=['newest_id'])
 # 修改列名
-ori.rename(columns={'newest_id':'newest'},inplace=True)
-ori
-
-# cus_week_nn_1 = week[week['current_week'] == '2021-1']
-# cus_week_nn_1
+df = df[['city_id','newest_id','period','id','cre']]
+df.columns = ['city','newest_id','visit_week','imei','cre']
 
 
-# In[4]:
-#前5月意向客户#
-#imei标签-增存
-#cust_browse_log_202004_202103  客户浏览日志表季度拼接
-#                                                      customer        imei客户号
-#                                                      idate           数据接收日期
-las=con.query("SELECT distinct customer imei,concat(substr(idate,1,4),'-',substr(idate,5,2),'-',substr(idate,7,2)) FROM odsdb.cust_browse_log_202004_202103 where date_format(idate,'%Y-%m-%d') <'"+pre_start_date+"' ")
-# las.columns=['imei','date','city','newest','pv']
-las.columns=['imei','date']
-las['city'] = ''
-las['newest'] = ''
-# 转换时间格式
-las['date']=pd.to_datetime(las['date'],format='%Y-%m-%d').dt.date
-las['current_week']=las['date'].apply(lambda x:x.strftime('%Y-%W'))
-
-las=las[['imei','city','newest','current_week']]
-
-# 转换时间格式
-# ori['date']=pd.to_datetime(ori['date'],format='%Y-%m-%d').dt.date
-#意向客户趋势-按周
-# 拼接数据
-cus_combi_ori=ori.append(las,ignore_index=True)
-cus_week=cus_combi_ori
-# 获取周
-# 拿取这季度前一周的数据
-# cus_week=cus_week[cus_week['week']>=week_date]
-# 重命名 + 去重
-cus_week=cus_week[['city','newest','current_week','imei']].drop_duplicates()
-# # 按照周进行排序，按照imei进行分组。然后将月份整体偏移一位。筛选出客户第一次出现的时间
-cus_week['last_week']=cus_week.sort_values(by=['imei','current_week']).groupby(['imei'])['current_week'].shift(1)
-
-# 判断最后一周的值为是否nan（not a number）的时候就是增量数据 ：本周/月之前未浏览本楼盘为增量客户，统一周期为半年
-cus_week.at[cus_week['last_week'].isna(),'last_week']="增量"
-# 判断不为增量的都是存量数据   ：本周/月之前有浏览本楼盘则为存量客户，统计周期为半年
-cus_week.at[cus_week['last_week']!="增量",'last_week']="存量"
-cus_week
-# 拿取这季度数据
-cus_week_nn = cus_week[cus_week['current_week'] >= week_list[0]]
-cus_week_nn
-
-# 统计这季度的总人数
-cus_week_res=cus_week_nn.groupby(['city','newest','current_week','last_week'])['imei'].count().reset_index()
-# 新增字段，赋值这季度
-cus_week_res['period']=date_quarter
-# 修改列名
-cus_week_res.columns=['city_id','newest_id','week','exist','imei_num','period']
-
-cus_week_res
-
-# cus_week_res_1 = cus_week_res[cus_week_res['week'] == '2020-53']
-# cus_week_res_1
-
-# In[27]:
-
-#  插入数据到dws_customer_week
-to_dws(cus_week_res,table_name)
+# In[7]:
+df1_in_tmp =  df[df['cre'] == 0]
+df1_in_tmp = df1_in_tmp[['city','newest_id','visit_week','imei']].drop_duplicates()
+df1_increase = df1_in_tmp.groupby(['city','visit_week','newest_id'])['imei'].count().reset_index()
+df1_increase['exist'] = "增量"
+df1_re_tmp =  df[df['cre'] == 1]
+df1_re_tmp = df1_re_tmp[['city','newest_id','visit_week','imei']].drop_duplicates()
+df1_retained = df1_re_tmp.groupby(['city','newest_id','visit_week'])['imei'].count().reset_index()
+df1_retained['exist'] = "存量"
 
 
-# In[111]:
-#更新星期
+# In[8]:
+cus_mon_res = pd.concat([df1_increase,df1_retained])
+cus_mon_res['period'] = date_quarter
+cus_mon_res = cus_mon_res[['city','newest_id','visit_week','exist','imei','period']]
+cus_mon_res.columns = ['city_id','newest_id','week','exist','imei_num','period']
 
 
-# conn = pymysql.connect(host=db_host, user=user,password=password,database=database,charset="utf8")
-# def connect_mysql(conn):
-# #判断链接是否正常
-#  conn.ping(True)
-# #建立操作游标
-#  cursor=conn.cursor()
-# #设置数据输入输出编码格式
-#  cursor.execute('set names utf8')
-#  return cursor
-# # 建立链接游标
-# cur=connect_mysql(conn)
-# update_sql = "UPDATE dws_db."+table_name+" SET  week = concat(substring_index(week,'-',1),'-',substring_index(week,'-',-1)+1)"
-# cur.execute(update_sql)
-# conn.commit() # 提交记
-# conn.close() # 关闭数据库链接
-# print('>> Done!') #完毕
+# In[9]:
+# cus_mon_res
+# 加载数据到dws_customer_month
+to_dws(cus_mon_res,table_name)
+
+
+print('>> Done!') #完毕

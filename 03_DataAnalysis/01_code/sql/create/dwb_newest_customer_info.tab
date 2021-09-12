@@ -1,0 +1,17 @@
+CREATE TABLE dwb_db.dwb_newest_customer_info (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `newest_id` varchar(33) COMMENT '楼盘id',
+  `period` varchar(8) COMMENT '周期',
+  `quarter` varchar(8) NOT null COMMENT '季度',
+  `intention` int(6) NOT NULL DEFAULT 0 COMMENT '意向人数',
+  `orien` int(6) NOT NULL DEFAULT 0 COMMENT '定向人数',
+  `urgent` int(6) NOT NULL DEFAULT 0 COMMENT '迫切人数',
+  `increase` int(6) NOT NULL DEFAULT 0 COMMENT '增量人数',
+  `retained` int(6) NOT NULL DEFAULT 0 COMMENT '存量人数',
+  `dr` int(2) NOT NULL DEFAULT 0 COMMENT '有效标识(0,有效，1，作废）',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+KEY `idx_newest_newest_id` (`newest_id`) USING BTREE,
+KEY `idx_newest_period` (`period`) USING BTREE
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='楼盘浏览客户信息表';

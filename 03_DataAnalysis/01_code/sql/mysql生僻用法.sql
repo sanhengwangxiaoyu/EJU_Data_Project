@@ -4,6 +4,7 @@
 -- 3.解锁表 unlock tables
 -- 4.mysql版本 show version()
 -- 5.窗口函数 
+-- 6.表元数据信息 
 
 --1
 insert
@@ -47,3 +48,23 @@ FROM
 where city_name in ('杭州')
 ORDER BY
     s.floor_name_clean asc;
+
+
+
+-- 6.表元数据信
+SELECT
+TABLE_NAME,
+CREATE_TIME,
+UPDATE_TIME
+FROM
+INFORMATION_SCHEMA.TABLES
+WHERE
+TABLE_SCHEMA = 'dws_db'
+AND TABLE_NAME LIKE  '%dws_imei_browse_tag%';
+
+
+
+
+SHOW processlist;
+
+kill 757595;

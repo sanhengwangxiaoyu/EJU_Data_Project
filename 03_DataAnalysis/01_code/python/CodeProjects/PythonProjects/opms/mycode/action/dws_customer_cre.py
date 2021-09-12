@@ -1,9 +1,6 @@
+# In[1]:
 #!/usr/bin/env python
 # coding: utf-8
-
-# In[1]:
-
-
 # -*- coding: utf-8 -*-
 """
 Created on Jun 26 16:44:47 2021
@@ -34,14 +31,11 @@ user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-
 date_quarter = '2021Q1'    #  获取季度（统计周期）
-start_date = '20210101'   #  获取取数的开始年月日
-stop_date = '20210401'   #  获取取数结束的年月日
-
 table_name = 'dws_customer_cre'
 
 
+#In[2]:
 opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:",["table=","quarter=","startdate=","enddate="])
 for opts,arg in opts:
   if opts=="-t" or opts=="--table":
@@ -52,15 +46,11 @@ for opts,arg in opts:
     start_date = arg
   elif opts=="-e" or opts=="--enddate":
     stop_date = arg
+    
 
-
-
-
-
-start_date_DF = datetime.datetime.strptime(start_date, "%Y%m%d")
-end_date_DF = datetime.datetime.strptime(stop_date, "%Y%m%d")
-pre_start_date = str(start_date_DF - relativedelta(months=+3))[0:10]
-pre_end_date =  str(end_date_DF - relativedelta(months=+3))[0:10]
+#In[3]:
+start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
+end_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
 
 # -*- coding: utf-8 -*-
 class MysqlClient:
@@ -90,94 +80,23 @@ def to_dws(result,table):
 con = MysqlClient(db_host,database,user,password)
 
 
-# dwb_customer_browse_log  客户浏览楼盘日志表（每日增量） 
-#                                                      imei           客户号
-#                                                      visit_date     浏览日期  
-#                                                      newest_id      楼盘id
-#                                                      pv             浏览次数  
-ori=con.query('''SELECT imei,visit_date date,newest_id,pv FROM dwb_db.dwb_customer_browse_log where visit_date>='''+start_date+''' and visit_date<'''+stop_date)
-#dws_newest_info  新房楼盘
-#                                                      newest_id       楼盘id
-#                                                      city_id         城市id  
-#                                                      county_id       区县id  
-newest_id=con.query('''select distinct newest_id,city_id city,county_id from dws_db.dws_newest_info''')
-# dws_newest_period_admit  准入楼盘表
-#                                                      newest_id       楼盘id
-admit = con.query('''select distinct newest_id from dws_db.dws_newest_period_admit where period = "'''+date_quarter+'''"  and dr = 0''')
-
-# dws_imei_browse_tag  客户浏览标签结果表
-#                                   imei            类似客户号的东西
-#                                   concern        关注
-#                                   intention      意向
-#                                   urgent         迫切
-#                                   cre            增存
-ime = con.query('''select imei,concern,intention,urgent,cre from dws_db.dws_imei_browse_tag where period = "'''+date_quarter+'''"''')
+# In[1]:
+#设置格式
+conn = pymysql.connect(host=db_host, user=user,password=password,database=database,charset="utf8")
+def connect_mysql(conn):
+#判断链接是否正常
+ conn.ping(True)
+#建立操作游标
+ cursor=conn.cursor()
+#设置数据输入输出编码格式
+ cursor.execute('set names utf8')
+ return cursor
+# 建立链接游标
+cur=connect_mysql(conn)
+update_sql1 = "insert into dws_db_Prd.dws_customer_cre(city_id,newest_id,exist,imei_num,period) select b.city_id,a.* from (select newest_id,'增量' exist,increase imei_num,period from dwb_db.dwb_newest_customer_info where dr=0 and period =quarter union all select newest_id,'存量' exist,retained imei_num,period from dwb_db.dwb_newest_customer_info where dr=0 and period =quarter) a left join (select newest_id,city_id,county_id from dwb_db.a_dwb_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,city_name,county_id,county_name) b on a.newest_id=b.newest_id where b.city_id is not null"
+cur.execute(update_sql1)
+conn.commit() # 提交记
+conn.close() # 关闭数据库链接
+print('>>> Done')
 
 
-# 获取楼盘的城市和区县，以及浏览基本情况
-grouped2 = pd.merge(admit, newest_id, how='left', on=['newest_id'])
-ori = pd.merge(grouped2, ori, how='inner', on=['newest_id'])
-# 修改列名
-# ori.rename(columns={'newest_id':'newest'},inplace=True)
-# # 转换时间格式
-# ori['date']=pd.to_datetime(ori['date'],format='%Y-%m-%d').dt.date
-
-# #imei标签-增存
-# #cust_browse_log_202004_202103  客户浏览日志表季度拼接
-# #                                                      customer        imei客户号
-# #                                                      idate           数据接收日期
-# #                                                      city_name       城市名称
-# #                                                      floor_name      项目名称
-# #                                                      pv              点击次数
-# las=con.query("SELECT distinct customer imei,concat(substr(idate,1,4),'-',substr(idate,5,2),'-',substr(idate,7,2)),city_name,floor_name,pv FROM odsdb.cust_browse_log_202004_202103 where date_format(idate,'%Y-%m-%d') >= '"+pre_start_date+"'  and date_format(idate,'%Y-%m-%d') <'"+pre_end_date+"' ")
-# las.columns=['imei','date','city','newest','pv']
-# # 转换时间格式
-# las['date']=pd.to_datetime(las['date'],format='%Y-%m-%d').dt.date
-
-
-# In[2]:
-grouped4 = pd.merge(ori,ime ,how='left' ,on=['imei'])
-grouped4 = grouped4[['city','newest_id','imei','cre']]
-
-
-# In[3]:
-grouped5_increase_tmp =  grouped4[grouped4['cre'] == '增长']
-grouped5_increase_tmp = grouped5_increase_tmp[['city','newest_id','imei']].drop_duplicates()
-grouped5_increase = grouped5_increase_tmp.groupby(['city','newest_id'])['imei'].count().reset_index()
-grouped5_increase['exist'] = "增量"
-grouped5_increase
-
-# In[4]:
-grouped5_retained_tmp =  grouped4[grouped4['cre'] == '活跃']
-grouped5_retained_tmp = grouped5_retained_tmp[['city','newest_id','imei']].drop_duplicates()
-grouped5_retained = grouped5_retained_tmp.groupby(['city','newest_id'])['imei'].count().reset_index()
-grouped5_retained['exist'] = "存量"
-grouped5_retained
-# In[4]:
-cus_cre_res = pd.concat([grouped5_increase,grouped5_retained])
-cus_cre_res['period'] = date_quarter
-cus_cre_res = cus_cre_res[['city','newest_id','exist','imei','period']]
-cus_cre_res.columns = ['city_id','newest_id','exist','imei_num','period']
-cus_cre_res
-to_dws(cus_cre_res,table_name)
-
-print('>> Done!') #完毕
-#增存留占比#
-# 截取列，去重
-# cus_list=ori[['city','newest','imei']].drop_duplicates()
-# # 截取列，去重
-# cus_last=las[['imei']].drop_duplicates()
-# # 新增字段exist 值为存量
-# cus_last['exist']="存量"
-# # 按照imei，浏览用户合存量用户拼接
-# cus_list=pd.merge(cus_list,cus_last,how='left',on=['imei'])
-# # 将新字段exist为空的，都填充为增量
-# cus_list.at[cus_list['exist'].isna(),'exist']="增量"
-# # 计算每个城市的项目增存量浏览了多少人
-# cus_cre_res=cus_list.groupby(['city','newest','exist']).count().reset_index()
-# # 新增季度字段并且赋值
-# cus_cre_res['period']=date_quarter
-# # 修改列名，加载数据到dws_customer_cre
-# cus_cre_res.columns=['city_id','newest_id','exist','imei_num','period']
-# cus_cre_res
-# to_dws(cus_cre_res,'dws_customer_cre')

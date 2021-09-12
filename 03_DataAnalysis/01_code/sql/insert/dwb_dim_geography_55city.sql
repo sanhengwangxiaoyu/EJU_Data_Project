@@ -1,0 +1,4 @@
+insert into dwb_db.dwb_dim_geography_55city (province_id,province_name,city_id,city_name,region_id,region_name,city_level_desc,dr,create_time,update_time)
+select province_id,province_name,city_id,city_name,region_id,region_name,city_level_desc,0,now(),now() from dws_db.dim_geography where city_name in ('南昌市','重庆市','天津市','常州市','绍兴市','郑州市','咸阳市','成都市','南通市','石家庄市','深圳市','北京市','三亚市','杭州市','贵阳市','西安市','武汉市','济南市','合肥市','肇庆市','青岛市','惠州市','长春市','珠海市','扬州市','广州市','南京市','沈阳市','徐州市','苏州市','上海市','保定市','宁波市','湖州市','赣州市','烟台市','济宁市','汕头市','昆明市','宝鸡市','佛山市','福州市','海口市','嘉兴市','九江市','丽水市','南宁市','厦门市','唐山市','温州市','无锡市','长沙市','淄博市') and grade = 4
+union all 
+select province_id,province_name,city_id,city_name,region_id,region_name,city_level_desc,0,now(),now() from dws_db.dim_geography where city_name in ('东莞市','中山市') and grade = 3;

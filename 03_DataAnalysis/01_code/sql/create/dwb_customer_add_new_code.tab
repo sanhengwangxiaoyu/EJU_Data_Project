@@ -1,0 +1,19 @@
+CREATE TABLE `dwb_customer_add_new_code` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `ods_id` varchar(33) DEFAULT NULL COMMENT '源表id',
+  `ods_table_name` varchar(30) DEFAULT NULL COMMENT '源表名称',
+  `imei` varchar(30) DEFAULT NULL COMMENT 'imei',
+  `visit_week` varchar(30) DEFAULT NULL COMMENT '浏览周度',
+  `visit_month` varchar(30) DEFAULT NULL COMMENT '浏览月度',
+  `visit_quarter` varchar(30) DEFAULT NULL COMMENT '浏览季度',
+  `add_new_code` int(2) NOT NULL DEFAULT '0' COMMENT '增存量的标识：0 增量  1  存量',
+  `dr` int(2) NOT NULL DEFAULT '0' COMMENT '有效标识： 0 有效  1无效',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `city_id` varchar(50) DEFAULT NULL COMMENT '城市id',
+  PRIMARY KEY (`id`),
+  KEY `idx_add_new_code_imei` (`imei`) USING BTREE,
+  KEY `idx_add_new_visit_week` (`visit_week`) USING BTREE,
+  KEY `idx_add_new_visit_month` (`visit_month`) USING BTREE,
+  KEY `add_new_code_visit_quarter` (`visit_quarter`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=10421264 DEFAULT CHARSET=utf8mb4 COMMENT='用户增全量标识表'

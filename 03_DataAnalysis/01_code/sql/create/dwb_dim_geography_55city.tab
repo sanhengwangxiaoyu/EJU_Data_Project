@@ -1,0 +1,16 @@
+CREATE TABLE dwb_db.dwb_dim_geography_55city (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `province_id` varchar(64) COMMENT '省id',
+  `province_name` varchar(255) COMMENT '省名称',
+  `city_id` varchar(64) COMMENT '城市id',
+  `city_name` varchar(255) COMMENT '城市名称',
+  `region_id` varchar(64) COMMENT '区域id',
+  `region_name` varchar(255) COMMENT '区域名称',
+  `city_level_desc` varchar(255) COMMENT '城市等级',
+  `dr` int(2) NOT NULL DEFAULT 0 COMMENT '有效标识(0,有效，1，作废）',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+KEY `idx_dim_geography_city_id` (`city_id`) USING BTREE,
+KEY `idx_dim_geography_city_name` (`city_name`) USING BTREE
+)  ENGINE=InnoDB AUTO_INCREMENT=3243767 DEFAULT CHARSET=utf8mb4 COMMENT='上线55城地域维度信息表' ;

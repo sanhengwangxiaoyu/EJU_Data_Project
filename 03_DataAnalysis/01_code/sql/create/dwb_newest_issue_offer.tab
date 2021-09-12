@@ -1,0 +1,21 @@
+CREATE TABLE dwb_db.dwb_newest_issue_offer (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `city` varchar(33) COMMENT '所在城市',
+  `newest_name` varchar(255) COMMENT '楼盘名字',
+  `issue_code` varchar(320) COMMENT '预售证',
+  `issue_date` varchar(30) COMMENT '发证日期',
+  `issue_month` varchar(30) COMMENT '发证月份',
+  `issue_quarter` varchar(30) COMMENT '发证季度',
+  `issue_room` int(11) COMMENT '许可证套数',
+  `issue_area` int(11) COMMENT '许可证面积',
+  `business` varchar(255) COMMENT '楼盘开发商',
+  `address`  varchar(255) COMMENT '楼盘地址',
+  `dr`  int(2) NOT NULL DEFAULT 0 COMMENT '有效标识(0,有效，1，作废）', 
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `newest_url` varchar(765) COMMENT '楼盘网址',
+  PRIMARY KEY (`id`),
+KEY `idx_newest_name` (`newest_name`) USING BTREE,
+KEY `idx_newest_issue_code` (`issue_code`) USING BTREE,
+KEY `idx_newest_city` (`city`) USING BTREE
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='楼盘预售证供应表';

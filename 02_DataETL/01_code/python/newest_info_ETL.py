@@ -72,6 +72,21 @@ def to_dws(result,table):
     engine = create_engine('mysql+mysqldb://'+user+':'+password+'@'+db_host+':'+'3306'+'/'+database+'?charset=utf8')
     result.to_sql(name = table,con = engine,if_exists = 'append',index = False,index_label = False)
 
+##车位数清洗逻辑
+def sum_str(s):
+    new_str = ""  		#创建一个空字符串
+    for ch in s:
+	    if ch.isdigit():		#字符串中的方法，可以直接判断ch是否是数字
+		    new_str += ch
+	    else:
+		    new_str += " "
+    sub_list = new_str.split()   #对新的字符串切片
+    num_list = list(map(int, sub_list)) 	#map方法，使列表中的元素按照指定方式转变
+    res  = sum(num_list)
+    # print(res)
+    return res
+
+
 ##正式代码##
 """
 1>  dws_newest_info
@@ -285,11 +300,17 @@ pr = pd.concat([park_r_1,park_r_2,park_r_3])
 
 # In[6]:
 ##车位数清洗##
-park_s_r = dw_newest[['newest_id','park_num']]
+# 截取列
+park_s = ods_newest[['uuid','park_num']]
+park_s.columns = ['newest_id','park_num_o']
+# 关联获取ods层表数据
+park_s_r = pd.merge(id,park_s,how='left',on=['newest_id'])
 park_s_r = park_s_r.replace ( '车位配比：1:1.7。' , '' , regex = True )
 park_s_r = park_s_r.replace ( '暂无信息' , '' , regex = True )
-park_s_r['park_num'] = park_s_r['park_num'].apply(lambda x:re.sub("\D","",str(x)))
+# park_s_r['park_num'] = park_s_r['park_num'].apply(lambda x:re.sub("\D","",str(x)))
+park_s_r['park_num'] = park_s_r['park_num_o'].apply(lambda x:sum_str(x))
 ##合并##
+park_s_r = park_s_r[['newest_id','park_num']]
 pr = pd.merge(pr,park_s_r,how='left',on='newest_id')
 
 
@@ -300,6 +321,8 @@ area_r.at[area_r['land_area'] < 7000,'land_area'] = -1
 area_r.at[area_r['land_area'] > 600000,'land_area'] = -1
 area_r.at[area_r['building_area'] < 20000,'building_area'] = -1
 area_r.at[area_r['building_area'] > 1200000,'building_area'] = -1
+pr.at[pr['park_num'] < 200, 'park_num'] = -1
+pr.at[pr['park_num'] > 100000, 'park_num'] = -1
 #和结果表拼接
 dw_newest
 result = dw_newest[['newest_id','newest_sn','newest_name','alias_name','city_id','county_id','address','lng','lat','property_type','property_fee','property_id','building_type','building_num','floor_num','right_term','green_rate','decoration','sales_state','sale_address','opening_date','recent_opening_time','recent_delivery_time','unit_price','dr','create_date','create_user','update_date','update_user','index','jpg']]
@@ -317,6 +340,28 @@ print('>> 开始写入数据')
 #更新空值
 conn = pymysql.connect(host=db_host, user=user,password=password,database=database,charset="utf8")
 def connect_mysql(conn):
+  #判断链接是否正常
+  conn.ping(True)
+  #建立操作游标
+  cursor=conn.cursor()
+  #设置数据输入输出编码格式
+  cursor.execute('set names utf8')
+  return cursor
+# 建立链接游标
+cur=connect_mysql(conn)
+# 清空表
+update_sql1 = "delete from "+database+"."+table_name+" "
+cur.execute(update_sql1)
+conn.commit() # 提交记
+conn.close() # 关闭数据库链接
+# 加载数据
+to_dws(result,table_name)
+
+
+# In[9]:
+# 去掉 - -1 等数据都替换为null
+conn = pymysql.connect(host=db_host, user=user,password=password,database=database,charset="utf8")
+def connect_mysql(conn):
 #判断链接是否正常
  conn.ping(True)
 #建立操作游标
@@ -326,29 +371,97 @@ def connect_mysql(conn):
  return cursor
 # 建立链接游标
 cur=connect_mysql(conn)
-# 清空表
-update_sql1 = "delete from "+database+"."+table_name+" "
+update_sql1 = "UPDATE dws_db."+table_name+" SET park_rate = NULL WHERE park_rate = ''"
+cur.execute(update_sql1)
+update_sq2 = "UPDATE dws_db."+table_name+" SET park_num = NULL WHERE park_num = '-1'"
+cur.execute(update_sq2)
+conn.commit() # 提交记
+conn.close() # 关闭数据库链接
+
+
+# In[9]:
+# 去掉 - -1 等数据都替换为null
+conn = pymysql.connect(host=db_host, user=user,password=password,database=database,charset="utf8")
+def connect_mysql(conn):
+#判断链接是否正常
+ conn.ping(True)
+#建立操作游标
+ cursor=conn.cursor()
+#设置数据输入输出编码格式
+ cursor.execute('set names utf8')
+ return cursor
+# 建立链接游标
+cur=connect_mysql(conn)
+update_sql1 = "UPDATE dws_db."+table_name+" SET volume_rate = NULL WHERE volume_rate < 1 or volume_rate > 5"
+cur.execute(update_sql1)
+update_sq2 = "UPDATE dws_db."+table_name+" SET household_num = NULL WHERE household_num < 100 "
+cur.execute(update_sq2)
+conn.commit() # 提交记
+conn.close() # 关闭数据库链接
+
+
+# In[9]:
+# 去掉 - -1 等数据都替换为null
+conn = pymysql.connect(host=db_host, user=user,password=password,database=database,charset="utf8")
+def connect_mysql(conn):
+#判断链接是否正常
+ conn.ping(True)
+#建立操作游标
+ cursor=conn.cursor()
+#设置数据输入输出编码格式
+ cursor.execute('set names utf8')
+ return cursor
+# 建立链接游标
+cur=connect_mysql(conn)
+update_sql1 = "UPDATE dws_db."+table_name+" SET land_area = NULL WHERE land_area = '-1'"
+cur.execute(update_sql1)
+update_sq2 = "UPDATE dws_db."+table_name+" SET building_area = NULL WHERE building_area = '-1'"
+cur.execute(update_sq2)
+conn.commit() # 提交记
+conn.close() # 关闭数据库链接
+
+
+# In[9]:
+# 通话plainfo
+conn = pymysql.connect(host=db_host, user=user,password=password,database=database,charset="utf8")
+def connect_mysql(conn):
+#判断链接是否正常
+ conn.ping(True)
+#建立操作游标
+ cursor=conn.cursor()
+#设置数据输入输出编码格式
+ cursor.execute('set names utf8')
+ return cursor
+# 建立链接游标
+cur=connect_mysql(conn)
+update_sql1 = "update dws_db.dws_newest_info a , dws_db.dws_newest_planinfo b set b.park_num = a.park_num where a.newest_id = b.newest_id and a.newest_name = b.newest_name and a.city_id = b.city_id"
+cur.execute(update_sql1)
+update_sql1 = "update dws_db.dws_newest_info a , dws_db.dws_newest_planinfo b set b.park_rate = a.park_rate where a.newest_id = b.newest_id and a.newest_name = b.newest_name and a.city_id = b.city_id"
 cur.execute(update_sql1)
 conn.commit() # 提交记
-# 加载数据
-to_dws(result,table_name)
-# 更新park_rate
-update_sql2 = "update "+database+"."+table_name+" set park_rate = '-' where park_rate = '' or park_rate is null"
-cur.execute(update_sql2)
-conn.commit() # 提交记
-# 更新park_num
-update_sql3 = "update "+database+"."+table_name+" set park_num = '-' where park_num = '' or park_num is null or park_num = 1"
-cur.execute(update_sql3)
-conn.commit() # 提交记
-# 更新volume_rate
-update_sql4 = "update "+database+"."+table_name+" set volume_rate = '-1.000' where volume_rate < 1 or volume_rate > 5"
-cur.execute(update_sql4)
-conn.commit() # 提交记
-# 更新household_num
-update_sql5 = "update "+database+"."+table_name+" set household_num = '-1.000' where household_num = 0"
-cur.execute(update_sql5)
+conn.close() # 关闭数据库链接
+
+
+# In[9]:
+# 通话plainfo
+conn = pymysql.connect(host=db_host, user=user,password=password,database=database,charset="utf8")
+def connect_mysql(conn):
+#判断链接是否正常
+ conn.ping(True)
+#建立操作游标
+ cursor=conn.cursor()
+#设置数据输入输出编码格式
+ cursor.execute('set names utf8')
+ return cursor
+# 建立链接游标
+cur=connect_mysql(conn)
+update_sql1 = "update dws_db.dws_newest_info a , dws_db.dws_newest_planinfo b set b.volume_rate = a.volume_rate where a.newest_id = b.newest_id and a.newest_name = b.newest_name and a.city_id = b.city_id"
+cur.execute(update_sql1)
+update_sql1 = "update dws_db.dws_newest_info a , dws_db.dws_newest_planinfo b set b.household_num = a.household_num where a.newest_id = b.newest_id and a.newest_name = b.newest_name and a.city_id = b.city_id"
+cur.execute(update_sql1)
 conn.commit() # 提交记
 conn.close() # 关闭数据库链接
 print('>> Done!') #完毕
-# park_r.to_csv('C:\\Users\\86133\\Desktop\\park_r.csv')
+
+# pr.to_csv('C:\\Users\\86133\\Desktop\\pr.csv')
 

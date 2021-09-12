@@ -1,0 +1,13 @@
+CREATE TABLE odsdb.ori_newest_provide_sche (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `url` varchar(500) COMMENT '楼盘id',
+  `newest_name`varchar(500) COMMENT '数据网址',
+  `sche_tag` varchar(500) COMMENT 'tag标签',
+  `provide_title` varchar(500) COMMENT 'title标题',
+  `provide_date` varchar(500) COMMENT 'date发布时间',
+  `provide_sche` varchar(500) COMMENT 'content内容',
+  `date_clean` date COMMENT '时间清洗结果',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='楼盘动态原始信息表';

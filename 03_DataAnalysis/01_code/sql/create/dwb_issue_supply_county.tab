@@ -1,0 +1,22 @@
+CREATE TABLE dwb_db.dwb_issue_supply_county (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `city_id` varchar(30) DEFAULT NULL COMMENT '城市id',
+  `city_name` varchar(64) DEFAULT NULL COMMENT '城市名称',
+  `county_id` varchar(30) DEFAULT NULL COMMENT '区县id',
+  `county_name` varchar(64) DEFAULT NULL COMMENT '区县名称',
+  `intention` int(6) NOT NULL DEFAULT 0	COMMENT '区县意向数量',
+  `period` varchar(30) DEFAULT NULL COMMENT '当前月份时间(格式：%Y%m)',
+  `quarter` varchar(30) DEFAULT NULL COMMENT '当前季度时间(举例：2021Q1)',
+  `intention_city` int(6) NOT NULL DEFAULT 0 COMMENT '城市意向数量',
+  `rate` varchar(30) DEFAULT NULL COMMENT '占比',
+  `supply_num` varchar(30) DEFAULT NULL COMMENT '城市供应套数',
+  `supply_value` varchar(30) DEFAULT NULL COMMENT '区县供应套数',
+  `cric_supply_num` varchar(30) DEFAULT NULL COMMENT 'CRIC套数',
+  `num_index` varchar(30) DEFAULT NULL COMMENT '取数标识 （1 从CRIC中取数）',
+  `dr` int(2) NOT NULL DEFAULT '0' COMMENT '有效标识(0,有效，1，作废）',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_newest_city_id` (`city_id`) USING BTREE,
+  KEY `idx_newest_county_id` (`county_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='区域总供应套数';

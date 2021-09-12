@@ -1,0 +1,14 @@
+CREATE TABLE `dwb_issue_supply_city` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `city_id` varchar(30) DEFAULT NULL COMMENT '城市id',
+  `city_name` varchar(64) DEFAULT NULL COMMENT '城市名称',
+  `period` varchar(30) DEFAULT NULL COMMENT '当前季度时间(举例：2021Q1)',
+  `supply_num` varchar(30) DEFAULT NULL COMMENT '供应套数',
+  `dr` int(2) NOT NULL DEFAULT '0' COMMENT '有效标识(0,有效，1，作废）',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `cric_supply_num` varchar(30) DEFAULT NULL COMMENT 'CRIC套数',
+  `num_index` varchar(30) DEFAULT NULL COMMENT '取数标识 （1 从CRIC中取数）',
+  PRIMARY KEY (`id`),
+  KEY `idx_newest_city_id` (`city_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='城市总供应套数'

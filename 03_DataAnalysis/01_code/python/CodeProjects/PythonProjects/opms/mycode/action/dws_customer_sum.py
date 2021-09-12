@@ -1,9 +1,6 @@
+# In[1]:
 #!/usr/bin/env python
 # coding: utf-8
-
-# In[1]:
-
-
 # -*- coding: utf-8 -*-
 """
 Created on Fri Mar 26 16:44:47 2021
@@ -12,6 +9,7 @@ Created on Fri Mar 26 16:44:47 2021
 import configparser
 import os
 import sys
+from numpy.matrixlib import defmatrix
 import pymysql
 import pandas as pd
 import numpy as np
@@ -22,7 +20,8 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import getopt
 
-cf = configparser.ConfigParser()
+pymysql.install_as_MySQLdb()
+cf = configparser.ConfigParser()    
 path = os.path.abspath(os.curdir)
 confpath = path + "/conf/config4.ini"
 cf.read(confpath)  # 读取配置文件，如果写文件的绝对路径，就可以不用os模块
@@ -36,7 +35,7 @@ start_date = '20210101'   #  获取取数的开始年月日
 stop_date = '20210401'   #  获取取数结束的年月日
 table_name = 'dws_customer_sum'
 
-
+# In[]
 
 opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:",["table=","quarter=","startdate=","enddate="])
 for opts,arg in opts:
@@ -48,8 +47,10 @@ for opts,arg in opts:
     start_date = arg
   elif opts=="-e" or opts=="--enddate":
     stop_date = arg
+  elif opts=="-d" or opts=="database":
+        database = arg
 
-
+# In[]
 
 start_date_DF = datetime.datetime.strptime(start_date, "%Y%m%d")  #转换为yyyy-MM-dd HH:mm:ss 的时间格式
 end_date_DF = datetime.datetime.strptime(stop_date, "%Y%m%d")     #转换为yyyy-MM-dd HH:mm:ss 的时间格式
@@ -79,9 +80,6 @@ class MysqlClient:
     def close(self):
         self.conn.close()
 
-
-# In[2]:
-
 def to_dws(result,table):
     engine = create_engine('mysql+mysqldb://'+user+':'+password+'@'+db_host+':'+'3306'+'/'+database)
     result.to_sql(name = table,con = engine,if_exists = 'append',index = False,index_label = False)
@@ -95,26 +93,23 @@ con = MysqlClient(db_host,database,user,password)
 #                                                      visit_date     浏览日期  
 #                                                      newest_id      楼盘id
 #                                                      pv             浏览次数  
-ori=con.query('''SELECT imei,visit_date date,newest_id,pv FROM dwb_db.dwb_customer_browse_log where visit_date>='''+start_date+''' and visit_date<'''+stop_date)
+ori=con.query("select newest_id,intention,orien,urgent,increase,retained from dwb_db.dwb_newest_customer_info where dr = 0 and period='"+date_quarter+"'")
 # dws_newest_info  新房楼盘
 #                                                      newest_id       楼盘id
 #                                                      city_id         城市id  
 #                                                      county_id       区县id  
-newest_id=con.query('''select distinct newest_id,city_id city,county_id from dws_db.dws_newest_info''')
-# dws_newest_period_admit  准入楼盘表
-#                                                      newest_id       楼盘id
-admit = con.query('''select distinct newest_id from dws_db.dws_newest_period_admit where period = "'''+date_quarter+'''"  and dr = 0''')
+admit=con.query("select newest_id from dwb_db.a_dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
+newest_id=con.query("select newest_id,city_id from dwb_db.a_dwb_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,city_name,county_id,county_name")
+# 获取指定季度的楼盘id,和城市id，区县id
+admit = pd.merge(admit,newest_id, how='inner', on=['newest_id'])
 
 
+#In[]
 # 获取楼盘的城市和区县，以及浏览基本情况
-grouped2 = pd.merge(admit, newest_id, how='left', on=['newest_id'])
-ori = pd.merge(grouped2, ori, how='inner', on=['newest_id'])
+df = pd.merge(admit, ori, how='inner', on=['newest_id'])
 # 修改列名
-ori.rename(columns={'newest_id':'newest'},inplace=True)
-# 字符串转换成时间格式
-# ori['date']=pd.to_datetime(ori['date'],format='%Y-%m-%d').dt.date
-# 根据城市id和楼盘id分组，关注客户总量
-cus_sum=ori.groupby(['city','newest']).agg({'imei':pd.Series.nunique}).reset_index()
+df.rename(columns={'newest_id':'newest'},inplace=True)
+cus_sum = df[['city_id','newest','intention']]
 # 修改列名
 cus_sum.columns=['city_name','newest_name','cou_imei']
 # 对城市名字分组，求取关注客户的平均值

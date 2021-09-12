@@ -1,5 +1,0 @@
-database=${d}
-input_table_name=${it}
-output_table_name=${ot}
-type=command
-command=python /bdp/code/python/dwb2dws.py -i "${input_table_name}" -d "${database}" -o "${output_table_name}"
