@@ -17,6 +17,7 @@ import re
 from sqlalchemy import create_engine
 import getopt
 from dateutil.relativedelta import relativedelta
+import requests,re,os, time
 pd.set_option('display.max_columns',None)
 
 ##设置配置信息##
@@ -30,9 +31,9 @@ user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-period = '2021Q1'
-taable_name='dws_imei_browse_tag'
-# database='dws_db_prd'
+period = '2018Q4'
+table_name='dws_imei_browse_tag'
+database='dws_db_prd'
 
 # -*- coding: utf-8 -*-
 class MysqlClient:
@@ -86,7 +87,8 @@ end_date =  str(pd.to_datetime(period) + pd.offsets.QuarterEnd(0))[0:10]      #�
     关注3个楼盘以上的用户中,
     若 (用户关注楼盘的最大值-城市平均关注值)/城市平均关注值 >40% 则为意向用户
     迫切算法调整 - 调整思路 : 集中度+高密集集中度
-    在意向的基础上,那批人的(用户关注楼盘的最大值-自己关注的中位数)/自己关注的中位数>190% 则为迫切用户
+    在意向的基础上,那批人的(用户关注楼盘的最大值-自己关注的中位数)/自己关注的中位数>200% 则为迫切用户
+
     用户关注楼盘的最大值:sum(pv)+count(1) group by period,newest_id,city
     留存：增存量-第一次出现为增量，其他为存量
   
@@ -157,9 +159,9 @@ imei_browse_tag['urgent']=np.nan
 imei_browse_tag=pd.merge(imei_browse_tag,df7,how='left',on=['period','imei'])
 imei_browse_tag.at[(imei_browse_tag['cou']>=2)&((imei_browse_tag['max_cu']-imei_browse_tag['avg_cu'])/imei_browse_tag['avg_cu']>0.4) ,'intention']='意向'
 #迫切
-imei_browse_tag.at[(imei_browse_tag['intention'] == '意向')&((imei_browse_tag['max_cu']-imei_browse_tag['median_cu'])/imei_browse_tag['median_cu']>1.9),'urgent']='迫切'
+imei_browse_tag.at[(imei_browse_tag['intention'] == '意向')&((imei_browse_tag['max_cu']-imei_browse_tag['median_cu'])/imei_browse_tag['median_cu']>2),'urgent']='迫切'
 # imei_browse_tag[imei_browse_tag['max_cu']==2]
-# imei_browse_tag[~imei_browse_tag['intention'].isna()]
+imei_browse_tag[~imei_browse_tag['intention'].isna()]
 # imei_browse_tag[~imei_browse_tag['urgent'].isna()]
 #合并增全量标识
 imei_browse_tag=pd.merge(imei_browse_tag,add_new_code,how='left',on=['period','imei'])
@@ -174,7 +176,7 @@ imei_browse_tag=imei_browse_tag[['period','imei','concern','intention','urgent',
 
 # In[9]:
 #imei_browse_tag.columns=['period','customer','concern','intention','urgent','cre']
-to_dws(imei_browse_tag,taable_name)
+to_dws(imei_browse_tag,table_name)
 print('>>> Done')
 
 # In[ ]:
@@ -184,7 +186,5 @@ print('>>> Done')
 
 
 # In[ ]:
-
-
 
 

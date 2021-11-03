@@ -6,57 +6,21 @@
 Created on Fri Mar 26 16:44:47 2021
 @author: admin1
 """
-import configparser
-import os
-import sys
-from numpy.matrixlib import defmatrix
-import pymysql
-import pandas as pd
-import numpy as np
-from collections import Counter
-import re
+import configparser,os,sys,pymysql,pandas as pd,datetime,getopt
 from sqlalchemy import create_engine
-import datetime
 from dateutil.relativedelta import relativedelta
-import getopt
 
 pymysql.install_as_MySQLdb()
 cf = configparser.ConfigParser()    
 path = os.path.abspath(os.curdir)
 confpath = path + "/conf/config4.ini"
 cf.read(confpath)  # 读取配置文件，如果写文件的绝对路径，就可以不用os模块
-
 user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-date_quarter = '2021Q1'    #  获取季度（统计周期）
-start_date = '20210101'   #  获取取数的开始年月日
-stop_date = '20210401'   #  获取取数结束的年月日
+date_quarter = '2021Q3'    #  获取季度（统计周期）
 table_name = 'dws_customer_sum'
-
-# In[]
-
-opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:",["table=","quarter=","startdate=","enddate="])
-for opts,arg in opts:
-  if opts=="-t" or opts=="--table":
-    table_name = arg
-  elif opts=="-q" or opts=="--quarter":
-    date_quarter = arg
-  elif opts=="-s" or opts=="--startdate":
-    start_date = arg
-  elif opts=="-e" or opts=="--enddate":
-    stop_date = arg
-  elif opts=="-d" or opts=="database":
-        database = arg
-
-# In[]
-
-start_date_DF = datetime.datetime.strptime(start_date, "%Y%m%d")  #转换为yyyy-MM-dd HH:mm:ss 的时间格式
-end_date_DF = datetime.datetime.strptime(stop_date, "%Y%m%d")     #转换为yyyy-MM-dd HH:mm:ss 的时间格式
-pre_start_date = str(start_date_DF - relativedelta(months=+3))[0:10]   #截取成yyyy-MM-dd
-pre_end_date =  str(end_date_DF - relativedelta(months=+3))[0:10]      #截取成yyyy-MM-dd
-
 
 # -*- coding: utf-8 -*-
 class MysqlClient:
@@ -84,8 +48,25 @@ def to_dws(result,table):
     engine = create_engine('mysql+mysqldb://'+user+':'+password+'@'+db_host+':'+'3306'+'/'+database)
     result.to_sql(name = table,con = engine,if_exists = 'append',index = False,index_label = False)
 
-# In[18]:
 
+
+# In[]
+opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:",["table=","quarter=","startdate=","enddate="])
+for opts,arg in opts:
+  if opts=="-t" or opts=="--table":
+    table_name = arg
+  elif opts=="-q" or opts=="--quarter":
+    date_quarter = arg
+  elif opts=="-s" or opts=="--startdate":
+    start_date = arg
+  elif opts=="-e" or opts=="--enddate":
+    stop_date = arg
+  elif opts=="-d" or opts=="database":
+        database = arg
+
+
+
+# In[]
 #意向客户总量#
 con = MysqlClient(db_host,database,user,password)
 # dwb_customer_browse_log  客户浏览楼盘日志表（每日增量） 
@@ -98,8 +79,8 @@ ori=con.query("select newest_id,intention,orien,urgent,increase,retained from dw
 #                                                      newest_id       楼盘id
 #                                                      city_id         城市id  
 #                                                      county_id       区县id  
-admit=con.query("select newest_id from dwb_db.a_dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
-newest_id=con.query("select newest_id,city_id from dwb_db.a_dwb_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,city_name,county_id,county_name")
+admit=con.query("select newest_id from dws_db_prd.dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
+newest_id=con.query("select newest_id,city_id from dws_db_prd.dws_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,county_id")
 # 获取指定季度的楼盘id,和城市id，区县id
 admit = pd.merge(admit,newest_id, how='inner', on=['newest_id'])
 

@@ -7,17 +7,9 @@ Created on Jul 12 17:44:47 2021
   楼盘 意向人数 定向人数 迫切人数 增量人数  存量人数
 
 """
-import configparser
-import os
-import sys,io
-import pymysql
-import pandas as pd
-import numpy as np
+import configparser,getopt,os,sys,pymysql,pandas as pd,numpy as np,time
 from collections import Counter
-import time
-import datetime
 from sqlalchemy import create_engine
-import getopt
 
 ##设置配置信息##
 pymysql.install_as_MySQLdb()
@@ -26,35 +18,14 @@ cf = configparser.ConfigParser()
 path = os.path.abspath(os.curdir)
 confpath = path + "/conf/config4.ini"
 cf.read(confpath)  # 读取配置文件，如果写文件的绝对路径，就可以不用os模块
-
 ##设置变量初始值##
 user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-date_quarter = '2021Q2'   # 季度
+date_quarter = '2021Q3'   # 季度
 table_name = 'dwb_newest_customer_info' # 要插入的表名称
 database = 'dwb_db'
-
-
-# In[2]:
-##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
-opts,args=getopt.getopt(sys.argv[1:],"t:q:d:c:",["city_id","database=","table=","quarter="])
-for opts,arg in opts:
-  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
-    table_name = arg
-  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
-    date_quarter = arg
-  elif opts=="-d" or opts=="--database":  # 获取输入参数 -1或者--quarter 后的值
-    database = arg
-  elif opts=="-c" or opts=="--city_id":  # 获取输入参数 -1或者--quarter 后的值
-    city_id = arg
-
-
-# In[3]:
-##重置时间格式
-start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
-end_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
 
 ##mysql连接配置##
 # -*- coding: utf-8 -*-
@@ -93,14 +64,36 @@ def to_dws(result,table):
 con = MysqlClient(db_host,database,user,password)
 
 
+
+
+# In[2]:
+##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
+opts,args=getopt.getopt(sys.argv[1:],"t:q:d:c:",["city_id","database=","table=","quarter="])
+for opts,arg in opts:
+  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
+    table_name = arg
+  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
+    date_quarter = arg
+  elif opts=="-d" or opts=="--database":  # 获取输入参数 -1或者--quarter 后的值
+    database = arg
+  elif opts=="-c" or opts=="--city_id":  # 获取输入参数 -1或者--quarter 后的值
+    city_id = arg
+
+
 # In[4]:
+##重置时间格式
+start_date = str(pd.to_datetime(date_quarter))[0:7]   #截取成yyyy-MM-dd
+end_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:7]      #截取成yyyy-MM-dd
+start_date = start_date.replace('-','')
+end_date = end_date.replace('-','')
 # a_dwb_customer_browse_log  客户浏览楼盘日志表（每日增量） 
 #                                                      imei          客户号
 #                                                      newest_id     楼盘id  
 #                                                      visit_month   浏览月份 
 #                                                      visit_date    浏览日期 
-
-newest_imei=con.query("SELECT newest_id,imei,visit_month,visit_date FROM dwb_db.a_dwb_customer_browse_log where visit_date>='"+start_date+"' and visit_date<='"+end_date+"'")
+# newest_imei=con.query("SELECT newest_id,imei,visit_month,visit_date FROM dwb_db.a_dwb_customer_browse_log where visit_date>='"+start_date+"' and visit_date<='"+end_date+"'")
+newest_imei=con.query("SELECT newest_id,imei,visit_month FROM dwb_db.dwb_customer_lookest_list_m where visit_month>='"+start_date+"' and visit_month<='"+end_date+"'")
+# newest_imei=con.query("SELECT id,newest_id FROM dwb_db.a_dwb_customer_browse_log where visit_date>='"+start_date+"' and visit_date<='"+end_date+"' and newest_id = 'dc79f4b4efc0fab54d5b42f9c2f913e9'")
 
 
 # In[5]:
@@ -110,7 +103,7 @@ newest_imei=con.query("SELECT newest_id,imei,visit_month,visit_date FROM dwb_db.
 #                                   intention      意向
 #                                   urgent         迫切
 #                                   cre            增存
-browse_tag = con.query('''select imei,concern,intention,urgent from dws_db.dws_imei_browse_tag where period = "'''+date_quarter+'''"''')
+browse_tag = con.query('''select imei,concern,intention,urgent,cre from dws_db_prd.dws_imei_browse_tag where period = "'''+date_quarter+'''"''')
 # 合并表
 df = pd.merge(newest_imei,browse_tag,how='left',on=['imei'])
 

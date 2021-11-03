@@ -6,6 +6,8 @@
 Created on Jul 12 17:44:47 2021
   许可证套数	issue_room
   许可证面积	issue_area
+  Change on Oct 28 13:29:00 2021
+    去除三亚,单独搞三亚
 
 """
 import configparser
@@ -33,7 +35,7 @@ user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-date_quarter = '2021Q1'   # 季度
+date_quarter = '2021Q3'   # 季度
 table_name = 'dwb_newest_issue_offer' # 要插入的表名称
 database = 'dwb_db'
 
@@ -138,6 +140,16 @@ df_sz = df_sz[['gd_city','floor_name','issue_code','issue_date_clean','issue_mon
 df_sz[['room_sum']] = df_sz[['room_sum']].astype('int')
 #   嘉兴市
 df_jx = issue_offer[issue_offer['gd_city'] == '嘉兴市']
+df_jx = df_jx.loc[~df_jx['building_code'].str.contains("地下")]
+df_jx = df_jx.loc[~df_jx['building_code'].str.contains("办公")]
+df_jx = df_jx.loc[~df_jx['building_code'].str.contains("车库")]
+df_jx = df_jx.loc[~df_jx['building_code'].str.contains("商业")]
+df_jx = df_jx.loc[~df_jx['building_code'].str.contains("其他")]
+df_jx = df_jx.loc[~df_jx['floor_name'].str.contains("地下")]
+df_jx = df_jx.loc[~df_jx['floor_name'].str.contains("办公")]
+df_jx = df_jx.loc[~df_jx['floor_name'].str.contains("车库")]
+df_jx = df_jx.loc[~df_jx['floor_name'].str.contains("商业")]
+df_jx = df_jx.loc[~df_jx['floor_name'].str.contains("其他")]
 df_jx = df_jx[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url']].drop_duplicates()
 df_jx[['room_sum']] = df_jx[['room_sum']].astype('int')
 #   南宁市
@@ -233,6 +245,11 @@ df_fz = df_fz.loc[~df_fz['building_code'].str.contains("商住")]
 df_fz = df_fz.loc[~df_fz['building_code'].str.contains("中心")]
 df_fz = df_fz.groupby(['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address'])['url'].max().reset_index()
 df_fz[['room_sum']] = df_fz[['room_sum']].astype('int')
+#   上海市
+df_sh =  issue_offer[issue_offer['gd_city'] == '上海市']
+df_sh = df_sh[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url']].drop_duplicates()
+
+
 
 
 # In[6]:
@@ -320,10 +337,10 @@ df_nj['room_sum'] = df_nj['room_sum'].apply(lambda x:re.sub("\D","",x))
 df_nj = df_nj[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url','building_code']].drop_duplicates()
 df_nj[['room_sum']] = df_nj[['room_sum']].astype('int')
 #   三亚市
-df_sy =  issue_offer[issue_offer['gd_city'] == '三亚市']
-df_sy['room_sum'] = df_sy['room_sum'].apply(lambda x:re.sub("\D","",x))
-df_sy = df_sy[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url','building_code']].drop_duplicates()
-df_sy[['room_sum']] = df_sy[['room_sum']].astype('int')
+# df_sy =  issue_offer[issue_offer['gd_city'] == '三亚市']
+# df_sy['room_sum'] = df_sy['room_sum'].apply(lambda x:re.sub("\D","",x))
+# df_sy = df_sy[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url','building_code']].drop_duplicates()
+# df_sy[['room_sum']] = df_sy[['room_sum']].astype('int')
 #   唐山市
 df_ts =  issue_offer[issue_offer['gd_city'] == '唐山市']
 df_ts = df_ts[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url','building_code']].drop_duplicates()
@@ -354,8 +371,32 @@ df_xz = df_xz[['gd_city','floor_name','issue_code','issue_date_clean','issue_mon
 df_xz[['room_sum']] = df_xz[['room_sum']].astype('int')
 #   扬州市
 df_yz =  issue_offer[issue_offer['gd_city'] == '扬州市']
-df_yz = df_yz[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url','building_code']].drop_duplicates()
+df_yz = df_yz[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url','building_code','room_code']].drop_duplicates()
+df_yz = df_yz.groupby(['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','issue_area','business','address','url','building_code'])['room_sum'].count().reset_index()
 df_yz[['room_sum']] = df_yz[['room_sum']].astype('int')
+df_yz = df_yz[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url','building_code']]
+#   温州市
+df_wz =  issue_offer[issue_offer['gd_city'] == '温州市']
+df_wz = df_wz[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url','building_code']].drop_duplicates()
+df_wz = df_wz.loc[~df_wz['building_code'].str.contains("地下")]
+df_wz = df_wz.loc[~df_wz['building_code'].str.contains("商业")]
+df_wz = df_wz.loc[~df_wz['building_code'].str.contains("办公")]
+df_wz = df_wz.loc[~df_wz['building_code'].str.contains("商铺")]
+df_wz = df_wz.loc[~df_wz['floor_name'].str.contains("商")]
+df_wz[['room_sum']] = df_wz[['room_sum']].astype('int')
+# df_wz.groupby(['gd_city'])['room_sum'].sum().reset_index()
+
+#   咸阳市
+df_xy =  issue_offer[issue_offer['gd_city'] == '咸阳市']
+df_xy = df_xy[['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','room_sum','issue_area','business','address','url','building_code']].drop_duplicates()
+df_xy = df_xy.loc[~df_xy['building_code'].str.contains("地下")]
+df_xy = df_xy.loc[~df_xy['building_code'].str.contains("商业")]
+df_xy = df_xy.loc[~df_xy['building_code'].str.contains("办公")]
+df_xy = df_xy.loc[~df_xy['building_code'].str.contains("商铺")]
+df_xy['room_sum'] = df_xy['room_sum'].astype('str').apply(lambda x:x.split('非住宅')[0])
+df_xy['room_sum'] = df_xy['room_sum'].apply(lambda x:re.sub("\D","",x))
+df_xy[['room_sum']] = df_xy[['room_sum']].astype('int')
+# df_xy.groupby(['gd_city'])['room_sum'].sum().reset_index()
 
 
 # In[8]:
@@ -416,9 +457,10 @@ df_yz[['room_sum']] = df_yz[['room_sum']].astype('int')
 # In[9]:
 ###合并结果集
 # 深圳 佛山 嘉兴 南宁 九江 保定 长沙 东莞 海口 合肥 青岛 沈阳 厦门 淄博 无锡市 成都 贵阳 惠州 武汉 济南  肇庆  福州
-reult1 = pd.concat([df_zq,df_jn,df_wh,df_hz,df_gy,df_cd,df_wx,df_zb,df_xm,df_sheny,df_qd,df_hf,df_hk,df_dg,df_cs,df_bd,df_jj,df_fs,df_nn,df_jx,df_sz,df_fz])
+reult1 = pd.concat([df_zq,df_jn,df_wh,df_hz,df_gy,df_cd,df_wx,df_zb,df_xm,df_sheny,df_qd,df_hf,df_hk,df_dg,df_cs,df_bd,df_jj,df_fs,df_nn,df_jx,df_sz,df_fz,df_sh])
 # 宝鸡 北京 长春 广州 南京 三亚 唐山 中山 宁波 石家庄 珠海 徐州 扬州
-reult2 = pd.concat([df_yz,df_xz,df_zh,df_sjz,df_nb,df_zs,df_ts,df_sy,df_nj,df_gz,df_cc,df_beij,df_bj])
+# reult2 = pd.concat([df_xy,df_wz,df_yz,df_xz,df_zh,df_sjz,df_nb,df_zs,df_ts,df_sy,df_nj,df_gz,df_cc,df_beij,df_bj,])
+reult2 = pd.concat([df_xy,df_wz,df_yz,df_xz,df_zh,df_sjz,df_nb,df_zs,df_ts,df_nj,df_gz,df_cc,df_beij,df_bj,])
 reult2 = reult2.groupby(['gd_city','floor_name','issue_code','issue_date_clean','issue_month','issue_quarter','issue_area','business','address','url'])['room_sum'].sum().reset_index()
 # 合并
 result = reult1.append(reult2,ignore_index=True)
@@ -433,7 +475,11 @@ result.columns = ['city','newest_name','issue_code','issue_date','issue_month','
 # 格式化面积
 result['issue_area'] = result['issue_area'].astype('str').apply(lambda x:x.split('.')[0])
 result['issue_area'] = result['issue_area'].apply(lambda x:re.sub("\D","",x))
-
+result['newest_id'] = '待定'
+result['formal_newest_name'] = '待定'
+result['alias_name'] = '待定'
+result = result[['newest_id','newest_name','address','business','formal_newest_name','alias_name','city','issue_code','issue_date','issue_month','issue_quarter','issue_room','issue_area','dr','create_time','update_time','newest_url']]
+result.columns = ['newest_id','newest_name','address','developer','formal_newest_name','alias_name','city','issue_code','issue_date','issue_month','issue_quarter','issue_room','issue_area','dr','create_time','update_time','newest_url']
 
 # In[1000000]:
 # 手动插入缺失数据
@@ -449,13 +495,14 @@ result['issue_area'] = result['issue_area'].apply(lambda x:re.sub("\D","",x))
 # # 格式化面积
 # result['issue_area'] = result['issue_area'].astype('str').apply(lambda x:x.split('.')[0])
 # result['issue_area'] = result['issue_area'].apply(lambda x:re.sub("\D","",x))
-
+# result = result[result['city']=='沈阳市']
+# result = result[result['city']== '咸阳市']
 
 # In[10]:
 # 加载到新表 dwb_newest_issue_offer
 # result.drop_duplicates(inplace=True)
 to_dws(result,table_name)
-# df_hk.to_csv('C:\\Users\\86133\\Desktop\\df_hk.csv')
+# df_wz.to_csv('C:\\Users\\86133\\Desktop\\df_wz.csv')
 # result
 print('>>>>>>>Done')
 

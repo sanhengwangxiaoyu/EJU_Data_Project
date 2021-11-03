@@ -14,6 +14,10 @@ Change on Aug 26 15:35 2021
 Changed on Seq 09 17:22:00 2021
 计算区县的数据的时候过滤掉东莞和中山
 
+Changed on Oct 10 16:22:00 2021
+更改投资用户获取逻辑,启动中间表dwb_customer_buyable
+
+
 """
 import configparser
 import os
@@ -39,31 +43,8 @@ user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-date_quarter = '2018Q1'   # 季度
+date_quarter = '2021Q3'   # 季度
 table_name = 'dws_newest_investment_pop_rownumber_quarter' # 要插入的表名称
-
-
-# In[]
-##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
-opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:d:",["database=","table=","quarter=","startdate=","enddate="])
-for opts,arg in opts:
-  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
-    table_name = arg
-  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
-    date_quarter = arg
-  elif opts=="-s" or opts=="--startdate":  # 同上
-    start_date = arg
-  elif opts=="-e" or opts=="--enddate":   # 同上
-    stop_date = arg
-  elif opts=="-d" or opts=="database":
-    database = arg
-
-
-
-# In[]
-##重置时间格式
-start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
-stop_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
 
 ##mysql连接配置##
 # -*- coding: utf-8 -*-
@@ -147,13 +128,37 @@ def to_dws(result,table):
 con = MysqlClient(db_host,database,user,password)   # 创建mysql链接
 
 
+
+
+# In[]
+##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
+opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:d:",["database=","table=","quarter=","startdate=","enddate="])
+for opts,arg in opts:
+  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
+    table_name = arg
+  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
+    date_quarter = arg
+  elif opts=="-s" or opts=="--startdate":  # 同上
+    start_date = arg
+  elif opts=="-e" or opts=="--enddate":   # 同上
+    stop_date = arg
+  elif opts=="-d" or opts=="database":
+    database = arg
+
+
+
 # In[1]:
+##重置时间格式
+start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
+stop_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
 #投资意向客户总量#
 # dwb_customer_browse_log  客户浏览楼盘日志表（每日增量） 
 #                                                      newest_id       楼盘id
 #                                                      imei     客户数  
 #                                                      visit_date      浏览日期
-o=con.query("select newest_id,imei from dwb_db.a_dwb_customer_browse_log where visit_date>='"+start_date+"' and visit_date<='"+stop_date+"' group by newest_id,imei")
+# o=con.query("select newest_id,imei from dwb_db.a_dwb_customer_browse_log where visit_date>='"+start_date+"' and visit_date<='"+stop_date+"' group by newest_id,imei")
+
+o=con.query("select newest_id,imei from dwb_db.dwb_customer_lookest_list where visit_quarter='"+date_quarter+"' and dr = 0")
 
 
 # In[2]:
@@ -162,22 +167,23 @@ o=con.query("select newest_id,imei from dwb_db.a_dwb_customer_browse_log where v
 #                                                      newest_id       楼盘id
 #                                                      city_id         城市id
 #                                                      county_id       区县id
-admit=con.query("select newest_id from dwb_db.a_dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
+admit=con.query("select newest_id from dws_db_prd.dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
 
-newest_id=con.query("select newest_id,city_id,county_id from dwb_db.a_dwb_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,city_name,county_id,county_name")
+newest_id=con.query("select newest_id,city_id,county_id from dws_db_prd.dws_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,county_id")
 
 
 # In[3]:
 # dwb_customer_imei_tag   客户单体标签
 #                                                      imei       客户号
-#                                                      type       投资类型
+#                                                      buyable  type       投资类型
 #                                                      is_college_stu    在校大学生
 #                                                      period      季度
 #                                                      marriage    婚姻状态
 #                                                      education   教育水平
 #                                                      have_child  有孩子
-tag = con.query("select imei,'投资型' type  from dwb_db.b_dwb_customer_imei_tag where is_college_stu = '否' and marriage = '已婚' and education = '高' and have_child = '有' group by imei")
+# tag = con.query("select imei,'投资型' type  from dwb_db.b_dwb_customer_imei_tag where is_college_stu = '否' and marriage = '已婚' and education = '高' and have_child = '有' group by imei")
 
+tag = con.query("select imei,'投资型' type from dwb_db.dwb_customer_buyable where visit_quarter='"+date_quarter+"' and buyable = 0 and dr = 0 group by imei,visit_quarter")
 # tag = con.query("select distinct imei,'投资型' type  from dwb_db.dwb_customer_imei_tag where is_college_stu = '否' and marriage = '已婚' and education = '高' and have_child = '有'")
 
 
@@ -227,7 +233,7 @@ grouped2 = pd.merge(grouped2, ic_max, how='left', on=['city_id'])
 grouped2 = pd.merge(grouped2, ic_min, how='left', on=['city_id'])
 # 新增字段index_rate
 grouped2['index_rate'] =round((grouped2['imei_newest']-grouped2['imei_y'])/(grouped2['imei_x']-grouped2['imei_y'])*4.5+0.5,2)
-
+grouped2['index_rate'] = grouped2['index_rate'].fillna(5)
 
 # In[9]:
 #城市楼盘指数占比排名：

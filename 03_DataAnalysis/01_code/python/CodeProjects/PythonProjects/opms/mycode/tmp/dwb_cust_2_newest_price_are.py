@@ -10,6 +10,7 @@ import configparser
 import os
 import sys,io
 from numpy.lib.function_base import append
+from pandas.core import groupby
 import pymysql
 import pandas as pd
 import numpy as np
@@ -151,3 +152,166 @@ to_dws(df,table_name)
 # result
 print('>> Done!') #完毕
 
+
+## =============================================================
+############  1>上边代码把原始数据初步聚合到表里之后
+#             2>通过sql清洗出全季度的均价
+#             3>然后在通过以下代码将平台清洗出来
+## =============================================================
+
+#In[]
+browse_avg_price=con.query("SELECT newest_id,browse_avg_price,pal_name from dwb_db.dwb_cust_2_newest_price_are where period is null")
+
+
+#In[]
+###贝壳
+result01 = browse_avg_price[browse_avg_price['pal_name'] == '贝壳']
+df001 = browse_avg_price[browse_avg_price['pal_name'] != '贝壳']
+df001 = df001[~df001['newest_id'].isin(result01['newest_id'])]
+###只有一个平台
+df002 = df001.groupby(['newest_id'])['pal_name'].count().reset_index()[df001.groupby(['newest_id'])['pal_name'].count().reset_index()['pal_name'] == 1]
+result02 = df001[df001['newest_id'].isin(df002['newest_id'])]
+###按照平台出现的次数挨个取 
+# 8026
+df003 = df001[~df001['newest_id'].isin(df002['newest_id'])]
+result03 = df003[df003['pal_name'] == '8026']
+df004 = df003[df003['pal_name'] != '8026']
+# 8001
+df004 = df004[~df004['newest_id'].isin(result03['newest_id'])]
+result04 = df004[df004['pal_name'] == '8001']
+df005 = df004[df004['pal_name'] != '8001']
+# 8002
+df005 = df005[~df005['newest_id'].isin(result04['newest_id'])]
+result05 = df005[df005['pal_name'] == '8002']
+df006 = df005[df005['pal_name'] != '8002']
+# 取均价最大的
+df006 = df006[~df006['newest_id'].isin(result05['newest_id'])]
+result06 = df006.groupby(['newest_id'])['browse_avg_price'].max().reset_index()
+
+
+# 合并所有结果集
+result = result01.append([result02, result03, result04, result05, result06], ignore_index=True)
+
+#插入表
+
+result['newest_name'] = result['newest_id']
+result['direct_avg_price'] = 0
+result['avg_price_rate'] = 0
+result['browse_avg_price_sum'] = 0
+result['browse_avg_price_count'] = 0
+result['browse_count'] = 0
+result['period'] = 'NULL'
+result['dr'] = '0'
+result['create_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+result['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+result['pal_name'] = 'clean_result'
+result=result[['newest_id','newest_name','direct_avg_price','browse_avg_price','avg_price_rate','browse_avg_price_sum','browse_avg_price_count','browse_count','period','dr','create_time','update_time','pal_name']]
+
+to_dws(result,table_name)
+
+
+
+# result
+print('>> Done!') #完毕
+
+# 8026	96260
+# 8001	82260
+# 贝壳	70654
+# 8002	63265
+# 房天下	50594
+# 8008	48936
+# 8024	31825
+# 8031	31066
+# 吉屋	26447
+# 居理新房	24330
+# 8006	21385
+# 安居客	16292
+# 乐居	13729
+# 8009	13150
+# 8069	10263
+# 8077	6654
+# 365淘房	6637
+# 8033	4515
+# 8003	3953
+# 焦点好房	3492
+# 腾讯房产	3024
+# 8062	2420
+# 8013	2269
+# 8034	2152
+# 8037	1991
+# 8058	1893
+# 8011	1878
+# 8065	1743
+# 8061	1545
+# 楼盘网	1240
+# 8057	1033
+# 觅房	1021
+# 网易房产	976
+# 8028	749
+# 8059	724
+# 深圳房地产	712
+# 8080	669
+# 8030	615
+# 8095	515
+# 我爱我家	486
+# 8007	436
+# 8129	433
+# 凤凰网房产	360
+# 8012	323
+# 合房网	301
+# 8137	291
+# 8063	275
+# 8005	243
+# 乐有家	210
+# 8027	201
+# 8078	152
+# 上海中原	134
+# 8133	127
+# 8114	124
+# 8035	98
+# 8121	98
+# 8081	92
+# 诸葛找房	92
+# 8109	91
+# 懂房帝	87
+# 8082	81
+# 8115	76
+# 8108	50
+# 购房网	47
+# 8036	45
+# 8104	43
+# 8120	43
+# 8167	31
+# 8093	30
+# 楼讯网	27
+# 8079	16
+# 8138	16
+# 8130	15
+# 8161	12
+# 8171	9
+# 8116	8
+# 8123	8
+# 8122	7
+# 8125	7
+# 8135	7
+# 幸福里	5
+# 8111	4
+# 8118	4
+# 8132	4
+# 8140	4
+# 8153	4
+# 8159	4
+# 8149	3
+# 8154	3
+# 8155	3
+# 8038	2
+# 8107	2
+# 8119	2
+# 8127	2
+# 城市房产网	2
+# 8092	1
+# 8110	1
+# 8131	1
+# 8151	1
+# 8156	1
+# 8160	1

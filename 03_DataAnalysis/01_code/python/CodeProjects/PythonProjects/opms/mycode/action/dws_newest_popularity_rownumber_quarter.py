@@ -52,30 +52,9 @@ password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
 # database = 'temp_db'
-date_quarter = '2018Q1'  # 季度
+date_quarter = '2021Q3'  # 季度
 table_name = 'dws_newest_popularity_rownumber_quarter' # 要插入的表名称
 
-
-# In[]
-##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
-opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:d:",["database=","table=","quarter=","startdate=","enddate="])
-for opts,arg in opts:
-  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
-    table_name = arg
-  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
-    date_quarter = arg
-  elif opts=="-s" or opts=="--startdate":  # 同上
-    start_date = arg
-  elif opts=="-e" or opts=="--enddate":   # 同上
-    stop_date = arg
-  elif opts=="-d" or opts=="database":
-    database = arg
-
-
-# In[]
-##重置时间格式
-start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
-stop_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
 
 ##mysql连接配置##
 # -*- coding: utf-8 -*-
@@ -161,7 +140,27 @@ def to_dws(result,table):
 con = MysqlClient(db_host,database,user,password)   # 创建mysql链接
 
 
-# In[1]:
+# In[]
+##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
+opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:d:",["database=","table=","quarter=","startdate=","enddate="])
+for opts,arg in opts:
+  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
+    table_name = arg
+  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
+    date_quarter = arg
+  elif opts=="-s" or opts=="--startdate":  # 同上
+    start_date = arg
+  elif opts=="-e" or opts=="--enddate":   # 同上
+    stop_date = arg
+  elif opts=="-d" or opts=="database":
+    database = arg
+
+
+# In[]
+##重置时间格式
+start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
+stop_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
+
 #意向客户#
 # dwb_customer_browse_log  客户浏览楼盘日志表（每日增量） 
 #                                                      newest_id       楼盘id
@@ -179,9 +178,9 @@ o=con.query("select newest_id,intention imei from dwb_db.dwb_newest_customer_inf
 #                                                      newest_id       楼盘id
 #                                                      city_id         城市id
 #                                                      county_id       区县id
-admit=con.query("select newest_id from dwb_db.a_dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
+admit=con.query("select newest_id from dws_db_prd.dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
 
-newest_id=con.query("select newest_id,city_id,county_id from dwb_db.a_dwb_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,city_name,county_id,county_name")
+newest_id=con.query("select newest_id,city_id,county_id from dws_db_prd.dws_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,county_id")
 
 
 # In[3]:
@@ -221,6 +220,7 @@ grouped2 = pd.merge(grouped2, ic_max, how='left', on=['city_id'])
 grouped2 = pd.merge(grouped2, ic_min, how='left', on=['city_id'])
 # 新增字段index_rate,保留两位小数
 grouped2['index_rate'] =round((grouped2['imei_newest']-grouped2['imei_y'])/(grouped2['imei_x']-grouped2['imei_y'])*4.5+0.5,2)
+grouped2['index_rate'] = grouped2['index_rate'].fillna(5)
 
 
 # In[7]:
@@ -250,7 +250,7 @@ grouped2['imei_c_avg']  = round(grouped2['imei_c_avg'],6)
 
 
 # In[9]:
-grouped2.dropna(axis = 0,inplace=True)
+# grouped2.dropna(axis = 0,inplace=True)
 # 修改列名
 grouped2.columns=['city_id','newest_id','imei_newest','imei_city','rate','imei_c_max','imei_c_min','index_rate','sort_id','imei_c_avg','index_rate_change']
 
@@ -338,7 +338,7 @@ grouped['create_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 grouped['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
 grouped['dr'] = 0
 
-
+# In[]:
 # test = grouped[grouped['newest_id'] == 'f6d276744ddcb55c3dbec0c70eff718c']
 # 调用to_dws方法，加载数据到dws_newest_popularity_top30_quarter表中
 to_dws(grouped,table_name)

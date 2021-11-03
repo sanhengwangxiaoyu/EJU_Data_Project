@@ -4,6 +4,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Jul 12 17:44:47 2021
+  dwb_issue_supply_city
   楼盘 意向人数 定向人数 迫切人数 增量人数  存量人数
 
 """
@@ -32,32 +33,10 @@ user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-date_quarter = '2018Q2'   # 季度
+date_quarter = '2021Q3'   # 季度
 table_name = 'dwb_issue_supply_city' # 要插入的表名称
 database = 'dwb_db'
 # index = 1
-
-
-# In[2]:
-##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
-opts,args=getopt.getopt(sys.argv[1:],"t:q:d:c:i:",["index","city_id","database=","table=","quarter="])
-for opts,arg in opts:
-  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
-    table_name = arg
-  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
-    date_quarter = arg
-  elif opts=="-d" or opts=="--database":  # 获取输入参数 -1或者--quarter 后的值
-    database = arg
-  elif opts=="-c" or opts=="--city_id":  # 获取输入参数 -1或者--quarter 后的值
-    city_id = arg
-  elif opts=="-i" or opts=="--index":  # 获取输入参数 -1或者--quarter 后的值
-    index = arg
-
-
-# In[3]:
-##重置时间格式
-start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
-end_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
 
 ##mysql连接配置##
 # -*- coding: utf-8 -*-
@@ -95,14 +74,34 @@ def to_dws(result,table):
 con = MysqlClient(db_host,database,user,password)
 
 
-# In[4]:
+# In[2]:
+##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
+opts,args=getopt.getopt(sys.argv[1:],"t:q:d:c:i:",["index","city_id","database=","table=","quarter="])
+for opts,arg in opts:
+  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
+    table_name = arg
+  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
+    date_quarter = arg
+  elif opts=="-d" or opts=="--database":  # 获取输入参数 -1或者--quarter 后的值
+    database = arg
+  elif opts=="-c" or opts=="--city_id":  # 获取输入参数 -1或者--quarter 后的值
+    city_id = arg
+  elif opts=="-i" or opts=="--index":  # 获取输入参数 -1或者--quarter 后的值
+    index = arg
+
+
+# In[3]:
+##重置时间格式
+start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
+end_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
+
 # if index == 1 :
   # dwb_newest_issue_offer  楼盘预售证供应表
   #          所在城市 city
   #          发证季度	issue_quarter
   #          许可证套数	issue_room
   #          有效标识	dr
-deal=con.query("select city ,issue_room ,issue_quarter from dwb_db.dwb_newest_issue_offer where dr=0 and issue_quarter='"+date_quarter+"'")
+deal=con.query("select city ,issue_room,issue_quarter from dwb_db.dwb_newest_issue_offer where dr!=1 and newest_id is not null and issue_quarter='"+date_quarter+"'")
 # dwb_dim_geography_55city  楼盘预售证供应表
 #          城市id	city_id
 #          城市名称	city_name
@@ -142,7 +141,7 @@ result['num_index'] = '-'
   # result['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
   # result.at[result['cric_supply_num'].isna(),'cric_supply_num'] = '-' 
   # result.at[result['num_index'].isna(),'num_index'] = '-'
-result[result['city_name'] == '保定市']
+# result = result[result['city']== '嘉兴市']
 
 
 # In[8]:

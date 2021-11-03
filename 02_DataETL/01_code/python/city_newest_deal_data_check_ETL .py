@@ -1,20 +1,17 @@
+#%%
+
 #!/usr/bin/env python
 # coding: utf-8
 # -*- coding: utf-8 -*-
+"""
+Created on Seq 28 10:44:47 2021
+  check数据清洗
 
-import configparser
-import os
-import sys
-from numpy.lib.function_base import append
-from pandas.core import groupby
-import pymysql
-import pandas as pd
-import numpy as np
-from collections import Counter
-import re
+"""
+
+import configparser,os,pymysql,pandas as pd
 from sqlalchemy import create_engine
-import datetime
-from dateutil.relativedelta import relativedelta
+
 
 cf = configparser.ConfigParser()
 path = os.path.abspath(os.curdir)
@@ -24,7 +21,7 @@ cf.read(confpath)  # 读取配置文件，如果写文件的绝对路径，就�
 user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
-# database = cf.get("Mysql", "database")  # 获取dbname对应的值
+database = cf.get("Mysql", "database")  # 获取dbname对应的值
 database = 'temp_db'
 
 # -*- coding: utf-8 -*-
@@ -55,45 +52,41 @@ def to_dws(result,table):
 
 
 # In[1]:
-#意向客户总量#
 con = MysqlClient(db_host,database,user,password)
 # city_newest_deal_data_check  新楼盘交易数据检验表
-#                                                   url
-#                                                   city_name
-#                                                   gd_city
-#                                                   floor_name
-#                                                   floor_name_new
-#                                                   clean_floor_name
-#                                                   floor_name_clean
-#                                                   address
-#                                                   business
-#                                                   issue_code
-#                                                   issue_date
-#                                                   issue_date_clean
-#                                                   open_date
-#                                                   issue_area
-#                                                   sale_state
-#                                                   building_code
-#                                                   room_sum
-#                                                   area
-#                                                   simulation_price
-#                                                   sale_telephone
-#                                                   sale_address
-#                                                   room_code
-#                                                   room_sale_area
-#                                                   room_sale_state
-#                                                   create_time
-ori=con.query('''SELECT * FROM dwd_db.ori_newest_info_base_new_20210609''')
-
+#       url
+#       city_name
+#       gd_city
+#       floor_name
+#       floor_name_new
+#       clean_floor_name
+#       floor_name_clean
+#       address
+#       business
+#       issue_code
+#       issue_date
+#       issue_date_clean
+#       open_date
+#       issue_area
+#       sale_state
+#       building_code
+#       room_sum
+#       area
+#       simulation_price
+#       sale_telephone
+#       sale_address
+#       room_code
+#       room_sale_area
+#       room_sale_state
+#       create_time
+city_name = '北京'
+ori=con.query("SELECT * FROM temp_db.city_newest_deal_data_check where city_name='"+city_name+"'")
 
 
 # In[2]:
-#问题清洗
-
-
-# 别名：（去掉），--待定--（无意义的字符去掉）   alias        别名
-ori['alias'] = ori['alias'].str.replace('别名：', '')
-ori['alias'] = ori['alias'].str.replace('--待定--', '')
+#更新gd_city
+df = ori
+ori['gd_city'] = ori['city_name'].apply(lambda x:x+'市')
 
 # 均价和日期格式处理
 #                                                      unit_price           楼盘单价

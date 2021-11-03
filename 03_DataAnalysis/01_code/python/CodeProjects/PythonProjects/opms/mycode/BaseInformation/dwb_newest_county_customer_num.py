@@ -4,7 +4,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Jul 12 17:44:47 2021
-  关注楼盘数量  意向选房数量  迫切买房数量  当季新增  当季留存
+  关注楼盘数量  意向选房数量  迫切买房数量  当季新增  当季留存z
 
 """
 import configparser
@@ -31,26 +31,10 @@ user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-date_quarter = '2021Q1'   # 季度
+date_quarter = '2021Q3'   # 季度
 table_name = 'dwb_newest_county_customer_num' # 要插入的表名称
 database = 'dwb_db'
 
-
-# In[2]:
-##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
-opts,args=getopt.getopt(sys.argv[1:],"t:q:d:c:",["city_id","database=","table=","quarter="])
-for opts,arg in opts:
-  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
-    table_name = arg
-  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
-    date_quarter = arg
-  elif opts=="-d" or opts=="--database":  # 获取输入参数 -1或者--quarter 后的值
-    database = arg
-  elif opts=="-c" or opts=="--city_id":  # 获取输入参数 -1或者--quarter 后的值
-    city_id = arg
-
-
-# In[3]:
 ##mysql连接配置##
 # -*- coding: utf-8 -*-
 class MysqlClient:
@@ -88,7 +72,21 @@ def to_dws(result,table):
 con = MysqlClient(db_host,database,user,password)
 
 
-# In[4]:
+# In[2]:
+##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
+opts,args=getopt.getopt(sys.argv[1:],"t:q:d:c:",["city_id","database=","table=","quarter="])
+for opts,arg in opts:
+  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
+    table_name = arg
+  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
+    date_quarter = arg
+  elif opts=="-d" or opts=="--database":  # 获取输入参数 -1或者--quarter 后的值
+    database = arg
+  elif opts=="-c" or opts=="--city_id":  # 获取输入参数 -1或者--quarter 后的值
+    city_id = arg
+
+
+# In[3]:
 # dwb_newest_admit_info   准入楼盘信息表
 #     城市id	city_id
 #     城市名称	city_name
@@ -96,11 +94,14 @@ con = MysqlClient(db_host,database,user,password)
 #     城市名称	county_name
 #     有效标识	dr
 #     周期	period
-admit_info=con.query("select newest_id,city_id from dwb_db.a_dws_newest_period_admit where city_id not in ('442000','441900') and dr = 0 and period='"+date_quarter+"'")
+admit_info=con.query("select newest_id,city_id from dws_db_prd.dws_newest_period_admit where city_id not in ('442000','441900') and dr = 0 and period='"+date_quarter+"'")
 
-newest_info=con.query("select newest_id,city_id,county_id from dwb_db.a_dwb_newest_info where city_id not in ('442000','441900') and newest_id is not null and county_id is not null and county_id != '' group by newest_id,city_id,city_name,county_id,county_name")
+newest_info=con.query("select newest_id,city_id,county_id from dws_db_prd.dws_newest_info where city_id not in ('442000','441900') and newest_id is not null and county_id is not null and county_id != '' group by newest_id,city_id,county_id")
+
 city_name=con.query("select city_id,city_name,region_id county_id,region_name county_name from dwb_db.dwb_dim_geography_55city where dr = 0 and city_id not in ('442000','441900') group by city_id,city_name,region_id,region_name")
 
+newest_info[['city_id']] = newest_info[['city_id']].astype('int')
+newest_info[['county_id']] = newest_info[['county_id']].astype('int')
 city_name[['city_id']] = city_name[['city_id']].astype('int')
 city_name[['county_id']] = city_name[['county_id']].astype('int')
 newest_info=pd.merge(newest_info,city_name,how='left',on=['city_id','county_id'])
