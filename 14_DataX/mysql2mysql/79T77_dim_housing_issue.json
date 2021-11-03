@@ -1,0 +1,73 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "column": ["id",
+                            "housing_id",
+                            "issue_number",
+                            "issue_date",
+                            "open_date",
+                            "room_sum",
+                            "issue_area",
+                            "building_code",
+                            "room_code",
+                            "simulation_price",
+                            "room_sale_area",
+                            "room_sale_state",
+                            "create_time",
+                            "update_time",
+                            "is_del"],
+                        "connection": [
+                            {
+                                "jdbcUrl": ["jdbc:mysql://172.28.36.79:3306/dw_a?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"],
+                                "table": ["dim_housing_issue"]
+                            }
+                        ],
+                        "password": "vd9_9GzIaq82KSHC",
+                        "username": "user_dw3",
+                        "where": ""
+                    }
+                },
+                "writer": {
+                    "name": "mysqlwriter",
+                    "parameter": {
+                        "column": ["id",
+                            "housing_id",
+                            "issue_number",
+                            "issue_date",
+                            "open_date",
+                            "room_sum",
+                            "issue_area",
+                            "building_code",
+                            "room_code",
+                            "simulation_price",
+                            "room_sale_area",
+                            "room_sale_state",
+                            "create_time",
+                            "update_time",
+                            "is_del"],
+                        "connection": [
+                            {
+                                "jdbcUrl": "jdbc:mysql://172.28.36.77:3306/dwb_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+                                "table": ["dim_housing_issue"]
+                            }
+                        ],
+                        "password": "NDR_AhfzXT3MSxfh",
+                        "preSql": [],
+                        "session": [],
+                        "username": "wanganming",
+                        "writeMode": "update"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "6"
+            }
+        }
+    }
+}

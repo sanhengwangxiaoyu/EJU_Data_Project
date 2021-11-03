@@ -1,0 +1,1 @@
+# 2021-10-25 使用数据进行数据入库 * * * * * bash /bdp/code/shell/tdrlmV3.sh >> /bdp/log/tdrlmV3.log

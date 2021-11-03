@@ -1,0 +1,55 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "txtfilereader", 
+                    "parameter": {
+                    "path": ["C:/Users/86133/Desktop/tmp_newest_customer_info.txt"], 
+                    "encoding":"utf-8",
+                        "column": [
+                            {
+                                "index": 0,
+                                "type": "string"
+                            },
+                            {
+                                "index": 1,
+                                "type": "string"
+                            },
+                            {
+                                "index": 2,
+                                "type": "string"
+                            }
+                        ],
+                    "fieldDelimiter": "\t",
+                    "skipHeader": "true"
+                    }
+                }, 
+                "writer": {
+                    "name": "mysqlwriter", 
+                    "parameter": {
+                        "column": ["newest_id",
+                            "imei",
+                            "period"], 
+                        "connection": [
+                            {
+                                "jdbcUrl": "jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+                                "table": ["tmp_newest_customer_info"]
+                            }
+                        ],
+                        "password": "NDR_AhfzXT3MSxfh",
+                        "preSql": [],
+                        "session": [],
+                        "username": "wanganming",
+                        "writeMode": "update"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "12"
+            }
+        }
+    }
+}

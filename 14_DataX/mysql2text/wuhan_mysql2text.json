@@ -1,0 +1,56 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "column": ["url",
+                            "city_name",
+                            "floor_name",
+                            "address",
+                            "business",
+                            "issue_code",
+                            "issue_date",
+                            "open_date",
+                            "issue_area",
+                            "sale_state",
+                            "building_code",
+                            "room_sum",
+                            "area",
+                            "simulation_price",
+                            "sale_telephone",
+                            "sale_address",
+                            "room_code",
+                            "room_sale_area",
+                            "room_sale_state"],
+                        "connection": [
+                            {
+                                "jdbcUrl": ["jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"],
+                                "table": ["tmp_city_newest_deal"]
+                            }
+                        ],
+                        "password": "egSQ7HhxajHZjvdX",
+                        "username": "mysql",
+                        "where": "city_name  = '武汉'"
+                    }
+                },
+                "writer": {
+                    "name": "txtfilewriter",
+                    "parameter": {
+                        "path": "D:/EJU/after_20210520/01_DataCheck/02_data/",
+                        "fileName": "wuhan.txt",
+                        "writeMode": "truncate",
+                        "fieldDelimiter": "\t",
+                        "dateFormat": "yyyy-MM-dd"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "3"
+            }
+        }
+    }
+}

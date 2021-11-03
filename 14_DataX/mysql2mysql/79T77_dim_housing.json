@@ -1,0 +1,149 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "column": ["id",
+"uuid",
+"newest_name",
+"dim_city_id",
+"city_id",
+"region_id",
+"city_name",
+"gd_lng",
+"gd_lat",
+"address",
+"unit_price",
+"developer",
+"investor",
+"brander",
+"land_area",
+"building_area",
+"arch_style",
+"green_rate",
+"volume_rate",
+"building_type",
+"right_term",
+"property_cate",
+"household_num",
+"property_comp",
+"property_fee",
+"park_rate",
+"park_num",
+"park_price",
+"orientation",
+"building_num",
+"avg_distance",
+"ong_park_num",
+"ung_park_num",
+"build_density",
+"floor_num",
+"ambitus",
+"bike_park_number",
+"decoration",
+"estate_pic",
+"heat_mode",
+"power_mode",
+"water_mode",
+"ring_locate",
+"deco_level",
+"mate_equip",
+"designer",
+"builder",
+"provide_sche",
+"recent_opening_time",
+"recent_delivery_time",
+"create_time",
+"update_time",
+"is_del"],
+                        "connection": [
+                            {
+                                "jdbcUrl": ["jdbc:mysql://172.28.36.79:3306/dw_a?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"],
+                                "table": ["dim_housing"]
+                            }
+                        ],
+                        "password": "vd9_9GzIaq82KSHC",
+                        "username": "user_dw3",
+                        "where": ""
+                    }
+                },
+                "writer": {
+                    "name": "mysqlwriter",
+                    "parameter": {
+                        "column": ["id",
+"uuid",
+"newest_name",
+"dim_city_id",
+"city_id",
+"region_id",
+"city_name",
+"gd_lng",
+"gd_lat",
+"address",
+"unit_price",
+"developer",
+"investor",
+"brander",
+"land_area",
+"building_area",
+"arch_style",
+"green_rate",
+"volume_rate",
+"building_type",
+"right_term",
+"property_cate",
+"household_num",
+"property_comp",
+"property_fee",
+"park_rate",
+"park_num",
+"park_price",
+"orientation",
+"building_num",
+"avg_distance",
+"ong_park_num",
+"ung_park_num",
+"build_density",
+"floor_num",
+"ambitus",
+"bike_park_number",
+"decoration",
+"estate_pic",
+"heat_mode",
+"power_mode",
+"water_mode",
+"ring_locate",
+"deco_level",
+"mate_equip",
+"designer",
+"builder",
+"provide_sche",
+"recent_opening_time",
+"recent_delivery_time",
+"create_time",
+"update_time",
+"is_del"],
+                        "connection": [
+                            {
+                                "jdbcUrl": "jdbc:mysql://172.28.36.77:3306/dwb_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+                                "table": ["dim_housing"]
+                            }
+                        ],
+                        "password": "NDR_AhfzXT3MSxfh",
+                        "preSql": [],
+                        "session": [],
+                        "username": "wanganming",
+                        "writeMode": "update"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "6"
+            }
+        }
+    }
+}

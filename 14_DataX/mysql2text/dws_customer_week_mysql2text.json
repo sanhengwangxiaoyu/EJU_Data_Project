@@ -1,0 +1,48 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "column": ["city_id",
+                            "newest_id",
+                            "week",
+                            "exist",
+                            "imei_num",
+                            "period"],
+                        "connection": [
+                            {
+                                "jdbcUrl": ["jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"],
+                                "table": ["bak_20210930_dws_customer_week"]
+                            }
+                        ],
+                        "password": "NDR_AhfzXT3MSxfh",
+                        "username": "wanganming"
+                    }
+                },
+                "writer": {
+                    "name": "txtfilewriter",
+                    "parameter": {
+                        "path": "D:/EJU/after_20210520/03_DataAnalysis/02_data/bak/202110/bak_20210930_dws_customer_week",
+                        "fileName": "bak_20210930_dws_customer_week.txt",
+                        "writeMode": "truncate",
+                        "fieldDelimiter": "\t",
+                        "dateFormat": "yyyy-MM-dd",
+                        "header":["city_id",
+                            "newest_id",
+                            "week",
+                            "exist",
+                            "imei_num",
+                            "period"]
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "11"
+            }
+        }
+    }
+}

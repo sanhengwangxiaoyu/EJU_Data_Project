@@ -1,0 +1,115 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "txtfilereader", 
+                    "parameter": {
+                    "path": ["C:/Users/86133/Desktop/20211021_latlng_rs_v3.txt"], 
+                    "encoding":"utf-8",
+                        "column": [
+                            {
+                                "index": 0,
+                                "type": "string"
+                            },
+                            {
+                                "index": 1,
+                                "type": "string"
+                            },
+                            {
+                                "index": 2,
+                                "type": "string"
+                            },
+                            {
+                                "index": 3,
+                                "type": "string"
+                            },
+                            {
+                                "index": 4,
+                                "type": "string"
+                            },
+                            {
+                                "index": 5,
+                                "type": "string"
+                            },
+                            {
+                                "index": 6,
+                                "type": "string"
+                            },
+                            {
+                                "index": 7,
+                                "type": "string"
+                            },
+                            {
+                                "index": 8,
+                                "type": "string"
+                            },
+                            {
+                                "index": 9,
+                                "type": "string"
+                            },
+                            {
+                                "index": 10,
+                                "type": "string"
+                            }, 
+                            {
+                                "type": "string",
+                                "value": "0"  
+                             }, 
+                            {
+                                "type": "string",
+                                "value": "2021-10-21 22:54:02"    
+                             }, 
+                            {
+                                "type": "string",
+                                "value": "2021-10-21 22:54:02"         
+                             }, 
+                            {
+                                "type": "string",
+                                "value": "20211021_latlng_rs_v3.txtt"   
+                             }
+                        ],
+                    "fieldDelimiter": "\t",
+                    "skipHeader": "true"
+                    }
+                }, 
+                "writer": {
+                    "name": "mysqlwriter", 
+                    "parameter": {
+                        "column": ["newest_name",
+                            "newest_address",
+                            "newest_lnglat",
+                            "poi_type",
+                            "poi_index",
+                            "poi_name",
+                            "poi_lnglat",
+                            "poi_pro_name",
+                            "poi_city_name",
+                            "poi_county_name",
+                            "poi_address",
+                            "dr",
+                            "create_time",
+                            "update_time",
+                            "file_name"], 
+                        "connection": [
+                            {
+                                "jdbcUrl": "jdbc:mysql://172.28.36.77:3306/odsdb?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+                                "table": ["ori_newest_poi_info"]
+                            }
+                        ],
+                        "password": "NDR_AhfzXT3MSxfh",
+                        "preSql": [],
+                        "session": [],
+                        "username": "wanganming",
+                        "writeMode": "update"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "10"
+            }
+        }
+    }
+}

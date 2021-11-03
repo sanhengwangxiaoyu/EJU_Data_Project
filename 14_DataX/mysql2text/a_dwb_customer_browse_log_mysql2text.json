@@ -1,0 +1,72 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "column": ["id",
+                            "ori_id",
+                            "ori_table",
+                            "imei",
+                            "city_id",
+                            "county_id",
+                            "newest_name",
+                            "visit_month",
+                            "visit_date",
+                            "pv",
+                            "source",
+                            "idate",
+                            "newest_id",
+                            "create_date",
+                            "create_user",
+                            "update_date",
+                            "update_user",
+                            "current_week"],
+                        "connection": [
+                            {
+                                "jdbcUrl": ["jdbc:mysql://172.28.36.77:3306/dwb_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"],
+                                "table": ["a_dwb_customer_browse_log"]
+                            }
+                        ],
+                        "password": "NDR_AhfzXT3MSxfh",
+                        "username": "wanganming"
+                    }
+                },
+                "writer": {
+                    "name": "txtfilewriter",
+                    "parameter": {
+                        "path": "D:/EJU/after_20210520/03_DataAnalysis/02_data/bak/202110/bak_20211011_a_dwb_customer_browse_log",
+                        "fileName": "bak_20211011_a_dwb_customer_browse_log.txt",
+                        "writeMode": "truncate",
+                        "fieldDelimiter": "\t",
+                        "dateFormat": "yyyy-MM-dd",
+                        "header":["id",
+                            "ori_id",
+                            "ori_table",
+                            "imei",
+                            "city_id",
+                            "county_id",
+                            "newest_name",
+                            "visit_month",
+                            "visit_date",
+                            "pv",
+                            "source",
+                            "idate",
+                            "newest_id",
+                            "create_date",
+                            "create_user",
+                            "update_date",
+                            "update_user",
+                            "current_week"]
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "11"
+            }
+        }
+    }
+}
