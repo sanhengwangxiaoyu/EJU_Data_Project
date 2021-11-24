@@ -1,0 +1,60 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "column": ["id",
+                            "newest_id",
+                            "period",
+                            "quarter",
+                            "intention",
+                            "orien",
+                            "urgent",
+                            "increase",
+                            "retained",
+                            "dr",
+                            "create_time",
+                            "update_time"],
+                        "connection": [
+                            {
+                                "jdbcUrl": ["jdbc:mysql://172.28.36.77:3306/dwb_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"],
+                                "table": ["dwb_newest_customer_info"]
+                            }
+                        ],
+                        "password": "NDR_AhfzXT3MSxfh",
+                        "username": "wanganming"
+                    }
+                },
+                "writer": {
+                    "name": "txtfilewriter",
+                    "parameter": {
+                        "path": "D:/EJU/after_20210520/03_DataAnalysis/02_data/bak/202111/bak_20211109_dwb_newest_customer_info",
+                        "fileName": "bak_20211109_dwb_newest_customer_info.txt",
+                        "writeMode": "truncate",
+                        "fieldDelimiter": "\t",
+                        "dateFormat": "yyyy-MM-dd",
+                        "header":["id",
+                            "newest_id",
+                            "period",
+                            "quarter",
+                            "intention",
+                            "orien",
+                            "urgent",
+                            "increase",
+                            "retained",
+                            "dr",
+                            "create_time",
+                            "update_time"]
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "11"
+            }
+        }
+    }
+}

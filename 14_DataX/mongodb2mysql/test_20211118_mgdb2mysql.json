@@ -1,0 +1,108 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mongodbreader", 
+                    "parameter": {
+                        "address": ["10.122.144.202:27017"], 
+			"userName":"",
+			"userPassword":"",
+                        "dbName":"performance",
+			"collectionName":"web_pages_hwzrnh21634261243667",
+                        "column": [
+				{
+			         "name": "app_id",
+			         "type": "string"
+				},{
+				    "name": "create_time",
+				    "type": "string"
+				},{
+				    "name": "url",
+				    "type": "string"
+				},{
+				    "name": "full_url",
+				    "type": "string"
+				},{
+				    "name": "pre_url",
+				    "type": "string"
+				},{
+				    "name": "speed_type",
+				    "type": "string"
+				},{
+				    "name": "is_first_in",
+				    "type": "string"
+				},{
+				    "name": "mark_page",
+				    "type": "string"
+				},{
+				    "name": "mark_user",
+				    "type": "string"
+				},{
+				    "name": "load_time",
+				    "type": "string"
+				},{
+				    "name": "dns_time",
+				    "type": "string"
+				},{
+				    "name": "tcp_time",
+				    "type": "string"
+				},{
+				    "name": "dom_time",
+				    "type": "string"
+				},{
+				    "name": "resource_list.name",
+				    "type": "string"
+				},{
+				    "name": "total_res_size",
+				    "type": "string"
+				},{
+				    "name": "white_time",
+				    "type": "string"
+				},{
+				    "name": "redirect_time",
+				    "type": "string"
+				},{
+				    "name": "unload_time",
+				    "type": "string"
+				},{
+				    "name": "request_time",
+				    "type": "string"
+				},{
+				    "name": "analysisDom_time",
+				    "type": "string"
+				},{
+				    "name": "ready_time",
+				    "type": "string"
+				},{
+				    "name": "screenwidth",
+				    "type": "string"
+				},{
+				    "name": "screenheight",
+				    "type": "string"
+				},{
+				    "name": "app_mobile",
+				    "type": "string"
+				}
+                        ],
+			"query":"{ \"create_time\" : { \"$gt\" : ISODate(\"2021-11-18\") } }"
+                    }
+                }, 
+                "writer": {
+                    "name": "txtfilewriter", 
+                    "parameter": {
+                        "path": "/data/",
+			"fileName":"luohw",
+                        "writeMode": "truncate",
+			"dateFormat": "yyyy-MM-dd"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "10"
+            }
+        }
+    }
+}
