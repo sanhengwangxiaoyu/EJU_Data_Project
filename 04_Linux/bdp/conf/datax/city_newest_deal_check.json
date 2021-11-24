@@ -1,0 +1,85 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "column": [
+                            "URL",
+                            "city",
+                            "project",
+                            "addr",
+                            "Development",
+                            "issue_code",
+                            "issue_date",
+                            "opening_date",
+                            "issue_area",
+                            "building_status",
+                            "building_name",
+                            "building_rooms",
+                            "building_area",
+                            "building_price",
+                            "sale_tel",
+                            "sale_addr",
+                            "room",
+                            "room_area",
+                            "room_status"
+                        ],
+                        "connection": [
+                            {
+                                "jdbcUrl": ["jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"],
+                                "table": ["fang_ysz"]
+                            }
+                        ],
+                        "password": "password123456~!",
+                        "username": "ShuT",
+                        "where": "add_date=${time}"
+                    }
+                },
+                "writer": {
+                    "name": "mysqlwriter",
+                    "parameter": {
+                        "column": [
+                            "url",
+                            "city_name",
+                            "floor_name",
+                            "address",
+                            "business",
+                            "issue_code",
+                            "issue_date",
+                            "open_date",
+                            "issue_area",
+                            "sale_state",
+                            "building_code",
+                            "room_sum",
+                            "area",
+                            "simulation_price",
+                            "sale_telephone",
+                            "sale_address",
+                            "room_code",
+                            "room_sale_area",
+                            "room_sale_state"
+                        ],
+                        "connection": [
+                            {
+                                "jdbcUrl": "jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+                                "table": ["city_newest_deal_data_check"]
+                            }
+                        ],
+                        "password": "NDR_AhfzXT3MSxfh",
+                        "preSql": [],
+                        "session": [],
+                        "username": "wanganming",
+                        "writeMode": "update"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "4"
+            }
+        }
+    }
+}

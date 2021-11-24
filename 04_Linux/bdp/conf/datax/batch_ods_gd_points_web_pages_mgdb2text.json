@@ -1,0 +1,163 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mongodbreader", 
+                    "parameter": {
+                        "address": ["10.122.144.202:27017"], 
+			"userName":"",
+			"userPassword":"",
+                        "dbName":"performance-prod",
+			"collectionName":"web_pages_a2wqjt21634186115834",
+                        "column": [
+				{
+			         "name": "app_id",
+			         "type": "string"
+				},{
+				    "name": "create_time",
+				    "type": "string"
+				},{
+				    "name": "url",
+				    "type": "string"
+				},{
+				    "name": "full_url",
+				    "type": "string"
+				},{
+				    "name": "pre_url",
+				    "type": "string"
+				},{
+				    "name": "speed_type",
+				    "type": "string"
+				},{
+				    "name": "is_first_in",
+				    "type": "string"
+				},{
+				    "name": "mark_page",
+				    "type": "string"
+				},{
+				    "name": "mark_user",
+				    "type": "string"
+				},{
+				    "name": "load_time",
+				    "type": "string"
+				},{
+				    "name": "dns_time",
+				    "type": "string"
+				},{
+				    "name": "tcp_time",
+				    "type": "string"
+				},{
+				    "name": "dom_time",
+				    "type": "string"
+				},{
+				    "name": "resource_list",
+				    "type": "string"
+				},{
+				    "name": "resource_list.name",
+				    "type": "string"
+				},{
+				    "name": "resource_list.methond",
+				    "type": "string"
+				},{   
+				    "name": "resource_list.type",
+				    "type": "string"
+				},{ 
+				    "name": "resource_list.dutation",
+				    "type": "string"
+				},{ 
+				    "name": "resource_list.decodebodysize",
+				    "type": "string"
+				},{     
+				    "name": "resource_list.nexthotprotocol",
+				    "type": "string"
+				},{
+				    "name": "total_res_size",
+				    "type": "string"
+				},{
+				    "name": "white_time",
+				    "type": "string"
+				},{
+				    "name": "redirect_time",
+				    "type": "string"
+				},{
+				    "name": "unload_time",
+				    "type": "string"
+				},{
+				    "name": "request_time",
+				    "type": "string"
+				},{
+				    "name": "analysisDom_time",
+				    "type": "string"
+				},{
+				    "name": "ready_time",
+				    "type": "string"
+				},{
+				    "name": "screenwidth",
+				    "type": "string"
+				},{
+				    "name": "screenheight",
+				    "type": "string"
+				},{
+				    "name": "app_mobile",
+				    "type": "string"
+				}
+                        ],
+			"query":"{ \"create_time\" : { \"$gt\" : ISODate(\"${time}\") } }"
+                    }	
+                }, 
+		"writer": {
+		    "name": "mysqlwriter",
+		    "parameter": {
+			"column": ["app_id",
+				"create_time",
+				"url",
+				"full_url",
+				"pre_url",
+				"speed_type",
+				"is_first_in",
+				"mark_page",
+				"mark_user",
+				"load_time",
+				"dns_time",
+				"tcp_time",
+				"dom_time",
+				"resource_list",
+				"resource_list_name",
+				"resource_list_methond",
+				"resource_list_type",
+				"resource_list_duration",
+				"resource_list_decodebodysize",
+				"resource_list_nexthotprotocol",
+				"total_res_size",
+				"white_time",
+				"redirect_time",
+				"unload_time",
+				"request_time",
+				"analysisdom_time",
+				"ready_time",
+				"screenwidth",
+				"screenheight",
+				"app_mobile"],
+			"connection": [
+		            {
+			        "jdbcUrl": "jdbc:mysql://172.28.36.77:3306/odsdb?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+				"table": ["ods_gd_points_web_pages"]
+			    }
+			],
+			"password": "NDR_AhfzXT3MSxfh",
+			"preSql": [],
+			"session": [],
+			"username": "wanganming",
+			"writeMode": "update"
+		    }
+		}
+	    }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "10"
+            }
+        }
+    }
+}

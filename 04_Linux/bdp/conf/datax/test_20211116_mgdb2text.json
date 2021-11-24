@@ -1,0 +1,53 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mongodbreader", 
+                    "parameter": {
+                        "address": ["localhost:27017"], 
+			"userName":"",
+			"userPassword":"",
+                        "dbName":"test",
+			"collectionName":"mycol",
+                        "column": [
+                            {
+                                "name": "title",
+                                "type": "string"
+                            },{
+			        "name": "description",
+		    	        "type": "string"
+			    },{
+			        "name": "by",
+			        "type": "string"
+			    },{
+			        "name": "url",
+			        "type": "string"
+			    },{
+			        "name": "tags",
+			        "type": "string"
+			    },{
+			        "name": "likes",
+			        "type": "long"
+			    }
+                        ]
+                    }
+                }, 
+                "writer": {
+                    "name": "txtfilewriter", 
+                    "parameter": {
+                        "path": "/data/",
+			"fileName":"luohw",
+                        "writeMode": "truncate",
+			"dateFormat": "yyyy-MM-dd"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "10"
+            }
+        }
+    }
+}

@@ -1,0 +1,2 @@
+type=command
+command=bash /bdp/code/shell/run_python_datax_newest_deal_7T77.sh >> /bdp/log/temp_check_data_ftp.log

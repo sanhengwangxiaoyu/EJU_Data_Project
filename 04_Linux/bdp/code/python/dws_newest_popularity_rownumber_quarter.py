@@ -1,18 +1,34 @@
+# In[]
 #!/usr/bin/env python
 # coding: utf-8
 # -*- coding: utf-8 -*-
 """
 Created on Jul 12 12:44:47 2021
 
+      
+ 
 项目榜单 - 比例改为指数数值,区间为0-5、固定展示2位小数，不能为空，不足2位补0
      (目标楼盘人气数-城市min)/(城市max-城市min)*5
 人气热度 - 增加人气热度，与本市均值对比情况,人气热度评分参考需求1
      (楼盘人气指数-城市人气指数均值)/城市人气指数均值
-     
+
+Change on Aug 26 15:35 2021
+删除区域热度占比，统一使用城市区域占比
+改正有楼盘被过滤
+
+Change on Sep 01 14:41 2021
+将从原始log日志表中获取的饿数据通过中间表来获取
+
+Changed on Seq 09 17:22:00 2021
+计算区县的数据的时候过滤掉东莞和中山
+
+
+
 """
 import configparser
 import os
 import sys
+from numpy.lib.arraysetops import isin
 from numpy.lib.function_base import place
 import pymysql
 import pandas as pd
@@ -21,6 +37,7 @@ from collections import Counter
 import re
 from sqlalchemy import create_engine
 import getopt
+import time
 
 pymysql.install_as_MySQLdb()
 ##读取配置文件##
@@ -35,24 +52,30 @@ password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
 # database = 'temp_db'
-date_quarter = '2021Q1'  # 季度
-start_date = '20210101'  # 季度开始时间
-stop_date = '20210401'    # 季度结束时间
+date_quarter = '2020Q2'  # 季度
 table_name = 'dws_newest_popularity_rownumber_quarter' # 要插入的表名称
 
+
+# In[]
 ##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
-opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:d:",["database","table=","quarter=","startdate=","enddate="])
+opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:d:",["database=","table=","quarter=","startdate=","enddate="])
 for opts,arg in opts:
-  if opts=="-t" or opts=="--table":  # 获取输入参数 -t或者--table 后的值
+  if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
     table_name = arg
-  elif opts=="-q" or opts=="--quarter":   # 获取输入参数 -1或者--quarter 后的值
+  elif opts=="-q" or opts=="--quarter":  # 获取输入参数 -1或者--quarter 后的值
     date_quarter = arg
-  elif opts=="-s" or opts=="--startdate": # 同上
+  elif opts=="-s" or opts=="--startdate":  # 同上
     start_date = arg
-  elif opts=="-e" or opts=="--enddate":  # 同上
+  elif opts=="-e" or opts=="--enddate":   # 同上
     stop_date = arg
   elif opts=="-d" or opts=="database":
     database = arg
+
+
+# In[]
+##重置时间格式
+start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
+stop_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
 
 ##mysql连接配置##
 # -*- coding: utf-8 -*-
@@ -136,15 +159,18 @@ def to_dws(result,table):
 """
 
 con = MysqlClient(db_host,database,user,password)   # 创建mysql链接
+
+
 # In[1]:
 #意向客户#
 # dwb_customer_browse_log  客户浏览楼盘日志表（每日增量） 
 #                                                      newest_id       楼盘id
 #                                                      imei     客户数  
 #                                                      visit_date      浏览日期
-o=con.query('''select newest_id,imei from dwb_db.dwb_customer_browse_log where visit_date>='''+start_date+''' and visit_date<'''+stop_date)
+# o=con.query("select newest_id,imei from dwb_db.dwb_customer_browse_log where visit_date>='"+start_date+"' and visit_date<='"+stop_date+"'")
 #去重
-o=o.groupby(['newest_id']).agg({'imei':pd.Series.nunique}).reset_index()
+# o=o.groupby(['newest_id']).agg({'imei':pd.Series.nunique}).reset_index()
+o=con.query("select newest_id,intention imei from dwb_db.dwb_newest_customer_info where period=quarter and period='"+date_quarter+"'")
 
 
 # In[2]:
@@ -153,11 +179,9 @@ o=o.groupby(['newest_id']).agg({'imei':pd.Series.nunique}).reset_index()
 #                                                      newest_id       楼盘id
 #                                                      city_id         城市id
 #                                                      county_id       区县id
-newest_id=con.query('''select distinct newest_id,city_id,county_id from dws_db.dws_newest_info where dr=0''')
-#意向客户总量#
-# dws_newest_period_admit  楼盘周期表
-#                                                      newest_id       楼盘id
-admit = con.query('''select distinct newest_id from dws_db.dws_newest_period_admit where period = "'''+date_quarter+'''"  and dr = 0''')
+admit=con.query("select newest_id from dws_db_prd.dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
+
+newest_id=con.query("select newest_id,city_id,county_id from dws_db_prd.dws_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,county_id")
 
 
 # In[3]:
@@ -165,6 +189,7 @@ admit = con.query('''select distinct newest_id from dws_db.dws_newest_period_adm
 newest_admit = pd.merge(admit,newest_id, how='left', on=['newest_id'])
 # 通过楼盘id，获取浏览的客户数量
 ori = pd.merge(newest_admit, o, how='inner', on=['newest_id'])
+ori = ori[~ori['city_id'].isna()]
 
 
 # In[4]:
@@ -196,6 +221,7 @@ grouped2 = pd.merge(grouped2, ic_max, how='left', on=['city_id'])
 grouped2 = pd.merge(grouped2, ic_min, how='left', on=['city_id'])
 # 新增字段index_rate,保留两位小数
 grouped2['index_rate'] =round((grouped2['imei_newest']-grouped2['imei_y'])/(grouped2['imei_x']-grouped2['imei_y'])*4.5+0.5,2)
+grouped2['index_rate'] = grouped2['index_rate'].fillna(5)
 
 
 # In[7]:
@@ -225,10 +251,9 @@ grouped2['imei_c_avg']  = round(grouped2['imei_c_avg'],6)
 
 
 # In[9]:
-grouped2.dropna(axis = 0,inplace=True)
+# grouped2.dropna(axis = 0,inplace=True)
 # 修改列名
 grouped2.columns=['city_id','newest_id','imei_newest','imei_city','rate','imei_c_max','imei_c_min','index_rate','sort_id','imei_c_avg','index_rate_change']
-
 
 # In[10]:
 #去除问题数据
@@ -265,14 +290,13 @@ ico_min = ori2.groupby(by = ['county_id'], as_index=False)['imei'].min()
 # 将区县的最小客户数和最大客户数和区县楼盘客户数的关联在一起
 grouped02 = pd.merge(grouped02, ico_max, how='left', on=['county_id'])
 grouped02 = pd.merge(grouped02, ico_min, how='left', on=['county_id'])
-# 新增字段index_rate,保留两位小数
-grouped02['index_rate'] =round((grouped02['imei_newest']-grouped02['imei_y'])/(grouped02['imei_x']-grouped02['imei_y'])*4.5+0.5,2)
+# grouped02['index_rate'] =round((grouped02['imei_newest']-grouped02['imei_y'])/(grouped02['imei_x']-grouped02['imei_y'])*4.5+0.5,2)
 
 
 # In[15]:
 #区县楼盘指数占比排名：
 # 每个区县的楼盘指数占比排序
-grouped02.sort_values(['county_id','index_rate'],ascending=[1,0],inplace=True)
+grouped02.sort_values(['county_id','imei_newest'],ascending=[1,0],inplace=True)
 # 新加字段sort_id :对区县楼盘指数占比排名
 grouped02['sort_id'] = grouped02.groupby(['county_id'])['imei_newest'].rank(ascending=False,method='dense')
 
@@ -282,15 +306,22 @@ grouped02['sort_id'] = grouped02.groupby(['county_id'])['imei_newest'].rank(asce
 # grouped02.sort_values(['county_id','rate'],ascending=[1,0],inplace=True)
 # # 获取区县楼盘排序的排名
 # grouped02['sort_id'] = grouped02.groupby(['county_id'])['imei_newest'].rank(ascending=False,method='dense')
+# # 将区域热度占比使用城市热度占比
+#获取城市热度占比
+df_city = grouped2[['newest_id','index_rate']]
+# 新增字段index_rate,保留两位小数
+grouped02 = pd.merge(grouped02,df_city,how='left',on=['newest_id'])
+grouped02 = grouped02[['county_id','newest_id','imei_newest','imei_city','rate','imei_x','imei_y','index_rate','sort_id']]
 
 
 # In[17]:
 # 去除空值
-grouped02.dropna(axis = 0,inplace=True)
+# grouped02.dropna(axis = 0,inplace=True)
 grouped02['imei_c_avg'] = -999
 grouped02['index_rate_change'] = -999
 # 修改列名
 grouped02.columns=['city_id','newest_id','imei_newest','imei_city','rate','imei_c_max','imei_c_min','index_rate','sort_id','imei_c_avg','index_rate_change']
+grouped02 = grouped02[~grouped02['city_id'].isin(['441900','442000'])]
 
 
 # In[18]:
@@ -304,9 +335,34 @@ grouped['period'] = date_quarter
 # 去重
 grouped.drop_duplicates(inplace=True)
 grouped = grouped[['city_id','newest_id','imei_newest','imei_city','rate','imei_c_max','imei_c_min','index_rate','sort_id','period','imei_c_avg','index_rate_change']]
+grouped['create_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+grouped['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+grouped['dr'] = 0
+
+
+# test = grouped[grouped['newest_id'] == 'f6d276744ddcb55c3dbec0c70eff718c']
 # 调用to_dws方法，加载数据到dws_newest_popularity_top30_quarter表中
 to_dws(grouped,table_name)
 print('>> Done!') #完毕
+
+
+# # In[20]:
+# #更新空值
+# conn = pymysql.connect(host=db_host, user=user,password=password,database=database,charset="utf8")
+# def connect_mysql(conn):
+# #判断链接是否正常
+#  conn.ping(True)
+# #建立操作游标
+#  cursor=conn.cursor()
+# #设置数据输入输出编码格式
+#  cursor.execute('set names utf8')
+#  return cursor
+# # 建立链接游标
+# cur=connect_mysql(conn)
+# update_sql1 = "update dws_db."+table_name+" a ,dws_db."+table_name+" b set a.index_rate = b.index_rate where a.newest_id = b.newest_id and a.imei_c_avg = '-999' and b.imei_c_avg != '-999'; "
+# cur.execute(update_sql1)
+# conn.commit() # 提交记
+# conn.close() # 关闭数据库链接
 
 
 

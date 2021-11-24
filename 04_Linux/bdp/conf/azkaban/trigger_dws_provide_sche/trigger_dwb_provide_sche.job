@@ -1,0 +1,3 @@
+type=command
+quarter=${q}
+command=python3 /bdp/code/python/provide_sche/dwb_newest_provide_sche.py -q "${quarter}" >> /bdp/log/provide_sche.log

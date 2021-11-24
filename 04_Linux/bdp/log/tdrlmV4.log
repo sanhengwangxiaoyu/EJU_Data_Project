@@ -1,0 +1,223 @@
+satrting date to 202110251428
+We are finding '20211021_latlng_rs_v3.zip' under the folder '/data/ods'
+Archive:  /data/ods/20211021_latlng_rs_v3.zip
+  inflating: /data/ods/20211021_latlng_rs_v3.txt  
+mkdir -p -m 755 /data/bak/20211025 done
+File name currently being loaded : 20211021_latlng_rs_v3.txt
+
+DataX (DATAX-OPENSOURCE-3.0), From Alibaba !
+Copyright (C) 2010-2017, Alibaba Group. All Rights Reserved.
+
+
+2021-10-25 14:28:36.767 [main] INFO  VMInfo - VMInfo# operatingSystem class => com.sun.management.internal.OperatingSystemImpl
+2021-10-25 14:28:36.778 [main] INFO  Engine - the machine info  => 
+
+	osInfo:	Ubuntu 11 11.0.11+9-Ubuntu-0ubuntu2.20.04
+	jvmInfo:	Linux amd64 5.11.0-38-generic
+	cpu num:	4
+
+	totalPhysicalMemory:	-0.00G
+	freePhysicalMemory:	-0.00G
+	maxFileDescriptorCount:	-1
+	currentOpenFileDescriptorCount:	-1
+
+	GC Names	[G1 Young Generation, G1 Old Generation]
+
+	MEMORY_NAME                    | allocation_size                | init_size                      
+	CodeHeap 'profiled nmethods'   | 117.22MB                       | 2.44MB                         
+	G1 Old Gen                     | 1,024.00MB                     | 970.00MB                       
+	G1 Survivor Space              | -0.00MB                        | 0.00MB                         
+	CodeHeap 'non-profiled nmethods' | 117.22MB                       | 2.44MB                         
+	Compressed Class Space         | 1,024.00MB                     | 0.00MB                         
+	Metaspace                      | -0.00MB                        | 0.00MB                         
+	G1 Eden Space                  | -0.00MB                        | 54.00MB                        
+	CodeHeap 'non-nmethods'        | 5.56MB                         | 2.44MB                         
+
+
+2021-10-25 14:28:36.805 [main] INFO  Engine - 
+{
+	"content":[
+		{
+			"reader":{
+				"name":"txtfilereader",
+				"parameter":{
+					"column":[
+						{
+							"index":0,
+							"type":"string"
+						},
+						{
+							"index":1,
+							"type":"string"
+						},
+						{
+							"index":2,
+							"type":"string"
+						},
+						{
+							"index":3,
+							"type":"string"
+						},
+						{
+							"index":4,
+							"type":"string"
+						},
+						{
+							"index":5,
+							"type":"string"
+						},
+						{
+							"index":6,
+							"type":"string"
+						},
+						{
+							"index":7,
+							"type":"string"
+						},
+						{
+							"index":8,
+							"type":"string"
+						},
+						{
+							"index":9,
+							"type":"string"
+						},
+						{
+							"index":10,
+							"type":"string"
+						},
+						{
+							"type":"string",
+							"value":"0"
+						},
+						{
+							"type":"string",
+							"value":"2021-10-25 14:28:35"
+						},
+						{
+							"type":"string",
+							"value":"2021-10-25 14:28:35"
+						},
+						{
+							"type":"string",
+							"value":"20211021_latlng_rs_v3_202110251428"
+						}
+					],
+					"encoding":"utf-8",
+					"fieldDelimiter":"\t",
+					"path":[
+						"/data/oper/20211021_latlng_rs_v3_202110251428"
+					],
+					"skipHeader":"true"
+				}
+			},
+			"writer":{
+				"name":"mysqlwriter",
+				"parameter":{
+					"column":[
+						"newest_name",
+						"newest_address",
+						"newest_lnglat",
+						"poi_type",
+						"poi_index",
+						"poi_name",
+						"poi_lnglat",
+						"poi_pro_name",
+						"poi_city_name",
+						"poi_county_name",
+						"poi_address",
+						"dr",
+						"create_time",
+						"update_time",
+						"file_name"
+					],
+					"connection":[
+						{
+							"jdbcUrl":"jdbc:mysql://172.28.36.77:3306/odsdb?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+							"table":[
+								"ori_newest_poi_info"
+							]
+						}
+					],
+					"password":"****************",
+					"preSql":[],
+					"session":[],
+					"username":"wanganming",
+					"writeMode":"update"
+				}
+			}
+		}
+	],
+	"setting":{
+		"speed":{
+			"channel":"8"
+		}
+	}
+}
+
+2021-10-25 14:28:36.832 [main] WARN  Engine - prioriy set to 0, because NumberFormatException, the value is: null
+2021-10-25 14:28:36.835 [main] INFO  PerfTrace - PerfTrace traceId=job_-1, isEnable=false, priority=0
+2021-10-25 14:28:36.836 [main] INFO  JobContainer - DataX jobContainer starts job.
+2021-10-25 14:28:36.839 [main] INFO  JobContainer - Set jobId = 0
+2021-10-25 14:28:37.294 [job-0] INFO  OriginalConfPretreatmentUtil - table:[ori_newest_poi_info] all columns:[
+id,newest_name,newest_address,newest_lnglat,poi_type,poi_index,poi_name,poi_lnglat,poi_pro_name,poi_city_name,poi_county_name,poi_address,dr,create_time,update_time,file_name
+].
+2021-10-25 14:28:37.319 [job-0] INFO  OriginalConfPretreatmentUtil - Write data [
+INSERT INTO %s (newest_name,newest_address,newest_lnglat,poi_type,poi_index,poi_name,poi_lnglat,poi_pro_name,poi_city_name,poi_county_name,poi_address,dr,create_time,update_time,file_name) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE newest_name=VALUES(newest_name),newest_address=VALUES(newest_address),newest_lnglat=VALUES(newest_lnglat),poi_type=VALUES(poi_type),poi_index=VALUES(poi_index),poi_name=VALUES(poi_name),poi_lnglat=VALUES(poi_lnglat),poi_pro_name=VALUES(poi_pro_name),poi_city_name=VALUES(poi_city_name),poi_county_name=VALUES(poi_county_name),poi_address=VALUES(poi_address),dr=VALUES(dr),create_time=VALUES(create_time),update_time=VALUES(update_time),file_name=VALUES(file_name)
+], which jdbcUrl like:[jdbc:mysql://172.28.36.77:3306/odsdb?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true]
+2021-10-25 14:28:37.320 [job-0] INFO  JobContainer - jobContainer starts to do prepare ...
+2021-10-25 14:28:37.321 [job-0] INFO  JobContainer - DataX Reader.Job [txtfilereader] do prepare work .
+2021-10-25 14:28:37.322 [job-0] INFO  TxtFileReader$Job - add file [/data/oper/20211021_latlng_rs_v3_202110251428] as a candidate to be read.
+2021-10-25 14:28:37.322 [job-0] INFO  TxtFileReader$Job - 您即将读取的文件数为: [1]
+2021-10-25 14:28:37.323 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do prepare work .
+2021-10-25 14:28:37.324 [job-0] INFO  JobContainer - jobContainer starts to do split ...
+2021-10-25 14:28:37.324 [job-0] INFO  JobContainer - Job set Channel-Number to 8 channels.
+2021-10-25 14:28:37.325 [job-0] INFO  JobContainer - DataX Reader.Job [txtfilereader] splits to [1] tasks.
+2021-10-25 14:28:37.326 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] splits to [1] tasks.
+2021-10-25 14:28:37.352 [job-0] INFO  JobContainer - jobContainer starts to do schedule ...
+2021-10-25 14:28:37.359 [job-0] INFO  JobContainer - Scheduler starts [1] taskGroups.
+2021-10-25 14:28:37.362 [job-0] INFO  JobContainer - Running by standalone Mode.
+2021-10-25 14:28:37.373 [taskGroup-0] INFO  TaskGroupContainer - taskGroupId=[0] start [1] channels for [1] tasks.
+2021-10-25 14:28:37.400 [taskGroup-0] INFO  Channel - Channel set byte_speed_limit to -1, No bps activated.
+2021-10-25 14:28:37.401 [taskGroup-0] INFO  Channel - Channel set record_speed_limit to -1, No tps activated.
+2021-10-25 14:28:37.428 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] attemptCount[1] is started
+2021-10-25 14:28:37.430 [0-0-0-reader] INFO  TxtFileReader$Task - reading file : [/data/oper/20211021_latlng_rs_v3_202110251428]
+2021-10-25 14:28:37.530 [0-0-0-reader] INFO  UnstructuredStorageReaderUtil - Header line 恒大海上威尼斯	江苏省启东圆陀角旅游度假区	121.9298530,31.7195040	酒店	住宿服务;宾馆酒店;宾馆酒店	启东美家公寓	121.929399,31.719222	江苏省	南通市	启东市	恒大海上威尼斯622栋201室 has been skiped.
+2021-10-25 14:28:37.541 [0-0-0-reader] INFO  UnstructuredStorageReaderUtil - CsvReader使用默认值[{"captureRawRecord":true,"columnCount":0,"comment":"#","currentRecord":-1,"delimiter":"\t","escapeMode":1,"headerCount":0,"rawRecord":"","recordDelimiter":"\u0000","safetySwitch":false,"skipEmptyRecords":true,"textQualifier":"\"","trimWhitespace":true,"useComments":false,"useTextQualifier":true,"values":[]}],csvReaderConfig值为[null]
+2021-10-25 14:28:37.934 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[512]ms
+2021-10-25 14:28:37.934 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2021-10-25 14:28:47.408 [job-0] INFO  StandAloneJobContainerCommunicator - Total 64 records, 11884 bytes | Speed 1.16KB/s, 6 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.065s | Percentage 100.00%
+2021-10-25 14:28:47.409 [job-0] INFO  AbstractScheduler - Scheduler accomplished all tasks.
+2021-10-25 14:28:47.412 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do post work.
+2021-10-25 14:28:47.415 [job-0] INFO  JobContainer - DataX Reader.Job [txtfilereader] do post work.
+2021-10-25 14:28:47.417 [job-0] INFO  JobContainer - DataX jobId [0] completed successfully.
+2021-10-25 14:28:47.422 [job-0] INFO  HookInvoker - No hook invoked, because base dir not exists or is a file: /opt/datax/hook
+2021-10-25 14:28:47.432 [job-0] INFO  JobContainer - 
+	 [total cpu info] => 
+		averageCpu                     | maxDeltaCpu                    | minDeltaCpu                    
+		-1.00%                         | -1.00%                         | -1.00%
+                        
+
+	 [total gc info] => 
+		 NAME                 | totalGCCount       | maxDeltaGCCount    | minDeltaGCCount    | totalGCTime        | maxDeltaGCTime     | minDeltaGCTime     
+		 G1 Young Generation  | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+		 G1 Old Generation    | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+
+2021-10-25 14:28:47.433 [job-0] INFO  JobContainer - PerfTrace not enable!
+2021-10-25 14:28:47.437 [job-0] INFO  StandAloneJobContainerCommunicator - Total 64 records, 11884 bytes | Speed 1.16KB/s, 6 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.065s | Percentage 100.00%
+2021-10-25 14:28:47.443 [job-0] INFO  JobContainer - 
+任务启动时刻                    : 2021-10-25 14:28:36
+任务结束时刻                    : 2021-10-25 14:28:47
+任务总计耗时                    :                 10s
+任务平均流量                    :            1.16KB/s
+记录写入速度                    :              6rec/s
+读出记录总数                    :                  64
+读写失败总数                    :                   0
+
+data load to mysql success
+mkdir -p -m 755 /data/succ/20211025 done
+>>>>>>>Done
+End time is 2021-10-25 14:28
+satrting date to 202110251458
+>>>>>>>Done
+End time is 2021-10-25 14:58

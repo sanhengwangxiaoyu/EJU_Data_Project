@@ -1,0 +1,5 @@
+MongoDB shell version v3.6.8
+connecting to: mongodb://10.122.144.202:27017/performance-prod
+Implicit session: session { "id" : UUID("39df7b60-3372-417f-9ad4-94d1f9360bdc") }
+MongoDB server version: 4.0.18
+WARNING: shell and server versions do not match

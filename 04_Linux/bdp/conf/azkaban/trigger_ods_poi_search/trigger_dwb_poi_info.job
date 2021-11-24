@@ -1,0 +1,2 @@
+type=command
+command=bash /bdp/code/shell/tdrlmV4.sh >> /bdp/log/tdrlmV4.log

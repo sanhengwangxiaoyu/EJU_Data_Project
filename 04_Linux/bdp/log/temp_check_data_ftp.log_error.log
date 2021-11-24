@@ -1,0 +1,71 @@
+执行时间： 2021-10-25 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211025 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+180读写失败总数:0
+365读写失败总数:0
+549读写失败总数:0
+执行时间： 2021-10-25 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211025 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+180读写失败总数:0
+365读写失败总数:0
+549读写失败总数:0
+733读写失败总数:0
+180读写失败总数:0
+365读写失败总数:0
+549读写失败总数:0
+733读写失败总数:0
+执行时间： 2021-10-25 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211025 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+执行时间： 2021-10-25 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211025 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1101行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-25 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211025 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1285行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-25 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211025 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1285行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-25 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211025 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1285行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-25 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211025 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1285行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-25 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211025 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-26 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211026 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-26 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211026 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-27 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211027 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-28 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211028 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-29 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211029 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-30 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211030 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-10-31 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211031 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-11-01 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211101 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-11-02 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211102 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-11-03 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211103 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-11-04 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211104 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0
+执行时间： 2021-11-05 00:00:00 。
+执行命令：  python2 /opt/datax/bin/datax.py -p -Dtime=20211105 /bdp/conf/datax/city_newest_deal_check.json >> /bdp/log/temp_check_data_ftp.log。
+第1469行>>>>>>>>>>>>>>>>>>>>>>>>>>>读写失败总数:0

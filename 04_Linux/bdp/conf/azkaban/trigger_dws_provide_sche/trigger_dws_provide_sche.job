@@ -1,0 +1,4 @@
+type=command
+dependencies=trigger_dwb_provide_sche
+quarter=${q}
+command=python3 /bdp/code/python/provide_sche/dws_newest_provide_sche.py -q "${quarter}" >> /bdp/log/provide_sche.log

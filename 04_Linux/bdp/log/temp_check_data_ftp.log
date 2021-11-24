@@ -1,0 +1,1470 @@
+
+DataX (DATAX-OPENSOURCE-3.0), From Alibaba !
+Copyright (C) 2010-2017, Alibaba Group. All Rights Reserved.
+
+
+2021-10-25 10:11:51.026 [main] INFO  VMInfo - VMInfo# operatingSystem class => com.sun.management.internal.OperatingSystemImpl
+2021-10-25 10:11:51.039 [main] INFO  Engine - the machine info  => 
+
+	osInfo:	Ubuntu 11 11.0.11+9-Ubuntu-0ubuntu2.20.04
+	jvmInfo:	Linux amd64 5.11.0-38-generic
+	cpu num:	4
+
+	totalPhysicalMemory:	-0.00G
+	freePhysicalMemory:	-0.00G
+	maxFileDescriptorCount:	-1
+	currentOpenFileDescriptorCount:	-1
+
+	GC Names	[G1 Young Generation, G1 Old Generation]
+
+	MEMORY_NAME                    | allocation_size                | init_size                      
+	CodeHeap 'profiled nmethods'   | 117.22MB                       | 2.44MB                         
+	G1 Old Gen                     | 1,024.00MB                     | 970.00MB                       
+	G1 Survivor Space              | -0.00MB                        | 0.00MB                         
+	CodeHeap 'non-profiled nmethods' | 117.22MB                       | 2.44MB                         
+	Compressed Class Space         | 1,024.00MB                     | 0.00MB                         
+	Metaspace                      | -0.00MB                        | 0.00MB                         
+	G1 Eden Space                  | -0.00MB                        | 54.00MB                        
+	CodeHeap 'non-nmethods'        | 5.56MB                         | 2.44MB                         
+
+
+2021-10-25 10:11:51.077 [main] INFO  Engine - 
+{
+	"content":[
+		{
+			"reader":{
+				"name":"mysqlreader",
+				"parameter":{
+					"column":[
+						"URL",
+						"city",
+						"project",
+						"addr",
+						"Development",
+						"issue_code",
+						"issue_date",
+						"opening_date",
+						"issue_area",
+						"building_status",
+						"building_name",
+						"building_rooms",
+						"building_area",
+						"building_price",
+						"sale_tel",
+						"sale_addr",
+						"room",
+						"room_area",
+						"room_status"
+					],
+					"connection":[
+						{
+							"jdbcUrl":[
+								"jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"
+							],
+							"table":[
+								"fang_ysz"
+							]
+						}
+					],
+					"password":"****************",
+					"username":"ShuT",
+					"where":"add_date=202110"
+				}
+			},
+			"writer":{
+				"name":"mysqlwriter",
+				"parameter":{
+					"column":[
+						"url",
+						"city_name",
+						"floor_name",
+						"address",
+						"business",
+						"issue_code",
+						"issue_date",
+						"open_date",
+						"issue_area",
+						"sale_state",
+						"building_code",
+						"room_sum",
+						"area",
+						"simulation_price",
+						"sale_telephone",
+						"sale_address",
+						"room_code",
+						"room_sale_area",
+						"room_sale_state"
+					],
+					"connection":[
+						{
+							"jdbcUrl":"jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+							"table":[
+								"city_newest_deal_data_check"
+							]
+						}
+					],
+					"password":"****************",
+					"preSql":[],
+					"session":[],
+					"username":"wanganming",
+					"writeMode":"update"
+				}
+			}
+		}
+	],
+	"setting":{
+		"speed":{
+			"channel":"4"
+		}
+	}
+}
+
+2021-10-25 10:11:51.108 [main] WARN  Engine - prioriy set to 0, because NumberFormatException, the value is: null
+2021-10-25 10:11:51.110 [main] INFO  PerfTrace - PerfTrace traceId=job_-1, isEnable=false, priority=0
+2021-10-25 10:11:51.111 [main] INFO  JobContainer - DataX jobContainer starts job.
+2021-10-25 10:11:51.114 [main] INFO  JobContainer - Set jobId = 0
+2021-10-25 10:11:51.756 [job-0] INFO  OriginalConfPretreatmentUtil - Available jdbcUrl:jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true.
+2021-10-25 10:11:51.891 [job-0] INFO  OriginalConfPretreatmentUtil - table:[fang_ysz] has columns:[URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status,add_date].
+2021-10-25 10:11:52.201 [job-0] INFO  OriginalConfPretreatmentUtil - table:[city_newest_deal_data_check] all columns:[
+id,url,city_name,gd_city,floor_name,floor_name_new,clean_floor_name,floor_name_clean,address,business,issue_code,issue_date,issue_date_clean,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state,create_time
+].
+2021-10-25 10:11:52.233 [job-0] INFO  OriginalConfPretreatmentUtil - Write data [
+INSERT INTO %s (url,city_name,floor_name,address,business,issue_code,issue_date,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE url=VALUES(url),city_name=VALUES(city_name),floor_name=VALUES(floor_name),address=VALUES(address),business=VALUES(business),issue_code=VALUES(issue_code),issue_date=VALUES(issue_date),open_date=VALUES(open_date),issue_area=VALUES(issue_area),sale_state=VALUES(sale_state),building_code=VALUES(building_code),room_sum=VALUES(room_sum),area=VALUES(area),simulation_price=VALUES(simulation_price),sale_telephone=VALUES(sale_telephone),sale_address=VALUES(sale_address),room_code=VALUES(room_code),room_sale_area=VALUES(room_sale_area),room_sale_state=VALUES(room_sale_state)
+], which jdbcUrl like:[jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true]
+2021-10-25 10:11:52.234 [job-0] INFO  JobContainer - jobContainer starts to do prepare ...
+2021-10-25 10:11:52.235 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do prepare work .
+2021-10-25 10:11:52.235 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do prepare work .
+2021-10-25 10:11:52.236 [job-0] INFO  JobContainer - jobContainer starts to do split ...
+2021-10-25 10:11:52.237 [job-0] INFO  JobContainer - Job set Channel-Number to 4 channels.
+2021-10-25 10:11:52.244 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] splits to [1] tasks.
+2021-10-25 10:11:52.245 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] splits to [1] tasks.
+2021-10-25 10:11:52.283 [job-0] INFO  JobContainer - jobContainer starts to do schedule ...
+2021-10-25 10:11:52.294 [job-0] INFO  JobContainer - Scheduler starts [1] taskGroups.
+2021-10-25 10:11:52.298 [job-0] INFO  JobContainer - Running by standalone Mode.
+2021-10-25 10:11:52.312 [taskGroup-0] INFO  TaskGroupContainer - taskGroupId=[0] start [1] channels for [1] tasks.
+2021-10-25 10:11:52.345 [taskGroup-0] INFO  Channel - Channel set byte_speed_limit to -1, No bps activated.
+2021-10-25 10:11:52.346 [taskGroup-0] INFO  Channel - Channel set record_speed_limit to -1, No tps activated.
+2021-10-25 10:11:52.380 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] attemptCount[1] is started
+2021-10-25 10:11:52.403 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Begin to read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=202110)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:11:52.529 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Finished read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=202110)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:11:52.784 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[412]ms
+2021-10-25 10:11:52.786 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2021-10-25 10:12:02.351 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:12:02.352 [job-0] INFO  AbstractScheduler - Scheduler accomplished all tasks.
+2021-10-25 10:12:02.353 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do post work.
+2021-10-25 10:12:02.355 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do post work.
+2021-10-25 10:12:02.356 [job-0] INFO  JobContainer - DataX jobId [0] completed successfully.
+2021-10-25 10:12:02.358 [job-0] INFO  HookInvoker - No hook invoked, because base dir not exists or is a file: /opt/datax/hook
+2021-10-25 10:12:02.362 [job-0] INFO  JobContainer - 
+	 [total cpu info] => 
+		averageCpu                     | maxDeltaCpu                    | minDeltaCpu                    
+		-1.00%                         | -1.00%                         | -1.00%
+                        
+
+	 [total gc info] => 
+		 NAME                 | totalGCCount       | maxDeltaGCCount    | minDeltaGCCount    | totalGCTime        | maxDeltaGCTime     | minDeltaGCTime     
+		 G1 Young Generation  | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+		 G1 Old Generation    | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+
+2021-10-25 10:12:02.363 [job-0] INFO  JobContainer - PerfTrace not enable!
+2021-10-25 10:12:02.365 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:12:02.368 [job-0] INFO  JobContainer - 
+任务启动时刻                    : 2021-10-25 10:11:51
+任务结束时刻                    : 2021-10-25 10:12:02
+任务总计耗时                    :                 11s
+任务平均流量                    :                0B/s
+记录写入速度                    :              0rec/s
+读出记录总数                    :                   0
+读写失败总数                    :                   0
+
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+start Time : 20211025
+
+DataX (DATAX-OPENSOURCE-3.0), From Alibaba !
+Copyright (C) 2010-2017, Alibaba Group. All Rights Reserved.
+
+
+2021-10-25 10:19:23.060 [main] INFO  VMInfo - VMInfo# operatingSystem class => com.sun.management.internal.OperatingSystemImpl
+2021-10-25 10:19:23.070 [main] INFO  Engine - the machine info  => 
+
+	osInfo:	Ubuntu 11 11.0.11+9-Ubuntu-0ubuntu2.20.04
+	jvmInfo:	Linux amd64 5.11.0-38-generic
+	cpu num:	4
+
+	totalPhysicalMemory:	-0.00G
+	freePhysicalMemory:	-0.00G
+	maxFileDescriptorCount:	-1
+	currentOpenFileDescriptorCount:	-1
+
+	GC Names	[G1 Young Generation, G1 Old Generation]
+
+	MEMORY_NAME                    | allocation_size                | init_size                      
+	CodeHeap 'profiled nmethods'   | 117.22MB                       | 2.44MB                         
+	G1 Old Gen                     | 1,024.00MB                     | 970.00MB                       
+	G1 Survivor Space              | -0.00MB                        | 0.00MB                         
+	CodeHeap 'non-profiled nmethods' | 117.22MB                       | 2.44MB                         
+	Compressed Class Space         | 1,024.00MB                     | 0.00MB                         
+	Metaspace                      | -0.00MB                        | 0.00MB                         
+	G1 Eden Space                  | -0.00MB                        | 54.00MB                        
+	CodeHeap 'non-nmethods'        | 5.56MB                         | 2.44MB                         
+
+
+2021-10-25 10:19:23.104 [main] INFO  Engine - 
+{
+	"content":[
+		{
+			"reader":{
+				"name":"mysqlreader",
+				"parameter":{
+					"column":[
+						"URL",
+						"city",
+						"project",
+						"addr",
+						"Development",
+						"issue_code",
+						"issue_date",
+						"opening_date",
+						"issue_area",
+						"building_status",
+						"building_name",
+						"building_rooms",
+						"building_area",
+						"building_price",
+						"sale_tel",
+						"sale_addr",
+						"room",
+						"room_area",
+						"room_status"
+					],
+					"connection":[
+						{
+							"jdbcUrl":[
+								"jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"
+							],
+							"table":[
+								"fang_ysz"
+							]
+						}
+					],
+					"password":"****************",
+					"username":"ShuT",
+					"where":"add_date=20211025"
+				}
+			},
+			"writer":{
+				"name":"mysqlwriter",
+				"parameter":{
+					"column":[
+						"url",
+						"city_name",
+						"floor_name",
+						"address",
+						"business",
+						"issue_code",
+						"issue_date",
+						"open_date",
+						"issue_area",
+						"sale_state",
+						"building_code",
+						"room_sum",
+						"area",
+						"simulation_price",
+						"sale_telephone",
+						"sale_address",
+						"room_code",
+						"room_sale_area",
+						"room_sale_state"
+					],
+					"connection":[
+						{
+							"jdbcUrl":"jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+							"table":[
+								"city_newest_deal_data_check"
+							]
+						}
+					],
+					"password":"****************",
+					"preSql":[],
+					"session":[],
+					"username":"wanganming",
+					"writeMode":"update"
+				}
+			}
+		}
+	],
+	"setting":{
+		"speed":{
+			"channel":"4"
+		}
+	}
+}
+
+2021-10-25 10:19:23.127 [main] WARN  Engine - prioriy set to 0, because NumberFormatException, the value is: null
+2021-10-25 10:19:23.129 [main] INFO  PerfTrace - PerfTrace traceId=job_-1, isEnable=false, priority=0
+2021-10-25 10:19:23.129 [main] INFO  JobContainer - DataX jobContainer starts job.
+2021-10-25 10:19:23.132 [main] INFO  JobContainer - Set jobId = 0
+2021-10-25 10:19:23.681 [job-0] INFO  OriginalConfPretreatmentUtil - Available jdbcUrl:jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true.
+2021-10-25 10:19:23.796 [job-0] INFO  OriginalConfPretreatmentUtil - table:[fang_ysz] has columns:[URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status,add_date].
+2021-10-25 10:19:24.030 [job-0] INFO  OriginalConfPretreatmentUtil - table:[city_newest_deal_data_check] all columns:[
+id,url,city_name,gd_city,floor_name,floor_name_new,clean_floor_name,floor_name_clean,address,business,issue_code,issue_date,issue_date_clean,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state,create_time
+].
+2021-10-25 10:19:24.053 [job-0] INFO  OriginalConfPretreatmentUtil - Write data [
+INSERT INTO %s (url,city_name,floor_name,address,business,issue_code,issue_date,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE url=VALUES(url),city_name=VALUES(city_name),floor_name=VALUES(floor_name),address=VALUES(address),business=VALUES(business),issue_code=VALUES(issue_code),issue_date=VALUES(issue_date),open_date=VALUES(open_date),issue_area=VALUES(issue_area),sale_state=VALUES(sale_state),building_code=VALUES(building_code),room_sum=VALUES(room_sum),area=VALUES(area),simulation_price=VALUES(simulation_price),sale_telephone=VALUES(sale_telephone),sale_address=VALUES(sale_address),room_code=VALUES(room_code),room_sale_area=VALUES(room_sale_area),room_sale_state=VALUES(room_sale_state)
+], which jdbcUrl like:[jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true]
+2021-10-25 10:19:24.054 [job-0] INFO  JobContainer - jobContainer starts to do prepare ...
+2021-10-25 10:19:24.055 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do prepare work .
+2021-10-25 10:19:24.055 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do prepare work .
+2021-10-25 10:19:24.056 [job-0] INFO  JobContainer - jobContainer starts to do split ...
+2021-10-25 10:19:24.056 [job-0] INFO  JobContainer - Job set Channel-Number to 4 channels.
+2021-10-25 10:19:24.063 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] splits to [1] tasks.
+2021-10-25 10:19:24.064 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] splits to [1] tasks.
+2021-10-25 10:19:24.091 [job-0] INFO  JobContainer - jobContainer starts to do schedule ...
+2021-10-25 10:19:24.097 [job-0] INFO  JobContainer - Scheduler starts [1] taskGroups.
+2021-10-25 10:19:24.099 [job-0] INFO  JobContainer - Running by standalone Mode.
+2021-10-25 10:19:24.115 [taskGroup-0] INFO  TaskGroupContainer - taskGroupId=[0] start [1] channels for [1] tasks.
+2021-10-25 10:19:24.145 [taskGroup-0] INFO  Channel - Channel set byte_speed_limit to -1, No bps activated.
+2021-10-25 10:19:24.145 [taskGroup-0] INFO  Channel - Channel set record_speed_limit to -1, No tps activated.
+2021-10-25 10:19:24.175 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] attemptCount[1] is started
+2021-10-25 10:19:24.191 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Begin to read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:19:24.290 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Finished read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:19:24.581 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[414]ms
+2021-10-25 10:19:24.584 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2021-10-25 10:19:34.146 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.002s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:19:34.148 [job-0] INFO  AbstractScheduler - Scheduler accomplished all tasks.
+2021-10-25 10:19:34.152 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do post work.
+2021-10-25 10:19:34.156 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do post work.
+2021-10-25 10:19:34.158 [job-0] INFO  JobContainer - DataX jobId [0] completed successfully.
+2021-10-25 10:19:34.164 [job-0] INFO  HookInvoker - No hook invoked, because base dir not exists or is a file: /opt/datax/hook
+2021-10-25 10:19:34.173 [job-0] INFO  JobContainer - 
+	 [total cpu info] => 
+		averageCpu                     | maxDeltaCpu                    | minDeltaCpu                    
+		-1.00%                         | -1.00%                         | -1.00%
+                        
+
+	 [total gc info] => 
+		 NAME                 | totalGCCount       | maxDeltaGCCount    | minDeltaGCCount    | totalGCTime        | maxDeltaGCTime     | minDeltaGCTime     
+		 G1 Young Generation  | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+		 G1 Old Generation    | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+
+2021-10-25 10:19:34.175 [job-0] INFO  JobContainer - PerfTrace not enable!
+2021-10-25 10:19:34.178 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.002s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:19:34.182 [job-0] INFO  JobContainer - 
+任务启动时刻                    : 2021-10-25 10:19:23
+任务结束时刻                    : 2021-10-25 10:19:34
+任务总计耗时                    :                 11s
+任务平均流量                    :                0B/s
+记录写入速度                    :              0rec/s
+读出记录总数                    :                   0
+读写失败总数                    :                   0
+
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+
+DataX (DATAX-OPENSOURCE-3.0), From Alibaba !
+Copyright (C) 2010-2017, Alibaba Group. All Rights Reserved.
+
+
+2021-10-25 10:26:17.590 [main] INFO  VMInfo - VMInfo# operatingSystem class => com.sun.management.internal.OperatingSystemImpl
+2021-10-25 10:26:17.604 [main] INFO  Engine - the machine info  => 
+
+	osInfo:	Ubuntu 11 11.0.11+9-Ubuntu-0ubuntu2.20.04
+	jvmInfo:	Linux amd64 5.11.0-38-generic
+	cpu num:	4
+
+	totalPhysicalMemory:	-0.00G
+	freePhysicalMemory:	-0.00G
+	maxFileDescriptorCount:	-1
+	currentOpenFileDescriptorCount:	-1
+
+	GC Names	[G1 Young Generation, G1 Old Generation]
+
+	MEMORY_NAME                    | allocation_size                | init_size                      
+	CodeHeap 'profiled nmethods'   | 117.22MB                       | 2.44MB                         
+	G1 Old Gen                     | 1,024.00MB                     | 970.00MB                       
+	G1 Survivor Space              | -0.00MB                        | 0.00MB                         
+	CodeHeap 'non-profiled nmethods' | 117.22MB                       | 2.44MB                         
+	Compressed Class Space         | 1,024.00MB                     | 0.00MB                         
+	Metaspace                      | -0.00MB                        | 0.00MB                         
+	G1 Eden Space                  | -0.00MB                        | 54.00MB                        
+	CodeHeap 'non-nmethods'        | 5.56MB                         | 2.44MB                         
+
+
+2021-10-25 10:26:17.635 [main] INFO  Engine - 
+{
+	"content":[
+		{
+			"reader":{
+				"name":"mysqlreader",
+				"parameter":{
+					"column":[
+						"URL",
+						"city",
+						"project",
+						"addr",
+						"Development",
+						"issue_code",
+						"issue_date",
+						"opening_date",
+						"issue_area",
+						"building_status",
+						"building_name",
+						"building_rooms",
+						"building_area",
+						"building_price",
+						"sale_tel",
+						"sale_addr",
+						"room",
+						"room_area",
+						"room_status"
+					],
+					"connection":[
+						{
+							"jdbcUrl":[
+								"jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"
+							],
+							"table":[
+								"fang_ysz"
+							]
+						}
+					],
+					"password":"****************",
+					"username":"ShuT",
+					"where":"add_date=20211025"
+				}
+			},
+			"writer":{
+				"name":"mysqlwriter",
+				"parameter":{
+					"column":[
+						"url",
+						"city_name",
+						"floor_name",
+						"address",
+						"business",
+						"issue_code",
+						"issue_date",
+						"open_date",
+						"issue_area",
+						"sale_state",
+						"building_code",
+						"room_sum",
+						"area",
+						"simulation_price",
+						"sale_telephone",
+						"sale_address",
+						"room_code",
+						"room_sale_area",
+						"room_sale_state"
+					],
+					"connection":[
+						{
+							"jdbcUrl":"jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+							"table":[
+								"city_newest_deal_data_check"
+							]
+						}
+					],
+					"password":"****************",
+					"preSql":[],
+					"session":[],
+					"username":"wanganming",
+					"writeMode":"update"
+				}
+			}
+		}
+	],
+	"setting":{
+		"speed":{
+			"channel":"4"
+		}
+	}
+}
+
+2021-10-25 10:26:17.655 [main] WARN  Engine - prioriy set to 0, because NumberFormatException, the value is: null
+2021-10-25 10:26:17.657 [main] INFO  PerfTrace - PerfTrace traceId=job_-1, isEnable=false, priority=0
+2021-10-25 10:26:17.658 [main] INFO  JobContainer - DataX jobContainer starts job.
+2021-10-25 10:26:17.660 [main] INFO  JobContainer - Set jobId = 0
+2021-10-25 10:26:18.190 [job-0] INFO  OriginalConfPretreatmentUtil - Available jdbcUrl:jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true.
+2021-10-25 10:26:18.353 [job-0] INFO  OriginalConfPretreatmentUtil - table:[fang_ysz] has columns:[URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status,add_date].
+2021-10-25 10:26:18.672 [job-0] INFO  OriginalConfPretreatmentUtil - table:[city_newest_deal_data_check] all columns:[
+id,url,city_name,gd_city,floor_name,floor_name_new,clean_floor_name,floor_name_clean,address,business,issue_code,issue_date,issue_date_clean,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state,create_time
+].
+2021-10-25 10:26:18.693 [job-0] INFO  OriginalConfPretreatmentUtil - Write data [
+INSERT INTO %s (url,city_name,floor_name,address,business,issue_code,issue_date,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE url=VALUES(url),city_name=VALUES(city_name),floor_name=VALUES(floor_name),address=VALUES(address),business=VALUES(business),issue_code=VALUES(issue_code),issue_date=VALUES(issue_date),open_date=VALUES(open_date),issue_area=VALUES(issue_area),sale_state=VALUES(sale_state),building_code=VALUES(building_code),room_sum=VALUES(room_sum),area=VALUES(area),simulation_price=VALUES(simulation_price),sale_telephone=VALUES(sale_telephone),sale_address=VALUES(sale_address),room_code=VALUES(room_code),room_sale_area=VALUES(room_sale_area),room_sale_state=VALUES(room_sale_state)
+], which jdbcUrl like:[jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true]
+2021-10-25 10:26:18.694 [job-0] INFO  JobContainer - jobContainer starts to do prepare ...
+2021-10-25 10:26:18.695 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do prepare work .
+2021-10-25 10:26:18.695 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do prepare work .
+2021-10-25 10:26:18.696 [job-0] INFO  JobContainer - jobContainer starts to do split ...
+2021-10-25 10:26:18.697 [job-0] INFO  JobContainer - Job set Channel-Number to 4 channels.
+2021-10-25 10:26:18.707 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] splits to [1] tasks.
+2021-10-25 10:26:18.708 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] splits to [1] tasks.
+2021-10-25 10:26:18.737 [job-0] INFO  JobContainer - jobContainer starts to do schedule ...
+2021-10-25 10:26:18.747 [job-0] INFO  JobContainer - Scheduler starts [1] taskGroups.
+2021-10-25 10:26:18.750 [job-0] INFO  JobContainer - Running by standalone Mode.
+2021-10-25 10:26:18.766 [taskGroup-0] INFO  TaskGroupContainer - taskGroupId=[0] start [1] channels for [1] tasks.
+2021-10-25 10:26:18.790 [taskGroup-0] INFO  Channel - Channel set byte_speed_limit to -1, No bps activated.
+2021-10-25 10:26:18.790 [taskGroup-0] INFO  Channel - Channel set record_speed_limit to -1, No tps activated.
+2021-10-25 10:26:18.814 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] attemptCount[1] is started
+2021-10-25 10:26:18.838 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Begin to read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:26:18.982 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Finished read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:26:19.218 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[410]ms
+2021-10-25 10:26:19.220 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2021-10-25 10:26:28.803 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:26:28.806 [job-0] INFO  AbstractScheduler - Scheduler accomplished all tasks.
+2021-10-25 10:26:28.809 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do post work.
+2021-10-25 10:26:28.813 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do post work.
+2021-10-25 10:26:28.815 [job-0] INFO  JobContainer - DataX jobId [0] completed successfully.
+2021-10-25 10:26:28.818 [job-0] INFO  HookInvoker - No hook invoked, because base dir not exists or is a file: /opt/datax/hook
+2021-10-25 10:26:28.821 [job-0] INFO  JobContainer - 
+	 [total cpu info] => 
+		averageCpu                     | maxDeltaCpu                    | minDeltaCpu                    
+		-1.00%                         | -1.00%                         | -1.00%
+                        
+
+	 [total gc info] => 
+		 NAME                 | totalGCCount       | maxDeltaGCCount    | minDeltaGCCount    | totalGCTime        | maxDeltaGCTime     | minDeltaGCTime     
+		 G1 Young Generation  | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+		 G1 Old Generation    | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+
+2021-10-25 10:26:28.821 [job-0] INFO  JobContainer - PerfTrace not enable!
+2021-10-25 10:26:28.822 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:26:28.824 [job-0] INFO  JobContainer - 
+任务启动时刻                    : 2021-10-25 10:26:17
+任务结束时刻                    : 2021-10-25 10:26:28
+任务总计耗时                    :                 11s
+任务平均流量                    :                0B/s
+记录写入速度                    :              0rec/s
+读出记录总数                    :                   0
+读写失败总数                    :                   0
+
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+
+DataX (DATAX-OPENSOURCE-3.0), From Alibaba !
+Copyright (C) 2010-2017, Alibaba Group. All Rights Reserved.
+
+
+2021-10-25 10:27:45.268 [main] INFO  VMInfo - VMInfo# operatingSystem class => com.sun.management.internal.OperatingSystemImpl
+2021-10-25 10:27:45.278 [main] INFO  Engine - the machine info  => 
+
+	osInfo:	Ubuntu 11 11.0.11+9-Ubuntu-0ubuntu2.20.04
+	jvmInfo:	Linux amd64 5.11.0-38-generic
+	cpu num:	4
+
+	totalPhysicalMemory:	-0.00G
+	freePhysicalMemory:	-0.00G
+	maxFileDescriptorCount:	-1
+	currentOpenFileDescriptorCount:	-1
+
+	GC Names	[G1 Young Generation, G1 Old Generation]
+
+	MEMORY_NAME                    | allocation_size                | init_size                      
+	CodeHeap 'profiled nmethods'   | 117.22MB                       | 2.44MB                         
+	G1 Old Gen                     | 1,024.00MB                     | 970.00MB                       
+	G1 Survivor Space              | -0.00MB                        | 0.00MB                         
+	CodeHeap 'non-profiled nmethods' | 117.22MB                       | 2.44MB                         
+	Compressed Class Space         | 1,024.00MB                     | 0.00MB                         
+	Metaspace                      | -0.00MB                        | 0.00MB                         
+	G1 Eden Space                  | -0.00MB                        | 54.00MB                        
+	CodeHeap 'non-nmethods'        | 5.56MB                         | 2.44MB                         
+
+
+2021-10-25 10:27:45.304 [main] INFO  Engine - 
+{
+	"content":[
+		{
+			"reader":{
+				"name":"mysqlreader",
+				"parameter":{
+					"column":[
+						"URL",
+						"city",
+						"project",
+						"addr",
+						"Development",
+						"issue_code",
+						"issue_date",
+						"opening_date",
+						"issue_area",
+						"building_status",
+						"building_name",
+						"building_rooms",
+						"building_area",
+						"building_price",
+						"sale_tel",
+						"sale_addr",
+						"room",
+						"room_area",
+						"room_status"
+					],
+					"connection":[
+						{
+							"jdbcUrl":[
+								"jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"
+							],
+							"table":[
+								"fang_ysz"
+							]
+						}
+					],
+					"password":"****************",
+					"username":"ShuT",
+					"where":"add_date=20211025"
+				}
+			},
+			"writer":{
+				"name":"mysqlwriter",
+				"parameter":{
+					"column":[
+						"url",
+						"city_name",
+						"floor_name",
+						"address",
+						"business",
+						"issue_code",
+						"issue_date",
+						"open_date",
+						"issue_area",
+						"sale_state",
+						"building_code",
+						"room_sum",
+						"area",
+						"simulation_price",
+						"sale_telephone",
+						"sale_address",
+						"room_code",
+						"room_sale_area",
+						"room_sale_state"
+					],
+					"connection":[
+						{
+							"jdbcUrl":"jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+							"table":[
+								"city_newest_deal_data_check"
+							]
+						}
+					],
+					"password":"****************",
+					"preSql":[],
+					"session":[],
+					"username":"wanganming",
+					"writeMode":"update"
+				}
+			}
+		}
+	],
+	"setting":{
+		"speed":{
+			"channel":"4"
+		}
+	}
+}
+
+2021-10-25 10:27:45.326 [main] WARN  Engine - prioriy set to 0, because NumberFormatException, the value is: null
+2021-10-25 10:27:45.328 [main] INFO  PerfTrace - PerfTrace traceId=job_-1, isEnable=false, priority=0
+2021-10-25 10:27:45.328 [main] INFO  JobContainer - DataX jobContainer starts job.
+2021-10-25 10:27:45.332 [main] INFO  JobContainer - Set jobId = 0
+2021-10-25 10:27:45.869 [job-0] INFO  OriginalConfPretreatmentUtil - Available jdbcUrl:jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true.
+2021-10-25 10:27:45.995 [job-0] INFO  OriginalConfPretreatmentUtil - table:[fang_ysz] has columns:[URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status,add_date].
+2021-10-25 10:27:46.271 [job-0] INFO  OriginalConfPretreatmentUtil - table:[city_newest_deal_data_check] all columns:[
+id,url,city_name,gd_city,floor_name,floor_name_new,clean_floor_name,floor_name_clean,address,business,issue_code,issue_date,issue_date_clean,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state,create_time
+].
+2021-10-25 10:27:46.293 [job-0] INFO  OriginalConfPretreatmentUtil - Write data [
+INSERT INTO %s (url,city_name,floor_name,address,business,issue_code,issue_date,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE url=VALUES(url),city_name=VALUES(city_name),floor_name=VALUES(floor_name),address=VALUES(address),business=VALUES(business),issue_code=VALUES(issue_code),issue_date=VALUES(issue_date),open_date=VALUES(open_date),issue_area=VALUES(issue_area),sale_state=VALUES(sale_state),building_code=VALUES(building_code),room_sum=VALUES(room_sum),area=VALUES(area),simulation_price=VALUES(simulation_price),sale_telephone=VALUES(sale_telephone),sale_address=VALUES(sale_address),room_code=VALUES(room_code),room_sale_area=VALUES(room_sale_area),room_sale_state=VALUES(room_sale_state)
+], which jdbcUrl like:[jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true]
+2021-10-25 10:27:46.294 [job-0] INFO  JobContainer - jobContainer starts to do prepare ...
+2021-10-25 10:27:46.295 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do prepare work .
+2021-10-25 10:27:46.295 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do prepare work .
+2021-10-25 10:27:46.296 [job-0] INFO  JobContainer - jobContainer starts to do split ...
+2021-10-25 10:27:46.296 [job-0] INFO  JobContainer - Job set Channel-Number to 4 channels.
+2021-10-25 10:27:46.302 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] splits to [1] tasks.
+2021-10-25 10:27:46.304 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] splits to [1] tasks.
+2021-10-25 10:27:46.329 [job-0] INFO  JobContainer - jobContainer starts to do schedule ...
+2021-10-25 10:27:46.334 [job-0] INFO  JobContainer - Scheduler starts [1] taskGroups.
+2021-10-25 10:27:46.336 [job-0] INFO  JobContainer - Running by standalone Mode.
+2021-10-25 10:27:46.356 [taskGroup-0] INFO  TaskGroupContainer - taskGroupId=[0] start [1] channels for [1] tasks.
+2021-10-25 10:27:46.375 [taskGroup-0] INFO  Channel - Channel set byte_speed_limit to -1, No bps activated.
+2021-10-25 10:27:46.376 [taskGroup-0] INFO  Channel - Channel set record_speed_limit to -1, No tps activated.
+2021-10-25 10:27:46.399 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] attemptCount[1] is started
+2021-10-25 10:27:46.413 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Begin to read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:27:46.531 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Finished read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:27:46.803 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[405]ms
+2021-10-25 10:27:46.806 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2021-10-25 10:27:56.372 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:27:56.375 [job-0] INFO  AbstractScheduler - Scheduler accomplished all tasks.
+2021-10-25 10:27:56.378 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do post work.
+2021-10-25 10:27:56.380 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do post work.
+2021-10-25 10:27:56.382 [job-0] INFO  JobContainer - DataX jobId [0] completed successfully.
+2021-10-25 10:27:56.387 [job-0] INFO  HookInvoker - No hook invoked, because base dir not exists or is a file: /opt/datax/hook
+2021-10-25 10:27:56.390 [job-0] INFO  JobContainer - 
+	 [total cpu info] => 
+		averageCpu                     | maxDeltaCpu                    | minDeltaCpu                    
+		-1.00%                         | -1.00%                         | -1.00%
+                        
+
+	 [total gc info] => 
+		 NAME                 | totalGCCount       | maxDeltaGCCount    | minDeltaGCCount    | totalGCTime        | maxDeltaGCTime     | minDeltaGCTime     
+		 G1 Young Generation  | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+		 G1 Old Generation    | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+
+2021-10-25 10:27:56.390 [job-0] INFO  JobContainer - PerfTrace not enable!
+2021-10-25 10:27:56.391 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:27:56.392 [job-0] INFO  JobContainer - 
+任务启动时刻                    : 2021-10-25 10:27:45
+任务结束时刻                    : 2021-10-25 10:27:56
+任务总计耗时                    :                 11s
+任务平均流量                    :                0B/s
+记录写入速度                    :              0rec/s
+读出记录总数                    :                   0
+读写失败总数                    :                   0
+
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+
+DataX (DATAX-OPENSOURCE-3.0), From Alibaba !
+Copyright (C) 2010-2017, Alibaba Group. All Rights Reserved.
+
+
+2021-10-25 10:35:04.779 [main] INFO  VMInfo - VMInfo# operatingSystem class => com.sun.management.internal.OperatingSystemImpl
+2021-10-25 10:35:04.789 [main] INFO  Engine - the machine info  => 
+
+	osInfo:	Ubuntu 11 11.0.11+9-Ubuntu-0ubuntu2.20.04
+	jvmInfo:	Linux amd64 5.11.0-38-generic
+	cpu num:	4
+
+	totalPhysicalMemory:	-0.00G
+	freePhysicalMemory:	-0.00G
+	maxFileDescriptorCount:	-1
+	currentOpenFileDescriptorCount:	-1
+
+	GC Names	[G1 Young Generation, G1 Old Generation]
+
+	MEMORY_NAME                    | allocation_size                | init_size                      
+	CodeHeap 'profiled nmethods'   | 117.22MB                       | 2.44MB                         
+	G1 Old Gen                     | 1,024.00MB                     | 970.00MB                       
+	G1 Survivor Space              | -0.00MB                        | 0.00MB                         
+	CodeHeap 'non-profiled nmethods' | 117.22MB                       | 2.44MB                         
+	Compressed Class Space         | 1,024.00MB                     | 0.00MB                         
+	Metaspace                      | -0.00MB                        | 0.00MB                         
+	G1 Eden Space                  | -0.00MB                        | 54.00MB                        
+	CodeHeap 'non-nmethods'        | 5.56MB                         | 2.44MB                         
+
+
+2021-10-25 10:35:04.817 [main] INFO  Engine - 
+{
+	"content":[
+		{
+			"reader":{
+				"name":"mysqlreader",
+				"parameter":{
+					"column":[
+						"URL",
+						"city",
+						"project",
+						"addr",
+						"Development",
+						"issue_code",
+						"issue_date",
+						"opening_date",
+						"issue_area",
+						"building_status",
+						"building_name",
+						"building_rooms",
+						"building_area",
+						"building_price",
+						"sale_tel",
+						"sale_addr",
+						"room",
+						"room_area",
+						"room_status"
+					],
+					"connection":[
+						{
+							"jdbcUrl":[
+								"jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"
+							],
+							"table":[
+								"fang_ysz"
+							]
+						}
+					],
+					"password":"****************",
+					"username":"ShuT",
+					"where":"add_date=20211025"
+				}
+			},
+			"writer":{
+				"name":"mysqlwriter",
+				"parameter":{
+					"column":[
+						"url",
+						"city_name",
+						"floor_name",
+						"address",
+						"business",
+						"issue_code",
+						"issue_date",
+						"open_date",
+						"issue_area",
+						"sale_state",
+						"building_code",
+						"room_sum",
+						"area",
+						"simulation_price",
+						"sale_telephone",
+						"sale_address",
+						"room_code",
+						"room_sale_area",
+						"room_sale_state"
+					],
+					"connection":[
+						{
+							"jdbcUrl":"jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+							"table":[
+								"city_newest_deal_data_check"
+							]
+						}
+					],
+					"password":"****************",
+					"preSql":[],
+					"session":[],
+					"username":"wanganming",
+					"writeMode":"update"
+				}
+			}
+		}
+	],
+	"setting":{
+		"speed":{
+			"channel":"4"
+		}
+	}
+}
+
+2021-10-25 10:35:04.844 [main] WARN  Engine - prioriy set to 0, because NumberFormatException, the value is: null
+2021-10-25 10:35:04.847 [main] INFO  PerfTrace - PerfTrace traceId=job_-1, isEnable=false, priority=0
+2021-10-25 10:35:04.847 [main] INFO  JobContainer - DataX jobContainer starts job.
+2021-10-25 10:35:04.850 [main] INFO  JobContainer - Set jobId = 0
+2021-10-25 10:35:05.402 [job-0] INFO  OriginalConfPretreatmentUtil - Available jdbcUrl:jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true.
+2021-10-25 10:35:05.554 [job-0] INFO  OriginalConfPretreatmentUtil - table:[fang_ysz] has columns:[URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status,add_date].
+2021-10-25 10:35:05.805 [job-0] INFO  OriginalConfPretreatmentUtil - table:[city_newest_deal_data_check] all columns:[
+id,url,city_name,gd_city,floor_name,floor_name_new,clean_floor_name,floor_name_clean,address,business,issue_code,issue_date,issue_date_clean,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state,create_time
+].
+2021-10-25 10:35:05.831 [job-0] INFO  OriginalConfPretreatmentUtil - Write data [
+INSERT INTO %s (url,city_name,floor_name,address,business,issue_code,issue_date,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE url=VALUES(url),city_name=VALUES(city_name),floor_name=VALUES(floor_name),address=VALUES(address),business=VALUES(business),issue_code=VALUES(issue_code),issue_date=VALUES(issue_date),open_date=VALUES(open_date),issue_area=VALUES(issue_area),sale_state=VALUES(sale_state),building_code=VALUES(building_code),room_sum=VALUES(room_sum),area=VALUES(area),simulation_price=VALUES(simulation_price),sale_telephone=VALUES(sale_telephone),sale_address=VALUES(sale_address),room_code=VALUES(room_code),room_sale_area=VALUES(room_sale_area),room_sale_state=VALUES(room_sale_state)
+], which jdbcUrl like:[jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true]
+2021-10-25 10:35:05.832 [job-0] INFO  JobContainer - jobContainer starts to do prepare ...
+2021-10-25 10:35:05.833 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do prepare work .
+2021-10-25 10:35:05.834 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do prepare work .
+2021-10-25 10:35:05.835 [job-0] INFO  JobContainer - jobContainer starts to do split ...
+2021-10-25 10:35:05.835 [job-0] INFO  JobContainer - Job set Channel-Number to 4 channels.
+2021-10-25 10:35:05.842 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] splits to [1] tasks.
+2021-10-25 10:35:05.843 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] splits to [1] tasks.
+2021-10-25 10:35:05.869 [job-0] INFO  JobContainer - jobContainer starts to do schedule ...
+2021-10-25 10:35:05.876 [job-0] INFO  JobContainer - Scheduler starts [1] taskGroups.
+2021-10-25 10:35:05.879 [job-0] INFO  JobContainer - Running by standalone Mode.
+2021-10-25 10:35:05.890 [taskGroup-0] INFO  TaskGroupContainer - taskGroupId=[0] start [1] channels for [1] tasks.
+2021-10-25 10:35:05.917 [taskGroup-0] INFO  Channel - Channel set byte_speed_limit to -1, No bps activated.
+2021-10-25 10:35:05.918 [taskGroup-0] INFO  Channel - Channel set record_speed_limit to -1, No tps activated.
+2021-10-25 10:35:05.940 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] attemptCount[1] is started
+2021-10-25 10:35:05.951 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Begin to read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:35:06.087 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Finished read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:35:06.345 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[409]ms
+2021-10-25 10:35:06.348 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2021-10-25 10:35:15.920 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:35:15.922 [job-0] INFO  AbstractScheduler - Scheduler accomplished all tasks.
+2021-10-25 10:35:15.925 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do post work.
+2021-10-25 10:35:15.927 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do post work.
+2021-10-25 10:35:15.929 [job-0] INFO  JobContainer - DataX jobId [0] completed successfully.
+2021-10-25 10:35:15.933 [job-0] INFO  HookInvoker - No hook invoked, because base dir not exists or is a file: /opt/datax/hook
+2021-10-25 10:35:15.942 [job-0] INFO  JobContainer - 
+	 [total cpu info] => 
+		averageCpu                     | maxDeltaCpu                    | minDeltaCpu                    
+		-1.00%                         | -1.00%                         | -1.00%
+                        
+
+	 [total gc info] => 
+		 NAME                 | totalGCCount       | maxDeltaGCCount    | minDeltaGCCount    | totalGCTime        | maxDeltaGCTime     | minDeltaGCTime     
+		 G1 Young Generation  | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+		 G1 Old Generation    | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+
+2021-10-25 10:35:15.943 [job-0] INFO  JobContainer - PerfTrace not enable!
+2021-10-25 10:35:15.948 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:35:15.950 [job-0] INFO  JobContainer - 
+任务启动时刻                    : 2021-10-25 10:35:04
+任务结束时刻                    : 2021-10-25 10:35:15
+任务总计耗时                    :                 11s
+任务平均流量                    :                0B/s
+记录写入速度                    :              0rec/s
+读出记录总数                    :                   0
+读写失败总数                    :                   0
+
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+
+DataX (DATAX-OPENSOURCE-3.0), From Alibaba !
+Copyright (C) 2010-2017, Alibaba Group. All Rights Reserved.
+
+
+2021-10-25 10:35:54.820 [main] INFO  VMInfo - VMInfo# operatingSystem class => com.sun.management.internal.OperatingSystemImpl
+2021-10-25 10:35:54.831 [main] INFO  Engine - the machine info  => 
+
+	osInfo:	Ubuntu 11 11.0.11+9-Ubuntu-0ubuntu2.20.04
+	jvmInfo:	Linux amd64 5.11.0-38-generic
+	cpu num:	4
+
+	totalPhysicalMemory:	-0.00G
+	freePhysicalMemory:	-0.00G
+	maxFileDescriptorCount:	-1
+	currentOpenFileDescriptorCount:	-1
+
+	GC Names	[G1 Young Generation, G1 Old Generation]
+
+	MEMORY_NAME                    | allocation_size                | init_size                      
+	CodeHeap 'profiled nmethods'   | 117.22MB                       | 2.44MB                         
+	G1 Old Gen                     | 1,024.00MB                     | 970.00MB                       
+	G1 Survivor Space              | -0.00MB                        | 0.00MB                         
+	CodeHeap 'non-profiled nmethods' | 117.22MB                       | 2.44MB                         
+	Compressed Class Space         | 1,024.00MB                     | 0.00MB                         
+	Metaspace                      | -0.00MB                        | 0.00MB                         
+	G1 Eden Space                  | -0.00MB                        | 54.00MB                        
+	CodeHeap 'non-nmethods'        | 5.56MB                         | 2.44MB                         
+
+
+2021-10-25 10:35:54.859 [main] INFO  Engine - 
+{
+	"content":[
+		{
+			"reader":{
+				"name":"mysqlreader",
+				"parameter":{
+					"column":[
+						"URL",
+						"city",
+						"project",
+						"addr",
+						"Development",
+						"issue_code",
+						"issue_date",
+						"opening_date",
+						"issue_area",
+						"building_status",
+						"building_name",
+						"building_rooms",
+						"building_area",
+						"building_price",
+						"sale_tel",
+						"sale_addr",
+						"room",
+						"room_area",
+						"room_status"
+					],
+					"connection":[
+						{
+							"jdbcUrl":[
+								"jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"
+							],
+							"table":[
+								"fang_ysz"
+							]
+						}
+					],
+					"password":"****************",
+					"username":"ShuT",
+					"where":"add_date=20211025"
+				}
+			},
+			"writer":{
+				"name":"mysqlwriter",
+				"parameter":{
+					"column":[
+						"url",
+						"city_name",
+						"floor_name",
+						"address",
+						"business",
+						"issue_code",
+						"issue_date",
+						"open_date",
+						"issue_area",
+						"sale_state",
+						"building_code",
+						"room_sum",
+						"area",
+						"simulation_price",
+						"sale_telephone",
+						"sale_address",
+						"room_code",
+						"room_sale_area",
+						"room_sale_state"
+					],
+					"connection":[
+						{
+							"jdbcUrl":"jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+							"table":[
+								"city_newest_deal_data_check"
+							]
+						}
+					],
+					"password":"****************",
+					"preSql":[],
+					"session":[],
+					"username":"wanganming",
+					"writeMode":"update"
+				}
+			}
+		}
+	],
+	"setting":{
+		"speed":{
+			"channel":"4"
+		}
+	}
+}
+
+2021-10-25 10:35:54.884 [main] WARN  Engine - prioriy set to 0, because NumberFormatException, the value is: null
+2021-10-25 10:35:54.886 [main] INFO  PerfTrace - PerfTrace traceId=job_-1, isEnable=false, priority=0
+2021-10-25 10:35:54.887 [main] INFO  JobContainer - DataX jobContainer starts job.
+2021-10-25 10:35:54.890 [main] INFO  JobContainer - Set jobId = 0
+2021-10-25 10:35:55.388 [job-0] INFO  OriginalConfPretreatmentUtil - Available jdbcUrl:jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true.
+2021-10-25 10:35:55.501 [job-0] INFO  OriginalConfPretreatmentUtil - table:[fang_ysz] has columns:[URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status,add_date].
+2021-10-25 10:35:55.800 [job-0] INFO  OriginalConfPretreatmentUtil - table:[city_newest_deal_data_check] all columns:[
+id,url,city_name,gd_city,floor_name,floor_name_new,clean_floor_name,floor_name_clean,address,business,issue_code,issue_date,issue_date_clean,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state,create_time
+].
+2021-10-25 10:35:55.822 [job-0] INFO  OriginalConfPretreatmentUtil - Write data [
+INSERT INTO %s (url,city_name,floor_name,address,business,issue_code,issue_date,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE url=VALUES(url),city_name=VALUES(city_name),floor_name=VALUES(floor_name),address=VALUES(address),business=VALUES(business),issue_code=VALUES(issue_code),issue_date=VALUES(issue_date),open_date=VALUES(open_date),issue_area=VALUES(issue_area),sale_state=VALUES(sale_state),building_code=VALUES(building_code),room_sum=VALUES(room_sum),area=VALUES(area),simulation_price=VALUES(simulation_price),sale_telephone=VALUES(sale_telephone),sale_address=VALUES(sale_address),room_code=VALUES(room_code),room_sale_area=VALUES(room_sale_area),room_sale_state=VALUES(room_sale_state)
+], which jdbcUrl like:[jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true]
+2021-10-25 10:35:55.823 [job-0] INFO  JobContainer - jobContainer starts to do prepare ...
+2021-10-25 10:35:55.823 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do prepare work .
+2021-10-25 10:35:55.824 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do prepare work .
+2021-10-25 10:35:55.824 [job-0] INFO  JobContainer - jobContainer starts to do split ...
+2021-10-25 10:35:55.824 [job-0] INFO  JobContainer - Job set Channel-Number to 4 channels.
+2021-10-25 10:35:55.831 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] splits to [1] tasks.
+2021-10-25 10:35:55.832 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] splits to [1] tasks.
+2021-10-25 10:35:55.855 [job-0] INFO  JobContainer - jobContainer starts to do schedule ...
+2021-10-25 10:35:55.860 [job-0] INFO  JobContainer - Scheduler starts [1] taskGroups.
+2021-10-25 10:35:55.863 [job-0] INFO  JobContainer - Running by standalone Mode.
+2021-10-25 10:35:55.875 [taskGroup-0] INFO  TaskGroupContainer - taskGroupId=[0] start [1] channels for [1] tasks.
+2021-10-25 10:35:55.897 [taskGroup-0] INFO  Channel - Channel set byte_speed_limit to -1, No bps activated.
+2021-10-25 10:35:55.897 [taskGroup-0] INFO  Channel - Channel set record_speed_limit to -1, No tps activated.
+2021-10-25 10:35:55.920 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] attemptCount[1] is started
+2021-10-25 10:35:55.932 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Begin to read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:35:56.103 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Finished read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:35:56.427 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[510]ms
+2021-10-25 10:35:56.427 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2021-10-25 10:36:05.909 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:36:05.911 [job-0] INFO  AbstractScheduler - Scheduler accomplished all tasks.
+2021-10-25 10:36:05.914 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do post work.
+2021-10-25 10:36:05.916 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do post work.
+2021-10-25 10:36:05.918 [job-0] INFO  JobContainer - DataX jobId [0] completed successfully.
+2021-10-25 10:36:05.923 [job-0] INFO  HookInvoker - No hook invoked, because base dir not exists or is a file: /opt/datax/hook
+2021-10-25 10:36:05.929 [job-0] INFO  JobContainer - 
+	 [total cpu info] => 
+		averageCpu                     | maxDeltaCpu                    | minDeltaCpu                    
+		-1.00%                         | -1.00%                         | -1.00%
+                        
+
+	 [total gc info] => 
+		 NAME                 | totalGCCount       | maxDeltaGCCount    | minDeltaGCCount    | totalGCTime        | maxDeltaGCTime     | minDeltaGCTime     
+		 G1 Young Generation  | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+		 G1 Old Generation    | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+
+2021-10-25 10:36:05.930 [job-0] INFO  JobContainer - PerfTrace not enable!
+2021-10-25 10:36:05.931 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.000s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:36:05.933 [job-0] INFO  JobContainer - 
+任务启动时刻                    : 2021-10-25 10:35:54
+任务结束时刻                    : 2021-10-25 10:36:05
+任务总计耗时                    :                 11s
+任务平均流量                    :                0B/s
+记录写入速度                    :              0rec/s
+读出记录总数                    :                   0
+读写失败总数                    :                   0
+
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+
+DataX (DATAX-OPENSOURCE-3.0), From Alibaba !
+Copyright (C) 2010-2017, Alibaba Group. All Rights Reserved.
+
+
+2021-10-25 10:43:52.155 [main] INFO  VMInfo - VMInfo# operatingSystem class => com.sun.management.internal.OperatingSystemImpl
+2021-10-25 10:43:52.168 [main] INFO  Engine - the machine info  => 
+
+	osInfo:	Ubuntu 11 11.0.11+9-Ubuntu-0ubuntu2.20.04
+	jvmInfo:	Linux amd64 5.11.0-38-generic
+	cpu num:	4
+
+	totalPhysicalMemory:	-0.00G
+	freePhysicalMemory:	-0.00G
+	maxFileDescriptorCount:	-1
+	currentOpenFileDescriptorCount:	-1
+
+	GC Names	[G1 Young Generation, G1 Old Generation]
+
+	MEMORY_NAME                    | allocation_size                | init_size                      
+	CodeHeap 'profiled nmethods'   | 117.22MB                       | 2.44MB                         
+	G1 Old Gen                     | 1,024.00MB                     | 970.00MB                       
+	G1 Survivor Space              | -0.00MB                        | 0.00MB                         
+	CodeHeap 'non-profiled nmethods' | 117.22MB                       | 2.44MB                         
+	Compressed Class Space         | 1,024.00MB                     | 0.00MB                         
+	Metaspace                      | -0.00MB                        | 0.00MB                         
+	G1 Eden Space                  | -0.00MB                        | 54.00MB                        
+	CodeHeap 'non-nmethods'        | 5.56MB                         | 2.44MB                         
+
+
+2021-10-25 10:43:52.193 [main] INFO  Engine - 
+{
+	"content":[
+		{
+			"reader":{
+				"name":"mysqlreader",
+				"parameter":{
+					"column":[
+						"URL",
+						"city",
+						"project",
+						"addr",
+						"Development",
+						"issue_code",
+						"issue_date",
+						"opening_date",
+						"issue_area",
+						"building_status",
+						"building_name",
+						"building_rooms",
+						"building_area",
+						"building_price",
+						"sale_tel",
+						"sale_addr",
+						"room",
+						"room_area",
+						"room_status"
+					],
+					"connection":[
+						{
+							"jdbcUrl":[
+								"jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"
+							],
+							"table":[
+								"fang_ysz"
+							]
+						}
+					],
+					"password":"****************",
+					"username":"ShuT",
+					"where":"add_date=20211025"
+				}
+			},
+			"writer":{
+				"name":"mysqlwriter",
+				"parameter":{
+					"column":[
+						"url",
+						"city_name",
+						"floor_name",
+						"address",
+						"business",
+						"issue_code",
+						"issue_date",
+						"open_date",
+						"issue_area",
+						"sale_state",
+						"building_code",
+						"room_sum",
+						"area",
+						"simulation_price",
+						"sale_telephone",
+						"sale_address",
+						"room_code",
+						"room_sale_area",
+						"room_sale_state"
+					],
+					"connection":[
+						{
+							"jdbcUrl":"jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+							"table":[
+								"city_newest_deal_data_check"
+							]
+						}
+					],
+					"password":"****************",
+					"preSql":[],
+					"session":[],
+					"username":"wanganming",
+					"writeMode":"update"
+				}
+			}
+		}
+	],
+	"setting":{
+		"speed":{
+			"channel":"4"
+		}
+	}
+}
+
+2021-10-25 10:43:52.220 [main] WARN  Engine - prioriy set to 0, because NumberFormatException, the value is: null
+2021-10-25 10:43:52.223 [main] INFO  PerfTrace - PerfTrace traceId=job_-1, isEnable=false, priority=0
+2021-10-25 10:43:52.224 [main] INFO  JobContainer - DataX jobContainer starts job.
+2021-10-25 10:43:52.227 [main] INFO  JobContainer - Set jobId = 0
+2021-10-25 10:43:52.862 [job-0] INFO  OriginalConfPretreatmentUtil - Available jdbcUrl:jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true.
+2021-10-25 10:43:52.964 [job-0] INFO  OriginalConfPretreatmentUtil - table:[fang_ysz] has columns:[URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status,add_date].
+2021-10-25 10:43:53.256 [job-0] INFO  OriginalConfPretreatmentUtil - table:[city_newest_deal_data_check] all columns:[
+id,url,city_name,gd_city,floor_name,floor_name_new,clean_floor_name,floor_name_clean,address,business,issue_code,issue_date,issue_date_clean,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state,create_time
+].
+2021-10-25 10:43:53.282 [job-0] INFO  OriginalConfPretreatmentUtil - Write data [
+INSERT INTO %s (url,city_name,floor_name,address,business,issue_code,issue_date,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE url=VALUES(url),city_name=VALUES(city_name),floor_name=VALUES(floor_name),address=VALUES(address),business=VALUES(business),issue_code=VALUES(issue_code),issue_date=VALUES(issue_date),open_date=VALUES(open_date),issue_area=VALUES(issue_area),sale_state=VALUES(sale_state),building_code=VALUES(building_code),room_sum=VALUES(room_sum),area=VALUES(area),simulation_price=VALUES(simulation_price),sale_telephone=VALUES(sale_telephone),sale_address=VALUES(sale_address),room_code=VALUES(room_code),room_sale_area=VALUES(room_sale_area),room_sale_state=VALUES(room_sale_state)
+], which jdbcUrl like:[jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true]
+2021-10-25 10:43:53.283 [job-0] INFO  JobContainer - jobContainer starts to do prepare ...
+2021-10-25 10:43:53.284 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do prepare work .
+2021-10-25 10:43:53.285 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do prepare work .
+2021-10-25 10:43:53.286 [job-0] INFO  JobContainer - jobContainer starts to do split ...
+2021-10-25 10:43:53.287 [job-0] INFO  JobContainer - Job set Channel-Number to 4 channels.
+2021-10-25 10:43:53.296 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] splits to [1] tasks.
+2021-10-25 10:43:53.298 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] splits to [1] tasks.
+2021-10-25 10:43:53.329 [job-0] INFO  JobContainer - jobContainer starts to do schedule ...
+2021-10-25 10:43:53.338 [job-0] INFO  JobContainer - Scheduler starts [1] taskGroups.
+2021-10-25 10:43:53.341 [job-0] INFO  JobContainer - Running by standalone Mode.
+2021-10-25 10:43:53.354 [taskGroup-0] INFO  TaskGroupContainer - taskGroupId=[0] start [1] channels for [1] tasks.
+2021-10-25 10:43:53.384 [taskGroup-0] INFO  Channel - Channel set byte_speed_limit to -1, No bps activated.
+2021-10-25 10:43:53.384 [taskGroup-0] INFO  Channel - Channel set record_speed_limit to -1, No tps activated.
+2021-10-25 10:43:53.415 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] attemptCount[1] is started
+2021-10-25 10:43:53.455 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Begin to read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:43:53.589 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Finished read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 10:43:53.821 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[410]ms
+2021-10-25 10:43:53.822 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2021-10-25 10:44:03.376 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.001s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:44:03.376 [job-0] INFO  AbstractScheduler - Scheduler accomplished all tasks.
+2021-10-25 10:44:03.377 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do post work.
+2021-10-25 10:44:03.378 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do post work.
+2021-10-25 10:44:03.378 [job-0] INFO  JobContainer - DataX jobId [0] completed successfully.
+2021-10-25 10:44:03.379 [job-0] INFO  HookInvoker - No hook invoked, because base dir not exists or is a file: /opt/datax/hook
+2021-10-25 10:44:03.382 [job-0] INFO  JobContainer - 
+	 [total cpu info] => 
+		averageCpu                     | maxDeltaCpu                    | minDeltaCpu                    
+		-1.00%                         | -1.00%                         | -1.00%
+                        
+
+	 [total gc info] => 
+		 NAME                 | totalGCCount       | maxDeltaGCCount    | minDeltaGCCount    | totalGCTime        | maxDeltaGCTime     | minDeltaGCTime     
+		 G1 Young Generation  | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+		 G1 Old Generation    | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+
+2021-10-25 10:44:03.382 [job-0] INFO  JobContainer - PerfTrace not enable!
+2021-10-25 10:44:03.383 [job-0] INFO  StandAloneJobContainerCommunicator - Total 0 records, 0 bytes | Speed 0B/s, 0 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 0.001s |  All Task WaitReaderTime 0.000s | Percentage 100.00%
+2021-10-25 10:44:03.384 [job-0] INFO  JobContainer - 
+任务启动时刻                    : 2021-10-25 10:43:52
+任务结束时刻                    : 2021-10-25 10:44:03
+任务总计耗时                    :                 11s
+任务平均流量                    :                0B/s
+记录写入速度                    :              0rec/s
+读出记录总数                    :                   0
+读写失败总数                    :                   0
+
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+=================================================================== day_batch 分割线 ==========================================================================
+
+DataX (DATAX-OPENSOURCE-3.0), From Alibaba !
+Copyright (C) 2010-2017, Alibaba Group. All Rights Reserved.
+
+
+2021-10-25 14:57:36.969 [main] INFO  VMInfo - VMInfo# operatingSystem class => com.sun.management.internal.OperatingSystemImpl
+2021-10-25 14:57:36.983 [main] INFO  Engine - the machine info  => 
+
+	osInfo:	Ubuntu 11 11.0.11+9-Ubuntu-0ubuntu2.20.04
+	jvmInfo:	Linux amd64 5.11.0-38-generic
+	cpu num:	4
+
+	totalPhysicalMemory:	-0.00G
+	freePhysicalMemory:	-0.00G
+	maxFileDescriptorCount:	-1
+	currentOpenFileDescriptorCount:	-1
+
+	GC Names	[G1 Young Generation, G1 Old Generation]
+
+	MEMORY_NAME                    | allocation_size                | init_size                      
+	CodeHeap 'profiled nmethods'   | 117.22MB                       | 2.44MB                         
+	G1 Old Gen                     | 1,024.00MB                     | 970.00MB                       
+	G1 Survivor Space              | -0.00MB                        | 0.00MB                         
+	CodeHeap 'non-profiled nmethods' | 117.22MB                       | 2.44MB                         
+	Compressed Class Space         | 1,024.00MB                     | 0.00MB                         
+	Metaspace                      | -0.00MB                        | 0.00MB                         
+	G1 Eden Space                  | -0.00MB                        | 54.00MB                        
+	CodeHeap 'non-nmethods'        | 5.56MB                         | 2.44MB                         
+
+
+2021-10-25 14:57:37.014 [main] INFO  Engine - 
+{
+	"content":[
+		{
+			"reader":{
+				"name":"mysqlreader",
+				"parameter":{
+					"column":[
+						"URL",
+						"city",
+						"project",
+						"addr",
+						"Development",
+						"issue_code",
+						"issue_date",
+						"opening_date",
+						"issue_area",
+						"building_status",
+						"building_name",
+						"building_rooms",
+						"building_area",
+						"building_price",
+						"sale_tel",
+						"sale_addr",
+						"room",
+						"room_area",
+						"room_status"
+					],
+					"connection":[
+						{
+							"jdbcUrl":[
+								"jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true"
+							],
+							"table":[
+								"fang_ysz"
+							]
+						}
+					],
+					"password":"****************",
+					"username":"ShuT",
+					"where":"add_date=20211025"
+				}
+			},
+			"writer":{
+				"name":"mysqlwriter",
+				"parameter":{
+					"column":[
+						"url",
+						"city_name",
+						"floor_name",
+						"address",
+						"business",
+						"issue_code",
+						"issue_date",
+						"open_date",
+						"issue_area",
+						"sale_state",
+						"building_code",
+						"room_sum",
+						"area",
+						"simulation_price",
+						"sale_telephone",
+						"sale_address",
+						"room_code",
+						"room_sale_area",
+						"room_sale_state"
+					],
+					"connection":[
+						{
+							"jdbcUrl":"jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+							"table":[
+								"city_newest_deal_data_check"
+							]
+						}
+					],
+					"password":"****************",
+					"preSql":[],
+					"session":[],
+					"username":"wanganming",
+					"writeMode":"update"
+				}
+			}
+		}
+	],
+	"setting":{
+		"speed":{
+			"channel":"4"
+		}
+	}
+}
+
+2021-10-25 14:57:37.043 [main] WARN  Engine - prioriy set to 0, because NumberFormatException, the value is: null
+2021-10-25 14:57:37.047 [main] INFO  PerfTrace - PerfTrace traceId=job_-1, isEnable=false, priority=0
+2021-10-25 14:57:37.047 [main] INFO  JobContainer - DataX jobContainer starts job.
+2021-10-25 14:57:37.051 [main] INFO  JobContainer - Set jobId = 0
+2021-10-25 14:57:37.602 [job-0] INFO  OriginalConfPretreatmentUtil - Available jdbcUrl:jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true.
+2021-10-25 14:57:37.703 [job-0] INFO  OriginalConfPretreatmentUtil - table:[fang_ysz] has columns:[URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status,add_date].
+2021-10-25 14:57:37.949 [job-0] INFO  OriginalConfPretreatmentUtil - table:[city_newest_deal_data_check] all columns:[
+id,url,city_name,gd_city,floor_name,floor_name_new,clean_floor_name,floor_name_clean,address,business,issue_code,issue_date,issue_date_clean,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state,create_time
+].
+2021-10-25 14:57:37.972 [job-0] INFO  OriginalConfPretreatmentUtil - Write data [
+INSERT INTO %s (url,city_name,floor_name,address,business,issue_code,issue_date,open_date,issue_area,sale_state,building_code,room_sum,area,simulation_price,sale_telephone,sale_address,room_code,room_sale_area,room_sale_state) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE url=VALUES(url),city_name=VALUES(city_name),floor_name=VALUES(floor_name),address=VALUES(address),business=VALUES(business),issue_code=VALUES(issue_code),issue_date=VALUES(issue_date),open_date=VALUES(open_date),issue_area=VALUES(issue_area),sale_state=VALUES(sale_state),building_code=VALUES(building_code),room_sum=VALUES(room_sum),area=VALUES(area),simulation_price=VALUES(simulation_price),sale_telephone=VALUES(sale_telephone),sale_address=VALUES(sale_address),room_code=VALUES(room_code),room_sale_area=VALUES(room_sale_area),room_sale_state=VALUES(room_sale_state)
+], which jdbcUrl like:[jdbc:mysql://172.28.36.77:3306/temp_db?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true]
+2021-10-25 14:57:37.973 [job-0] INFO  JobContainer - jobContainer starts to do prepare ...
+2021-10-25 14:57:37.974 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do prepare work .
+2021-10-25 14:57:37.975 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do prepare work .
+2021-10-25 14:57:37.977 [job-0] INFO  JobContainer - jobContainer starts to do split ...
+2021-10-25 14:57:37.977 [job-0] INFO  JobContainer - Job set Channel-Number to 4 channels.
+2021-10-25 14:57:37.985 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] splits to [1] tasks.
+2021-10-25 14:57:37.986 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] splits to [1] tasks.
+2021-10-25 14:57:38.013 [job-0] INFO  JobContainer - jobContainer starts to do schedule ...
+2021-10-25 14:57:38.019 [job-0] INFO  JobContainer - Scheduler starts [1] taskGroups.
+2021-10-25 14:57:38.021 [job-0] INFO  JobContainer - Running by standalone Mode.
+2021-10-25 14:57:38.032 [taskGroup-0] INFO  TaskGroupContainer - taskGroupId=[0] start [1] channels for [1] tasks.
+2021-10-25 14:57:38.067 [taskGroup-0] INFO  Channel - Channel set byte_speed_limit to -1, No bps activated.
+2021-10-25 14:57:38.067 [taskGroup-0] INFO  Channel - Channel set record_speed_limit to -1, No tps activated.
+2021-10-25 14:57:38.091 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] attemptCount[1] is started
+2021-10-25 14:57:38.105 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Begin to read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 14:57:46.130 [0-0-0-reader] INFO  CommonRdbmsReader$Task - Finished read record by Sql: [select URL,city,project,addr,Development,issue_code,issue_date,opening_date,issue_area,building_status,building_name,building_rooms,building_area,building_price,sale_tel,sale_addr,room,room_area,room_status from fang_ysz where (add_date=20211025)
+] jdbcUrl:[jdbc:mysql://47.96.87.7:3306/ST?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true].
+2021-10-25 14:57:46.342 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] taskId[0] is successed, used[8253]ms
+2021-10-25 14:57:46.344 [taskGroup-0] INFO  TaskGroupContainer - taskGroup[0] completed it's tasks.
+2021-10-25 14:57:48.070 [job-0] INFO  StandAloneJobContainerCommunicator - Total 43977 records, 6816956 bytes | Speed 665.72KB/s, 4397 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 4.842s |  All Task WaitReaderTime 1.921s | Percentage 100.00%
+2021-10-25 14:57:48.073 [job-0] INFO  AbstractScheduler - Scheduler accomplished all tasks.
+2021-10-25 14:57:48.076 [job-0] INFO  JobContainer - DataX Writer.Job [mysqlwriter] do post work.
+2021-10-25 14:57:48.080 [job-0] INFO  JobContainer - DataX Reader.Job [mysqlreader] do post work.
+2021-10-25 14:57:48.082 [job-0] INFO  JobContainer - DataX jobId [0] completed successfully.
+2021-10-25 14:57:48.088 [job-0] INFO  HookInvoker - No hook invoked, because base dir not exists or is a file: /opt/datax/hook
+2021-10-25 14:57:48.099 [job-0] INFO  JobContainer - 
+	 [total cpu info] => 
+		averageCpu                     | maxDeltaCpu                    | minDeltaCpu                    
+		-1.00%                         | -1.00%                         | -1.00%
+                        
+
+	 [total gc info] => 
+		 NAME                 | totalGCCount       | maxDeltaGCCount    | minDeltaGCCount    | totalGCTime        | maxDeltaGCTime     | minDeltaGCTime     
+		 G1 Young Generation  | 5                  | 5                  | 5                  | 0.072s             | 0.072s             | 0.072s             
+		 G1 Old Generation    | 0                  | 0                  | 0                  | 0.000s             | 0.000s             | 0.000s             
+
+2021-10-25 14:57:48.101 [job-0] INFO  JobContainer - PerfTrace not enable!
+2021-10-25 14:57:48.102 [job-0] INFO  StandAloneJobContainerCommunicator - Total 43977 records, 6816956 bytes | Speed 665.72KB/s, 4397 records/s | Error 0 records, 0 bytes |  All Task WaitWriterTime 4.842s |  All Task WaitReaderTime 1.921s | Percentage 100.00%
+2021-10-25 14:57:48.103 [job-0] INFO  JobContainer - 
+任务启动时刻                    : 2021-10-25 14:57:37
+任务结束时刻                    : 2021-10-25 14:57:48
+任务总计耗时                    :                 11s
+任务平均流量                    :          665.72KB/s
+记录写入速度                    :           4397rec/s
+读出记录总数                    :               43977
+读写失败总数                    :                   0
+

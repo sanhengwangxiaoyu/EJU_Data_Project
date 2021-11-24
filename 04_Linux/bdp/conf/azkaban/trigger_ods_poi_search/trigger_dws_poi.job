@@ -1,0 +1,3 @@
+type=command
+dependencies=trigger_dwb_poi_info
+command=bash /usr/bin/run_sql_script.sh 77 1 /bdp/code/sql/dws_tag_purchase_poi.sql >> /bdp/log/tdrlmV4.log

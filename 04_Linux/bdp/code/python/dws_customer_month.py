@@ -1,3 +1,4 @@
+#In[1]:
 #!/usr/bin/env python
 # coding: utf-8
 # -*- coding: utf-8 -*-
@@ -18,7 +19,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import getopt
 
-pymysql.install_as_MySQLdb()
+pymysql.install_as_MySQLdb() 
 cf = configparser.ConfigParser()
 path = os.path.abspath(os.curdir)
 confpath = path + "/conf/config4.ini"
@@ -28,13 +29,12 @@ user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-# database = 'temp_db'
-date_quarter = '2021Q1'    #  获取季度（统计周期）
-start_date = '20210101'   #  获取取数的开始年月日
-stop_date = '20210401'   #  获取取数结束的年月日
+date_quarter = '2020Q4'    #  获取季度（统计周期）
 table_name = 'dws_customer_month'
 
-opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:d:",["table=","quarter=","startdate=","enddate=","database="])
+
+#In[2]:
+opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:d:",["database","table=","quarter=","startdate=","enddate="])
 for opts,arg in opts:
   if opts=="-t" or opts=="--table":
     table_name = arg
@@ -45,18 +45,11 @@ for opts,arg in opts:
   elif opts=="-e" or opts=="--enddate":
     stop_date = arg
   elif opts=="-d" or opts=="database":
-    database = arg
+        database = arg
 
-
-start_date_DF = datetime.datetime.strptime(start_date, "%Y%m%d")
-end_date_DF = datetime.datetime.strptime(stop_date, "%Y%m%d")
-pre_start_date = str(start_date_DF)[0:10]
-# pre_start_date = str(start_date_DF - relativedelta(months=+5))[0:10]
-# pre_end_date =  str(end_date_DF - relativedelta(months=+5))[0:10]
-month_date = (start_date_DF - relativedelta(days=+1)).strftime("%Y%m")   # 截取成yyyy-week
-
-
-
+#In[3]:
+start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
+end_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
 
 # -*- coding: utf-8 -*-
 class MysqlClient:
@@ -86,76 +79,73 @@ def to_dws(result,table):
 
 con = MysqlClient(db_host,database,user,password)
 
-# In[1]:
+"""
+正式代码
+     根据增存量标识表，获取原表id，关联浏览日志表获取楼盘id，根据楼盘id关联楼0盘表获取城市id。并限制城市
+"""
+
+
+# In[4]:
 #当月意向客户#
 # dwb_customer_browse_log  客户浏览楼盘日志表（每日增量） 
 #                                                      imei           客户号
 #                                                      visit_date     浏览日期  
 #                                                      newest_id      楼盘id
-ori=con.query('''SELECT imei,visit_date date,newest_id FROM dwb_db.dwb_customer_browse_log where visit_date>='''+start_date+''' and visit_date<'''+stop_date)
+# ori=con.query("SELECT id,newest_id FROM dwb_db.a_dwb_customer_browse_log where visit_date>='"+start_date+"' and visit_date<='"+end_date+"' ")
+ori=con.query("SELECT imei,newest_id FROM dwb_db.a_dwb_customer_browse_log where visit_date>='"+start_date+"' and visit_date<='"+end_date+"' ")
 
-# In[2]:
+
+# In[5]:
 #当前季度准入楼盘#
 #dws_newest_info  新房楼盘
 #                                                      newest_id       楼盘id
 #                                                      city_id         城市id  
 #                                                      county_id       区县id  
-newest_id=con.query('''select distinct newest_id,city_id city,county_id from dws_db.dws_newest_info where dr=0''')
-# dws_newest_period_admit  准入楼盘表
-#                                                      newest_id       楼盘id
-admit = con.query('''select distinct newest_id from dws_db.dws_newest_period_admit where period = "'''+date_quarter+'''"  and dr = 0''')
+admit=con.query("select newest_id from dws_db_prd.dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
+newest_id=con.query("select newest_id,city_id from dws_db_prd.dws_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,county_id")
+# 获取指定季度的楼盘id,和城市id，区县id
+admit = pd.merge(admit,newest_id, how='inner', on=['newest_id'])
 
 
 # In[3]:
-# 获取楼盘的城市和区县，以及浏览基本情况#
-grouped2 = pd.merge(admit, newest_id, how='left', on=['newest_id'])
-ori = pd.merge(grouped2, ori, how='inner', on=['newest_id'])
-# 修改列名
-ori.rename(columns={'newest_id':'newest'},inplace=True)
 
-# In[4]:
-#前5月意向客户#
-#imei标签-增存
-#cust_browse_log_202004_202103  客户浏览日志表季度拼接
-#                                                      customer        imei客户号
-#                                                      idate           数据接收日期
-las=con.query("SELECT distinct customer imei,concat(substr(idate,1,4),'-',substr(idate,5,2),'-',substr(idate,7,2)) FROM odsdb.cust_browse_log_202004_202103 where date_format(idate,'%Y-%m-%d') <'"+pre_start_date+"' ")
-# las.columns=['imei','date','city','newest','pv']
-las.columns=['imei','date']
-las['city'] = ''
-las['newest'] = ''
-# 转换时间格式
-las['date']=pd.to_datetime(las['date'],format='%Y-%m-%d').dt.date
-# 转换时间格式
-ori['date']=pd.to_datetime(ori['date'],format='%Y-%m-%d').dt.date
+# dws_imei_browse_tag  客户浏览标签结果表
+#                                   imei            类似客户号的东西
+#                                   concern        关注
+#                                   intention      意向
+#                                   urgent         迫切
+#                                   cre            增存
+ime = con.query(" SELECT imei,min(add_new_code) cre,visit_month period FROM dwb_db.dwb_customer_add_new_code where dr = '0' and visit_quarter = '"+date_quarter+"' group by imei,visit_month")
 
 
 # In[6]:
-# 添加以前时间的数据
-cus_mon=ori.append(las,ignore_index=True)
-#意向客户趋势-按月
-# 将时间转换为月
-cus_mon['month']=cus_mon['date'].apply(lambda x:x.strftime('%Y%m'))
-# 去重
-cus_mon=cus_mon[['city','newest','month','imei']].drop_duplicates()
-# 按照月份进行排序，按照imei进行分组。然后将月份整体偏移一位。筛选出客户第一次出现的时间
-cus_mon['last_month']=cus_mon.sort_values(by=['imei','month']).groupby(['imei'])['month'].shift(1)
+# 获取楼盘的城市和区县，以及浏览基本情况#
+#ime[['id']]=ime['id'].astype(int)
+#ori[['id']]=ori['id'].astype(int)
+df = pd.merge(ime,ori ,how='left' ,on=['imei'])
+df = pd.merge(admit, df, how='inner', on=['newest_id'])
+# 修改列名
+df = df[['city_id','newest_id','period','imei','cre']]
+df.columns = ['city','newest_id','visit_month','imei','cre']
+
+
+# In[7]:
+df1_in_tmp =  df[df['cre'] == 0]
+df1_in_tmp = df1_in_tmp[['city','newest_id','visit_month','imei']].drop_duplicates()
+df1_increase = df1_in_tmp.groupby(['city','visit_month','newest_id'])['imei'].count().reset_index()
+df1_increase['exist'] = "增量"
+df1_re_tmp =  df[df['cre'] == 1]
+df1_re_tmp = df1_re_tmp[['city','newest_id','visit_month','imei']].drop_duplicates()
+df1_retained = df1_re_tmp.groupby(['city','newest_id','visit_month'])['imei'].count().reset_index()
+df1_retained['exist'] = "存量"
+
 
 # In[8]:
-# 判断增存量：  存量客户：本周/月之前有浏览本楼盘则为存量客户，统计周期为半年
-#              增量客户：本周/月之前未浏览本楼盘为增量客户，统计周期为半年
-cus_mon.at[cus_mon['last_month'].isna(),'last_month']="增量"
-cus_mon.at[cus_mon['last_month']!="增量",'last_month']="存量"
-# 从当前季度前一月的数据
-cus_mon=cus_mon[cus_mon['month']>month_date]
-# 统计总人数
-cus_mon_res=cus_mon.groupby(['city','newest','month','last_month'])['imei'].count().reset_index()
-# 新增字段，赋值这季度
-cus_mon_res['period']=date_quarter
-# 修改列名
-cus_mon_res.columns=['city_id','newest_id','month','exist','imei_num','period']
-# 这季度数据
-cus_mon_res = cus_mon_res[cus_mon_res['month']>month_date]
+cus_mon_res = pd.concat([df1_increase,df1_retained])
+cus_mon_res['period'] = date_quarter
+cus_mon_res = cus_mon_res[['city','newest_id','visit_month','exist','imei','period']]
+cus_mon_res.columns = ['city_id','newest_id','month','exist','imei_num','period']
+
 
 # In[9]:
 # cus_mon_res
@@ -164,4 +154,3 @@ to_dws(cus_mon_res,table_name)
 
 
 print('>> Done!') #完毕
-

@@ -1,3 +1,4 @@
+# In[]
 #!/usr/bin/env python
 # coding: utf-8
 # -*- coding: utf-8 -*-
@@ -6,7 +7,13 @@ Created on Jul 12 17:44:47 2021
 
 项目榜单 - 比例改为指数数值,区间为0-5、固定展示2位小数，不能为空，不足2位补0
      (目标楼盘人气数-城市min)/(城市max-城市min)*5
-     
+Change on Aug 26 15:35 2021
+删除区域热度占比，统一使用城市区域占比
+改正有楼盘被过滤
+
+Changed on Seq 09 17:22:00 2021
+计算区县的数据的时候过滤掉东莞和中山
+
 """
 import configparser
 import os
@@ -18,6 +25,7 @@ from collections import Counter
 import re
 from sqlalchemy import create_engine
 import getopt
+import time
 
 pymysql.install_as_MySQLdb()
 ##读取配置文件##
@@ -31,13 +39,13 @@ user = cf.get("Mysql", "user")  # 获取user对应的值
 password = cf.get("Mysql", "password")  # 获取password对应的值
 db_host = cf.get("Mysql", "host")  # 获取host对应的值
 database = cf.get("Mysql", "database")  # 获取dbname对应的值
-date_quarter = '2021Q1'   # 季度
-start_date = '20210101'  # 季度开始时间
-stop_date = '20210401'    # 季度结束时间
+date_quarter = '2018Q1'   # 季度
 table_name = 'dws_newest_investment_pop_rownumber_quarter' # 要插入的表名称
 
+
+# In[]
 ##通过输入的参数的方式获取变量值##  如果不需要使用输入参数的方式，可以不用这段
-opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:d:",["database","table=","quarter=","startdate=","enddate="])
+opts,args=getopt.getopt(sys.argv[1:],"t:q:s:e:d:",["database=","table=","quarter=","startdate=","enddate="])
 for opts,arg in opts:
   if opts=="-t" or opts=="--table": # 获取输入参数 -t或者--table 后的值
     table_name = arg
@@ -49,6 +57,13 @@ for opts,arg in opts:
     stop_date = arg
   elif opts=="-d" or opts=="database":
     database = arg
+
+
+
+# In[]
+##重置时间格式
+start_date = str(pd.to_datetime(date_quarter))[0:10]   #截取成yyyy-MM-dd
+stop_date =  str(pd.to_datetime(date_quarter) + pd.offsets.QuarterEnd(0))[0:10]      #截取成yyyy-MM-dd
 
 ##mysql连接配置##
 # -*- coding: utf-8 -*-
@@ -130,27 +145,26 @@ def to_dws(result,table):
 """
 
 con = MysqlClient(db_host,database,user,password)   # 创建mysql链接
+
+
 # In[1]:
 #投资意向客户总量#
 # dwb_customer_browse_log  客户浏览楼盘日志表（每日增量） 
 #                                                      newest_id       楼盘id
 #                                                      imei     客户数  
 #                                                      visit_date      浏览日期
-o=con.query('''select newest_id,imei from dwb_db.dwb_customer_browse_log where visit_date>='''+start_date+''' and visit_date<'''+stop_date)
-#去重
-o.drop_duplicates(inplace=True)
+o=con.query("select newest_id,imei from dwb_db.a_dwb_customer_browse_log where visit_date>='"+start_date+"' and visit_date<='"+stop_date+"' group by newest_id,imei")
 
 
 # In[2]:
-#意向客户总量#
+#准入楼盘信息#
 # dws_newest_info   新房楼盘
 #                                                      newest_id       楼盘id
 #                                                      city_id         城市id
 #                                                      county_id       区县id
-newest_id=con.query('''select distinct newest_id,city_id,county_id from dws_db.dws_newest_info where dr=0''')
-# dws_newest_period_admit  楼盘周期表
-#                                                      newest_id       楼盘id
-admit = con.query('''select distinct newest_id from dws_db.dws_newest_period_admit where period = "'''+date_quarter+'''"  and dr = 0''')
+admit=con.query("select newest_id from dws_db_prd.dws_newest_period_admit where dr = 0 and period='"+date_quarter+"'")
+
+newest_id=con.query("select newest_id,city_id,county_id from dws_db_prd.dws_newest_info where newest_id is not null and city_id in ('110000','120000','130100','130200','130600','210100','220100','310000','320100','320200','320300','320400','320500','320600','321000','330100','330200','330300','330400','330500','330600','331100','340100','350100','350200','360100','360400','360700','370100','370200','370300','370600','370800','410100','420100','430100','440100','440300','440400','440500','440600','441200','441300','441900','442000','450100','460100','460200','500000','510100','520100','530100','610100','610300','610400') and county_id is not null and county_id != '' group by newest_id,city_id,county_id")
 
 
 # In[3]:
@@ -162,10 +176,9 @@ admit = con.query('''select distinct newest_id from dws_db.dws_newest_period_adm
 #                                                      marriage    婚姻状态
 #                                                      education   教育水平
 #                                                      have_child  有孩子
-tag = con.query('''
- select distinct imei,'投资型' type  from dwb_db.dwb_customer_imei_tag where is_college_stu = '否' -- and period = "'''+date_quarter+'''"
-and marriage = '已婚' and education = '高' and have_child = '有'
-''')
+tag = con.query("select imei,'投资型' type  from dwb_db.b_dwb_customer_imei_tag where is_college_stu = '否' and marriage = '已婚' and education = '高' and have_child = '有' group by imei")
+
+# tag = con.query("select distinct imei,'投资型' type  from dwb_db.dwb_customer_imei_tag where is_college_stu = '否' and marriage = '已婚' and education = '高' and have_child = '有'")
 
 
 # In[4]:
@@ -180,6 +193,8 @@ ori = pd.merge(grouped2, o, how='inner', on=['newest_id'])
 df_invest = pd.merge(ori,tag,how='left',on='imei')
 # 筛选出投资型客户
 df_invest_y = df_invest[df_invest['type']=='投资型']
+# #去重
+# o=o.groupby(['newest_id']).agg({'imei':pd.Series.nunique}).reset_index()
 # 楼盘投资型客户数量
 df_invest_1 = df_invest_y.groupby(['city_id','newest_id'])['imei'].count().reset_index()
  
@@ -212,7 +227,7 @@ grouped2 = pd.merge(grouped2, ic_max, how='left', on=['city_id'])
 grouped2 = pd.merge(grouped2, ic_min, how='left', on=['city_id'])
 # 新增字段index_rate
 grouped2['index_rate'] =round((grouped2['imei_newest']-grouped2['imei_y'])/(grouped2['imei_x']-grouped2['imei_y'])*4.5+0.5,2)
-
+grouped2['index_rate'] = grouped2['index_rate'].fillna(5)
 
 # In[9]:
 #城市楼盘指数占比排名：
@@ -264,14 +279,19 @@ ico_min = ori2.groupby(by = ['county_id'], as_index=False)['imei'].min()
 grouped02 = pd.merge(grouped02, ico_max, how='left', on=['county_id'])
 grouped02 = pd.merge(grouped02, ico_min, how='left', on=['county_id'])
 # 新增字段index_rate
-grouped02['index_rate'] =round((grouped02['imei_newest']-grouped02['imei_y'])/(grouped02['imei_x']-grouped02['imei_y'])*4.5+0.5,2)
+# grouped02['index_rate'] =round((grouped02['imei_newest']-grouped02['imei_y'])/(grouped02['imei_x']-grouped02['imei_y'])*4.5+0.5,2)
 
 
 # In[14]:
 #  排序
-grouped02.sort_values(['county_id','index_rate'],ascending=[1,0],inplace=True)
+grouped02.sort_values(['county_id','imei_newest'],ascending=[1,0],inplace=True)
 # 新加字段sort_id :对区县楼盘指数占比排名
 grouped02['sort_id'] = grouped02.groupby(['county_id'])['imei_newest'].rank(ascending=False,method='dense')
+#获取城市热度占比
+df_city = grouped2[['newest_id','index_rate']]
+# 新增字段index_rate,保留两位小数
+grouped02 = pd.merge(grouped02,df_city,how='left',on=['newest_id'])
+grouped02 = grouped02[['county_id','newest_id','imei_newest','imei_city','rate','imei_x','imei_y','index_rate','sort_id']]
 
 
 # In[15]:
@@ -279,6 +299,7 @@ grouped02['sort_id'] = grouped02.groupby(['county_id'])['imei_newest'].rank(asce
 grouped02.dropna(axis = 0,inplace=True)
 # 修改列名
 grouped02.columns=['city_id','newest_id','imei_newest','imei_city','rate','imei_c_max','imei_c_min','index_rate','sort_id']
+grouped02 = grouped02[~grouped02['city_id'].isin(['441900','442000'])]
 
 
 # In[16]:
@@ -286,6 +307,10 @@ grouped02.columns=['city_id','newest_id','imei_newest','imei_city','rate','imei_
 grouped = pd.concat([grouped2,grouped02])
 # 新字段period季度
 grouped['period'] = date_quarter
+grouped['create_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+grouped['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+grouped['dr'] = 0
+# test = grouped[grouped['newest_id'] == 'a95951c421d605cc4c7d6ad9ffc6efcd']
 
 
 # In[17]:
@@ -295,5 +320,6 @@ to_dws(grouped,table_name)
 # grouped.to_csv('C:\\Users\\86133\\Desktop\\dws_newest_investment_pop_top30_quarter.csv')
 grouped
 print('>> Done!')
+
 
 

@@ -1,0 +1,162 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "txtfilereader", 
+                    "parameter": {
+                    "path": ["/data/luohw__*"], 
+                    "encoding":"utf-8",
+                        "column": [
+                            {
+                                "index": 0,
+                                "type": "string"
+                            },
+                            {
+                                "index": 1,
+                                "type": "string"
+                            },
+                            {
+                                "index": 2,
+                                "type": "string"
+                            },
+                            {
+                                "index": 3,
+                                "type": "string"
+                            },
+                            {
+                                "index": 4,
+                                "type": "string"
+                            },
+                            {
+                                "index": 5,
+                                "type": "string"
+                            },
+                            {
+                                "index": 6,
+                                "type": "string"
+                            },
+                            {
+                                "index": 7,
+                                "type": "string"
+                            },
+                            {
+                                "index": 8,
+                                "type": "string"
+                            },
+                            {
+                                "index": 9,
+                                "type": "string"
+                            },
+                            {
+                                "index": 10,
+                                "type": "string"
+                            },
+                            {
+                                "index": 11,
+                                "type": "string"
+                            },
+                            {
+                                "index": 12,
+                                "type": "string"
+                            },
+                            {
+                                "index": 13,
+                                "type": "string"
+                            },
+                            {
+                                "index": 14,
+                                "type": "string"
+                            },
+                            {
+                                "index": 15,
+                                "type": "string"
+                            },
+                            {
+                                "index": 16,
+                                "type": "string"
+                            },
+                            {
+                                "index": 17,
+                                "type": "string"
+                            },
+                            {
+                                "index": 18,
+                                "type": "string"
+                            },
+			    {
+				        "index": 19,
+					    "type": "string"
+			    },
+			    {
+				        "index": 20,
+					    "type": "string"
+			    },
+			    {
+				        "index": 21,
+					    "type": "string"
+			    },
+			    {
+				        "index": 22,
+					    "type": "string"
+			    },
+			    {
+				        "index": 23,
+					    "type": "string"
+			    }
+                        ],
+                    "fieldDelimiter": "\t",
+                    "skipHeader": "true"
+                    }
+                }, 
+		"writer": {
+			"name": "mysqlwriter",
+			"parameter": {
+				"column": ["app_id",
+					"create_time",
+					"url",
+					"full_url",
+					"pre_url",
+					"speed_type",
+					"is_first_in",
+					"mark_page",
+					"mark_user",
+					"load_time",
+					"dns_time",
+					"tcp_time",
+					"dom_time",
+					"resource_list",
+					"total_res_size",
+					"white_time",
+					"redirect_time",
+					"unload_time",
+					"request_time",
+					"analysisDom_time",
+					"ready_time",
+					"screenwidth",
+					"screenheight",
+					"app_mobile"
+				],
+				"connection": [
+					{
+						"jdbcUrl": "jdbc:mysql://172.28.36.77:3306/odsdb?useUnicode=true&characterEncoding=utf8&yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true",
+						"table": ["ods_gd_points_web_pages"]
+					}
+				],
+				"password": "NDR_AhfzXT3MSxfh",
+				"preSql": [],
+				"session": [],
+				"username": "wanganming",
+				"writeMode": "update"
+
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": "10"
+            }
+        }
+    }
+}
