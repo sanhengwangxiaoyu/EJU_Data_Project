@@ -1,0 +1,294 @@
+备忘录
+
+
+2022-02-07 工作计划
+    
+    新项目开发？ 是什么，干什么的，怎么去做
+    历史遗留问题解决？
+        预售证日批爬取代码，此结果必须要包含，预售证号，预售证时间，预售项目名称，预售证城市，预售证供应套数。其他作为补充可以没有
+        预售证项目和楼盘表信息关联
+        
+
+
+
+host = 172.28.36.79
+user = user_dw1
+password = j5O_ermkAc4oqrKr
+database = prd_dws_db
+
+
+-p "-Dfilename=${newfn} -Dpath=${oper_path} -Dtime='${dda}'"
+
+
+
+
+devuser1\ tFY6Xmny
+/home/devuser1/data_group/Anaconda3/conda/bin/python
+
+su - techviewleo
+
+1. datax 乱码解决 ： CHCP 65001
+
+2. DELETE FROM table_name [WHERE Clause]
+
+2. 47.96.87.7 root z4UyWuMn
+
+服务器地址：47.96.87.7
+数据库：ST
+用户名：ShuT
+密码：password123456~!
+
+mysql
+root 
+000000
+
+
+
+systemctl daemon-reload
+
+systemctl enable prometheus && systemctl start prometheus
+
+netstat -lntp | grep prometheus
+
+systemctl daemon-reload
+
+systemctl enable node_exporter && systemctl start node_exporter
+
+netstat -lntp | grep node_exporter
+
+
+systemctl daemon-reload
+
+systemctl enable alertmanager && systemctl start alertmanager
+
+netstat -lntp | grep alertmanager
+
+
+
+
+
+CREATE TABLE temp_db.city_newest_deal_data_check_2 (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `url` varchar(765) COMMENT '网址',
+  `city_name` varchar(32) COMMENT '城市名称',
+  `gd_city` varchar(32) DEFAULT NULL COMMENT '高德城市名称',
+  `floor_name` varchar(200) COMMENT '原始项目名称',
+  `floor_name_new` varchar(200) DEFAULT NULL COMMENT '清洗过的新项目名称',
+  `clean_floor_name` varchar(255) DEFAULT NULL COMMENT '清洗过的项目名称（1）',
+  `floor_name_clean` varchar(255) DEFAULT NULL COMMENT '清洗过的项目名称（2）',
+  `address` varchar(200) DEFAULT NULL COMMENT '地址',
+  `business` varchar(200) DEFAULT NULL COMMENT '公司',
+  `issue_code` varchar(2000) DEFAULT NULL COMMENT '许可证',
+  `issue_date` varchar(200) DEFAULT NULL COMMENT '发证日期',
+  `issue_date_clean` varchar(200) DEFAULT NULL COMMENT '发证日期清洗结果',
+  `open_date` varchar(200) DEFAULT NULL COMMENT '开盘日期',
+  `issue_area` varchar(200) DEFAULT NULL COMMENT '许可证面积',
+  `sale_state` varchar(200) DEFAULT NULL COMMENT '销售状态',
+  `building_code` varchar(200) DEFAULT NULL COMMENT '建筑编号',
+  `room_sum` varchar(200) DEFAULT NULL COMMENT '房间个数',
+  `area` varchar(200) DEFAULT NULL COMMENT '房间面积',
+  `simulation_price` varchar(200) DEFAULT NULL COMMENT '拟售价格',
+  `sale_telephone` varchar(200) DEFAULT NULL COMMENT '销售电话',
+  `sale_address` varchar(2000) DEFAULT NULL COMMENT '销售地址',
+  `room_code` varchar(200) DEFAULT NULL COMMENT '房间编号',
+  `room_sale_area` varchar(200) DEFAULT NULL COMMENT '房间销售面积',
+  `room_sale_state` varchar(200) DEFAULT NULL COMMENT '房间销售状态',
+  `create_time` text COMMENT '插入时间',
+  PRIMARY KEY (`id`,`city_name`),
+KEY `idx_newest_gd_city` (`gd_city`) USING BTREE,
+KEY `idx_newest_city_name` (`city_name`) USING BTREE,
+KEY `idx_newest_url` (`url`) USING BTREE,
+KEY `idx_newest_floor_name` (`floor_name`) USING BTREE
+)  ENGINE=InnoDB AUTO_INCREMENT=3243767 DEFAULT CHARSET=utf8mb4 COMMENT='新楼盘交易数据检验表' 
+PARTITION BY LINEAR KEY (id) PARTITIONS 8 ;
+
+
+CREATE TABLE `city_newest_deal_data_check` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `url` text COMMENT '网址',
+  `city_name` varchar(100) NOT NULL COMMENT '城市名称',
+  `gd_city` varchar(32) DEFAULT NULL COMMENT '高德城市名称',
+  `floor_name` text COMMENT '原始项目名称',
+  `clean_floor_name` varchar(255) DEFAULT NULL COMMENT '清洗过的项目名称（1）',
+  `floor_name_clean` varchar(255) DEFAULT NULL COMMENT '清洗过的项目名称（2）',
+  `address` text COMMENT '地址',
+  `business` text COMMENT '公司',
+  `issue_code` text COMMENT '许可证',
+  `issue_date` text COMMENT '发证日期',
+  `issue_date_clean` varchar(200) DEFAULT NULL COMMENT '发证日期清洗结果',
+  `open_date` text COMMENT '开盘日期',
+  `issue_area` text COMMENT '许可证面积',
+  `sale_state` text COMMENT '销售状态',
+  `building_code` text COMMENT '建筑编号',
+  `room_sum` text COMMENT '房间个数',
+  `area` text COMMENT '房间面积',
+  `simulation_price` text COMMENT '拟售价格',
+  `sale_telephone` text COMMENT '销售电话',
+  `sale_address` text COMMENT '销售地址',
+  `room_code` text COMMENT '房间编号',
+  `room_sale_area` text COMMENT '房间销售面积',
+  `room_sale_state` text COMMENT '房间销售状态',
+  PRIMARY KEY (`id`,`city_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3243767 DEFAULT CHARSET=utf8mb4 COMMENT='新楼盘交易数据检验表' 
+PARTITION BY LINEAR KEY (id) PARTITIONS 1000 ;
+
+mysql分区遇到问题，A PRIMARY KEY must include all columns in the table's partitioning function
+分区字段必须是主键
+
+A BLOB field is not allowed in partition function
+分区字段不能是大对象
+
+
+
+
+
+
+--mysql生僻用法
+-- 1.修改时间格式函数：date_format
+-- 2.清空表 truncate
+-- 3.解锁表 unlock tables
+-- 4.mysql版本 show version()
+-- 5.窗口函数 
+
+--1
+insert
+	into
+	city_newest_deal (url,issue_date)
+select
+    id,
+	DATE_FORMAT(issue_date , '%Y-%m-%d %H:%i:%s')
+from
+	tmp_city_newest_deal tcnd where city_name in ('杭州');
+
+
+--2
+truncate table city_newest_deal ;
+
+
+--3
+UNLOCK TABLES;
+
+
+
+--4
+select version();
+
+
+
+--5
+SET @row_number=0, @customer_no=0;
+
+SELECT
+    @row_number:=CASE
+        WHEN @customer_no = s.floor_name THEN @row_number + 1 
+        ELSE 1
+    END AS num,
+    @customer_no:=s.floor_name AS floor_name,
+    s.city_name ,  
+    s.room_sum ,
+    s.issue_date_clean 
+FROM
+    temp_db.tmp_city_newest_deal s
+where city_name in ('杭州')
+ORDER BY
+    s.floor_name_clean asc;
+
+
+
+找人群---> 定向楼盘   、   5*5
+
+项目预览 --->
+
+购物车、报告、订单 --->
+
+
+
+
+
+--mysql生僻用法
+-- 1.修改时间格式函数：date_format
+-- 2.清空表 truncate
+-- 3.解锁表 unlock tables
+-- 4.mysql版本 show version()
+-- 5.窗口函数 
+-- 6.表元数据信息 
+
+--1
+insert
+    into
+    city_newest_deal (url,issue_date)
+select
+    id,
+    DATE_FORMAT(issue_date , '%Y-%m-%d %H:%i:%s')
+from
+    tmp_city_newest_deal tcnd where city_name in ('杭州');
+
+
+--2
+truncate table city_newest_deal ;
+
+
+--3
+UNLOCK TABLES;
+
+
+
+--4
+select version();
+
+
+
+--5
+SET @row_number=0, @customer_no=0;
+
+SELECT
+    @row_number:=CASE
+        WHEN @customer_no = s.floor_name THEN @row_number + 1 
+        ELSE 1
+    END AS num,
+    @customer_no:=s.floor_name AS floor_name,
+    s.city_name ,  
+    s.room_sum ,
+    s.issue_date_clean 
+FROM
+    temp_db.tmp_city_newest_deal s
+where city_name in ('杭州')
+ORDER BY
+    s.floor_name_clean asc;
+
+
+
+-- 6.表元数据信
+SELECT
+TABLE_NAME,
+CREATE_TIME,
+UPDATE_TIME
+FROM
+INFORMATION_SCHEMA.TABLES
+WHERE
+TABLE_SCHEMA = 'dws_db'
+AND TABLE_NAME LIKE  '%dws_imei_browse_tag%';
+
+
+
+
+SHOW processlist;
+
+kill 757595;
+
+一行拆分多行
+
+select t.id,SUBSTRING_INDEX(t.NAME,"], 'tagid': '" ,-1) id,SUBSTRING_INDEX(SUBSTRING_INDEX(t.NAME,"'], 'tagid':" ,1),"tag_value': ['",-1) value,NAME from (
+    select distinct a.*,substring_index(substring_index(a.tex, "'}, {'", b.help_topic_id + 1), '}, {',-1) NAME from test a JOIN mysql.help_topic b ON b.help_topic_id < ( LENGTH (a.tex) - LENGTH(REPLACE(a.tex, "'}, {'",''))+1)
+) t
+
+
+加载本地数据
+load data local infile 'D:/EJU/after_20210520/03_DataAnalysis/02_data/bak/202110/bak_20211015_dws_newest_popularity_rownumber_quarter/bak_20211015_dws_newest_popularity_rownumber_quarter.txt__58cbe389_2437_4bca_8bc9_29ef60c09609' into table dws_db_prd.dws_newest_popularity_rownumber_quarter_aaaa 
+CHARACTER SET utf8 -- 可选，避免中文乱码问题
+FIELDS TERMINATED BY '\t' -- 字段分隔符，每个字段(列)以什么字符分隔，默认是 \t
+    OPTIONALLY ENCLOSED BY '' -- 文本限定符，每个字段被什么字符包围，默认是空字符
+    ESCAPED BY '\\' -- 转义符，默认是 \
+LINES TERMINATED BY '\n' -- 记录分隔符，如字段本身也含\n，那么应先去除，否则load data 会误将其视作另一行记录进行导入
+(id,city_id,newest_id,imei_newest,imei_city,rate,imei_c_max,imei_c_min,index_rate,sort_id,period,imei_c_avg,index_rate_change,create_time,update_time,dr) -- 每一行文本按顺序对应的表字段，建议不要省略
+;
