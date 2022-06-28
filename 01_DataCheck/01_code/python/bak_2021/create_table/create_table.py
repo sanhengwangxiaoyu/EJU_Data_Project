@@ -40,7 +40,8 @@ def mysql_create(fields):
             else:
                 table_column = '`' + field['column_name'] + '`    ' + field['type'] + '  DEFAULT NULL  ' + 'COMMENT ' + "'" + field['column_exp'] + "'" + ',\n'
         if field['index_key'] == 'Y':
-            table_column_index = 'KEY `idx_dim_' + stg_table_name.split('.')[1] + '_' + field['column_name'] + '` (`' + field['column_name'] + '`) USING BTREE' + ',\n'        
+            table_column_index = 'KEY `idx_dim_' + stg_table_name.replace('.','_') + '_' + field['column_name'] + '` (`' + field['column_name'] + '`) USING BTREE' + ',\n'        
+        # print(stg_table_name)
         if table_column_index is None :
             columns.append(table_column)
         else:
@@ -68,10 +69,10 @@ print('---------------paths-------------------')
 print(paths)
 for path in paths:
     for filename in os.listdir(path):
-        # print(filename)
+        print(filename)
         if filename.endswith(".xlsx") or filename.endswith(".xls"):
             result_sql = ''
-            # print(path)
+            print(path)
             print(filename)
             print(path + filename)
             worksheet = xlrd.open_workbook(path + filename)

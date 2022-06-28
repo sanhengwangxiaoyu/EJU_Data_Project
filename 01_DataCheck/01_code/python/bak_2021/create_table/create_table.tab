@@ -1,0 +1,146 @@
+drop table if exists odsdb.ods_city_issue_code;
+create table odsdb.ods_city_issue_code (
+`id`    INT(8)    NOT NULL AUTO_INCREMENT    COMMENT '增量ID',
+`url`    VARCHAR(800)  DEFAULT NULL  COMMENT '预售证URL',
+`region`    VARCHAR(80)  DEFAULT NULL  COMMENT '楼盘所在区县',
+`gd_city`    VARCHAR(20)  DEFAULT NULL  COMMENT '楼盘所在城市',
+KEY `idx_dim_odsdb_ods_city_issue_code_gd_city` (`gd_city`) USING BTREE,
+`floor_name`    VARCHAR(200)  DEFAULT NULL  COMMENT '楼盘名称',
+KEY `idx_dim_odsdb_ods_city_issue_code_floor_name` (`floor_name`) USING BTREE,
+`address`    VARCHAR(800)  DEFAULT NULL  COMMENT '楼盘地址',
+`business`    VARCHAR(200)  DEFAULT NULL  COMMENT '楼盘开发商',
+`issue_code`    VARCHAR(400)  DEFAULT NULL  COMMENT '预售证号',
+KEY `idx_dim_odsdb_ods_city_issue_code_issue_code` (`issue_code`) USING BTREE,
+`issue_date`    VARCHAR(20)  DEFAULT NULL  COMMENT '预售证时间',
+`issue_area`    INT(20)  DEFAULT NULL  COMMENT '预售证许可面积',
+`building_code`    VARCHAR(200)  DEFAULT NULL  COMMENT '预售证许可建筑号',
+`room_sum`    INT(20)  DEFAULT NULL  COMMENT '预售证许可房间数',
+`dr`    INT(2)    NOT NULL DEFAULT 0.0    COMMENT '有效标识1：失效2：有效',
+`load_data_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP    COMMENT '数据加载时间',
+`update_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP    COMMENT '更新时间',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='城市的预售证信息表' ;
+
+drop table if exists dwb_et_user_region;
+create table dwb_et_user_region (
+`id`    INT(8)    NOT NULL AUTO_INCREMENT    COMMENT '增量ID',
+`user_id`    VARCHAR(400)  DEFAULT NULL  COMMENT '用户id',
+`login_date`    DATETIME  DEFAULT NULL  COMMENT '注册时间(日)',
+`user_type`    INT(2)  DEFAULT NULL  COMMENT '用户类型标识',
+`register_mobile`    INT(20)  DEFAULT NULL  COMMENT '注册手机号',
+`province_id`    INT(20)  DEFAULT NULL  COMMENT '首次注册时的登录省id',
+`province_name`    VARCHAR(400)  DEFAULT NULL  COMMENT '首次注册时的登录省名称',
+`city_id`    INT(20)  DEFAULT NULL  COMMENT '首次注册时的登录城市id',
+`city_name`    VARCHAR(400)  DEFAULT NULL  COMMENT '首次注册时的登录城市名称',
+`region_id`    INT(20)  DEFAULT NULL  COMMENT '首次注册时的登录区县id',
+`region_name`    VARCHAR(400)  DEFAULT NULL  COMMENT '首次注册时的登录区县名称',
+`dr`    INT(2)    NOT NULL DEFAULT 0.0    COMMENT '有效标识1：失效2：有效',
+`create_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP    COMMENT '数据加载时间',
+`update_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP    COMMENT '更新时间',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='注册用户区域分布表' ;
+
+drop table if exists dwb_et_user_invite_cc;
+create table dwb_et_user_invite_cc (
+`id`    INT(8)    NOT NULL AUTO_INCREMENT    COMMENT '增量ID',
+`user_id`    VARCHAR(400)  DEFAULT NULL  COMMENT '用户id',
+`invite_code`    VARCHAR(20)  DEFAULT NULL  COMMENT '用户邀请码',
+`invite_code_channel`    VARCHAR(400)  DEFAULT NULL  COMMENT '用户邀请码渠道',
+`invite_code_num`    INT(20)  DEFAULT NULL  COMMENT '邀请码被使用次数',
+`dr`    INT(2)    NOT NULL DEFAULT 0.0    COMMENT '有效标识1：失效2：有效',
+`create_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP    COMMENT '数据加载时间',
+`update_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP    COMMENT '更新时间',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='注册用户渠道分布表' ;
+
+drop table if exists dwb_et_user_log_order;
+create table dwb_et_user_log_order (
+`id`    INT(8)    NOT NULL AUTO_INCREMENT    COMMENT '增量ID',
+`provide_id`    INT(20)  DEFAULT NULL  COMMENT '省份id',
+`provide_name`    VARCHAR(400)  DEFAULT NULL  COMMENT '省份名称',
+`city_id`    INT(20)  DEFAULT NULL  COMMENT '城市id',
+`city_name`    VARCHAR(400)  DEFAULT NULL  COMMENT '城市名称',
+`region_id`    INT(20)  DEFAULT NULL  COMMENT '区县id',
+`region_name`    VARCHAR(400)  DEFAULT NULL  COMMENT '区县名称',
+`browse_num`    INT(20)  DEFAULT NULL  COMMENT '访问量',
+`order_num`    INT(20)  DEFAULT NULL  COMMENT '报告成交量(区县为空：城市汇总  城市和区县为空: 省份汇总)',
+`date_time`    DATETIME  DEFAULT NULL  COMMENT '自然日日期',
+`dr`    INT(2)    NOT NULL DEFAULT 0.0    COMMENT '有效标识1：失效2：有效',
+`create_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP    COMMENT '数据加载时间',
+`update_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP    COMMENT '更新时间',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='各城市访问成交量表' ;
+
+drop table if exists dwb_et_funnel;
+create table dwb_et_funnel (
+`id`    INT(8)    NOT NULL AUTO_INCREMENT    COMMENT '增量ID',
+`user_id`    VARCHAR(400)  DEFAULT NULL  COMMENT '用户id',
+`login_date`    DATETIME  DEFAULT NULL  COMMENT '注册时间(日)',
+`login_index`    INT(2)  DEFAULT NULL  COMMENT '注册标识  (1:已注册 2:未注册)',
+`buy_first_report`    INT(2)  DEFAULT NULL  COMMENT '首次购买报告标识 (1:已购买  2  未购买)',
+`buy_thired_report`    INT(2)  DEFAULT NULL  COMMENT '累计购买3份报告标识 (1:已购买  2  未购买)',
+`dr`    INT(2)    NOT NULL DEFAULT 0.0    COMMENT '有效标识1：失效2：有效',
+`create_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP    COMMENT '数据加载时间',
+`update_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP    COMMENT '更新时间',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='漏斗图' ;
+
+drop table if exists dwb_et_day_report;
+create table dwb_et_day_report (
+`id`    INT(8)    NOT NULL AUTO_INCREMENT    COMMENT '增量ID',
+`invite_code_channel`    VARCHAR(400)  DEFAULT NULL  COMMENT '邀请码对应渠道',
+`sum_cust_num`    INT(20)  DEFAULT NULL  COMMENT '总登入用户量',
+`new_cust_num`    INT(20)  DEFAULT NULL  COMMENT '日新增用户量',
+`show_report_cust_num`    INT(20)  DEFAULT NULL  COMMENT '日有动作用户量',
+`active_cust_num`    INT(20)  DEFAULT NULL  COMMENT '日活跃用户量',
+`active_super_cust_num`    INT(20)  DEFAULT NULL  COMMENT '日超级活跃用户量',
+`lost_cust_num`    INT(20)  DEFAULT NULL  COMMENT '日流失用户量',
+`no_first_cust_num`    INT(20)  DEFAULT NULL  COMMENT '非一级登入用户量',
+`no_first_active_cust_num`    INT(20)  DEFAULT NULL  COMMENT '非一级活跃用户量',
+`no_first_super_active_cust_num`    INT(20)  DEFAULT NULL  COMMENT '非一级超级活跃用户量',
+`dr`    INT(2)    NOT NULL DEFAULT 0.0    COMMENT '有效标识1：失效2：有效',
+`create_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP    COMMENT '数据加载时间',
+`update_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP    COMMENT '更新时间',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='日报' ;
+
+drop table if exists dwb_et_user_action_count;
+create table dwb_et_user_action_count (
+`id`    INT(8)    NOT NULL AUTO_INCREMENT    COMMENT '增量ID',
+`data_time`    DATETIME  DEFAULT NULL  COMMENT '自然日日期',
+`sum_pv`    INT(20)  DEFAULT NULL  COMMENT '总页面浏览量PV',
+`avg_url_time`    INT(40)  DEFAULT NULL  COMMENT '平均页面逗留时长(s)',
+`avg_url_num`    INT(20)  DEFAULT NULL  COMMENT '平均访问页面数',
+`jump_rate`    FLOAT  DEFAULT NULL  COMMENT '查看报告跳出率',
+`find_est_num`    INT(20)  DEFAULT NULL  COMMENT '找项目模块点击量',
+`find_est_search_num`    INT(20)  DEFAULT NULL  COMMENT '名称搜索模块点击量',
+`find_est_choise_num`    INT(20)  DEFAULT NULL  COMMENT '条件搜索模块点击量',
+`find_est_rownum_num`    INT(20)  DEFAULT NULL  COMMENT '排行榜模块点击量',
+`find_people_num`    INT(20)  DEFAULT NULL  COMMENT '找人群模块点击量',
+`est_show_num`    INT(20)  DEFAULT NULL  COMMENT '项目预览模块点击量',
+`est_show_cust_count_num`    INT(20)  DEFAULT NULL  COMMENT '报告的客流统计模块点击量',
+`est_show_portrait_num`    INT(20)  DEFAULT NULL  COMMENT '报告的画像模块点击量',
+`est_show_compete_num`    INT(20)  DEFAULT NULL  COMMENT '报告的竞品概览模块点击量',
+`est_show_compete_link_num`    INT(20)  DEFAULT NULL  COMMENT '报告的竞品关系模块点击量',
+`dr`    INT(2)    NOT NULL DEFAULT 0.0    COMMENT '有效标识1：失效2：有效',
+`create_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP    COMMENT '数据加载时间',
+`update_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP    COMMENT '更新时间',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户行为统计' ;
+
+drop table if exists dwb_et_user_browse_log;
+create table dwb_et_user_browse_log (
+`id`    INT(8)    NOT NULL AUTO_INCREMENT    COMMENT '增量ID',
+`user_id`    VARCHAR(400)  DEFAULT NULL  COMMENT '用户id',
+`register_mobile`    VARCHAR(20)  DEFAULT NULL  COMMENT '注册手机号',
+`date_time`    DATETIME  DEFAULT NULL  COMMENT '浏览时间',
+`url`    VARCHAR(400)  DEFAULT NULL  COMMENT '浏览页面',
+`url_model`    VARCHAR(40)  DEFAULT NULL  COMMENT '浏览页面模块',
+`dr`    INT(2)    NOT NULL DEFAULT 0.0    COMMENT '有效标识1：失效2：有效',
+`create_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP    COMMENT '数据加载时间',
+`update_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP    COMMENT '更新时间',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='浏览日志表' ;
+
+drop table if exists odsdb.ods_gd_points_url_model;
+create table odsdb.ods_gd_points_url_model (
+`id`    INT(8)    NOT NULL AUTO_INCREMENT    COMMENT '增量ID',
+`url_key`    VARCHAR(80)  DEFAULT NULL  COMMENT '连接关键词',
+`model_name`    VARCHAR(20)  DEFAULT NULL  COMMENT '模块名称',
+`dr`    INT(2)    NOT NULL DEFAULT 0.0    COMMENT '有效标识1：失效2：有效',
+`create_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP    COMMENT '数据加载时间',
+`update_time`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP    COMMENT '更新时间',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='浏览连接模块映射表' ;
+
